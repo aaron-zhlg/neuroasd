@@ -4,7 +4,8 @@ Compiled October 2026. Purpose: give the neuroasd project a reference point — 
 
 ## Key takeaways
 
-- **When tested on truly unseen sites, the credible state of the art is 60–70% accuracy and 0.70–0.80 AUC.** Papers reporting 80%+ accuracy almost always use random splits (the same site in both train and test), pick the epoch on the test set, or leak information through feature selection.
+- **When tested on truly unseen sites, the credible state of the art is about 65–67% accuracy and 0.72–0.81 AUC.** The strict leave-one-site-out accuracies are Abraham 2017 (66.8%), Heinsfeld 2018 (65%), and a 2023 ABIDE I+II harmonization study (60.7–62.7%). For AUC, IMPAC reached 0.81 on a single unseen site and 0.72 on the external EU-AIMS cohort.
+- **The frequently cited "~70% accuracy" numbers are not cross-site.** Parisot 2018 (70.4%), BrainNetTF (71.0%), BrainMass (72.8%), Dong 2025 (72.2%) and Heinsfeld's 70% all come from random or site-stratified splits where every test site is also seen in training. Papers reporting 80%+ go further: random splits plus test-set epoch selection or feature-selection leakage.
 - **More data helps, and there is direct evidence for it.** Abraham 2017 and the IMPAC challenge (Traut 2022) both show learning curves that have not saturated at ~2,000 subjects.
 - **For cross-site generalization, simple models often beat deep ones.** Of 146 IMPAC submissions, the ones that generalized best combined tangent-space connectivity with linear models (logistic regression / linear SVM). Deep learning and graph-convolutional submissions scored high on the public set and dropped sharply on the private set.
 - **Site harmonization (ComBat etc.) helps little.** Under leave-one-site-out, a well-tuned baseline already learns site-invariant features.
@@ -135,11 +136,12 @@ Two other common ways scores get inflated:
   - **no subjects excluded for QC**; QC scores were supplied instead.
 - Validation: blind evaluation, 146 teams.
 - Results:
-  - blend of the top 10 submissions: AUC 0.80;
+  - blend of the top 10 submissions: AUC 0.80 on the whole private set. **This is not a leave-one-site-out number**: most private-set subjects are ABIDE participants from sites that also appear in the public training set;
     - as a screening test: 88% sensitivity at a 50% false-positive rate;
     - as a confirmatory test: 25% sensitivity at a 3% false-positive rate;
-  - unseen RDB site: median AUC 0.81;
-  - external EU-AIMS: AUC 0.72 (the authors suspect IQ distribution differences);
+  - split by origin: median AUC 0.81 on the RDB subjects (the only truly unseen site) versus 0.77 on the ABIDE subjects of the private set;
+  - external EU-AIMS (several unseen sites): AUC 0.72 (the authors suspect IQ distribution differences);
+  - the paper reports AUC only, no accuracy;
   - fMRI alone AUC 0.79; structural MRI alone 0.66.
 - Learning curve: **not saturated at 2,000 subjects**; extrapolation gives AUC ≈0.83 at 10,000 subjects.
 - What the winners had in common:
@@ -150,7 +152,7 @@ Two other common ways scores get inflated:
 - The authors write that deep-learning submissions, graph convolutions included, showed "strong overfits": public-set AUCs above 0.8 never generalized, while "conservative" submissions in the 0.6–0.8 range stayed stable.
 - Takeaways:
   1. The combined ABIDE I + II dataset we just built is the right direction.
-  2. **AUC 0.80 is the ceiling reference at the ~2,000-subject scale with mostly linear models**, roughly 70–73% accuracy.
+  2. **For unseen sites, the realistic reference is AUC 0.72–0.81** at the ~2,000-subject scale with mostly linear models: 0.81 on one unseen site, 0.72 on an external multi-site cohort.
   3. Our GNN should be benchmarked head-to-head against a tangent + logistic regression baseline.
 
 **Ingalhalikar et al., 2021, IEEE TBME** — *Functional Connectivity-Based Prediction of Autism on Site Harmonized ABIDE Dataset*
@@ -159,7 +161,7 @@ Two other common ways scores get inflated:
 - Validation: leave-one-site-out.
 - Method: ComBat harmonization of site differences, then an artificial neural network, random forest, and autoencoders.
 - Results: after ComBat, the neural network's LOSO accuracy rose by ~4.5 points; AUROC ≈0.80.
-- Caveat: fitting the harmonization model on the full data, including the test site, is itself a leak (see the next paper).
+- Caveat: the sources we checked do not establish that ComBat was fit on training sites only. If it was fit on all data including the held-out site, that is a leak (see the next paper) and this LOSO AUC would be optimistic.
 
 **Effect of data harmonization of multicentric dataset in ASD/TD classification, 2023, Brain Informatics**
 
@@ -230,8 +232,8 @@ Two other common ways scores get inflated:
 | Parisot 2018 | ABIDE I | 871 | 10-fold (transductive) | Population-graph GCN | 70.4% | 0.75 |
 | Kan 2022 | ABIDE | 1,009 | Site-stratified random split | BrainNetTF | 71.0% | 0.80 |
 | Dong 2025 (HBM) | ABIDE I | 871 | 5-fold (leakage-free) | 5 models + voting | 58–72% | 0.64–0.78 |
-| Traut 2022 (IMPAC) | ABIDE I+II+RDB | 2,117 | **Blind test + unseen site** | Tangent + linear ensemble | – | 0.80 (EU-AIMS 0.72) |
-| Ingalhalikar 2021 | ABIDE | 988 | **LOSO** | ComBat + ANN | – | ~0.80 |
+| Traut 2022 (IMPAC) | ABIDE I+II+RDB | 2,117 | Blind private set (mostly seen sites) + **unseen site** + **external cohort** | Tangent + linear ensemble | – | 0.80 overall; **0.81 unseen site; 0.72 EU-AIMS** |
+| Ingalhalikar 2021 | ABIDE | 988 | **LOSO** (ComBat fitting scope unclear) | ComBat + ANN | – | ~0.80 (possibly optimistic) |
 | Harmonization 2023 | ABIDE I+II (9 sites) | – | **LOSO** | ComBat/CovBat + DL | 60.7–62.7% | – |
 | BrainMass 2024 | ABIDE I | ~1,084 | Site-stratified random split | Pretrained Transformer | 72.8% | – |
 | Brain Harmony 2025 | ABIDE I / II | – | Site-stratified random split | Pretrained multimodal | 63.1% / 66.7% | – |
@@ -239,8 +241,8 @@ Two other common ways scores get inflated:
 
 ## 4. Implications for neuroasd
 
-1. **Our numbers are not bad.** With LOSO, final-epoch reporting, and no test-set selection, 64% / AUC 0.72 is close to Abraham 2017 (67%). Most 70%+ numbers in the literature come from looser protocols.
-2. **There is no credible precedent for 80% accuracy across unseen sites.** IMPAC, with 2,000+ subjects and 146 teams, ended at AUC 0.80, roughly 72% accuracy. Treat that as the realistic ceiling when planning.
+1. **Our numbers are already near the cross-site ceiling.** With LOSO, final-epoch reporting, and no test-set selection, our 64.4% / AUC 0.72 sits just below Abraham 2017 (66.8%, also LOSO) and inside the 0.72–0.81 AUC range IMPAC reports for unseen data. The 70%+ numbers in the literature come from looser protocols and are not the right comparison.
+2. **There is no credible precedent for 80% accuracy across unseen sites.** The strict LOSO record is ~67% accuracy. IMPAC, with 2,000+ subjects and 146 teams, reached AUC 0.81 on one unseen site and 0.72 on an external cohort, and reported no accuracy. Plan with ~65–70% LOSO accuracy as the realistic target.
 3. **More data helps, but it needs the right model.** Two high-quality learning curves had not saturated, so combining ABIDE I + II is the right call. As data grows, low-capacity, strongly regularized models tend to be more stable.
 4. **Add a tangent + logistic regression baseline.** This is what every IMPAC top-10 submission had in common, and it takes a few dozen lines of nilearn / sklearn. If it matches or beats our GCN under LOSO, the GNN's complexity is not paying off.
 5. **Literature-backed changes worth trying on the GNN:**
