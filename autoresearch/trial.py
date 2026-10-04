@@ -29,7 +29,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from torch.utils.data import DataLoader, Subset
 
 from neuroasd.fc_dataset import AbideFCDataset, collate_graphs
-from neuroasd.gcn import SimpleGCN
+from neuroasd.gcn import FISHER_CLIP, SimpleGCN, quantile_normalize_edges
 from neuroasd.train import evaluate, pick_device, train_one_epoch
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +42,9 @@ GATES_PATH = Path(__file__).resolve().parent / "gates.json"
 SUBSET_SITES = ("NYU", "UM_1", "USM", "UCLA_1", "YALE")
 
 STAGES = ("screen", "loso-subset", "loso-full")
+
+# Grid size of the per-site edge-weight quantile map (train-fold statistics only).
+EDGE_QUANTILE_GRID = 129
 
 PASS_EXIT_CODE = 0
 FAIL_EXIT_CODE = 3
@@ -99,13 +102,89 @@ def git_revision() -> dict[str, str]:
     }
 
 
-def build_loader(dataset: AbideFCDataset, indices, batch_size: int, shuffle: bool):
+def build_loader(
+    dataset: AbideFCDataset,
+    indices,
+    batch_size: int,
+    shuffle: bool,
+    collate_fn=collate_graphs,
+):
     return DataLoader(
         Subset(dataset, list(indices)),
         batch_size=batch_size,
         shuffle=shuffle,
-        collate_fn=collate_graphs,
+        collate_fn=collate_fn,
     )
+
+
+def subject_edge_values(dataset: AbideFCDataset) -> tuple[np.ndarray, list[str]]:
+    """Fisher-z |FC| upper-triangle edge weights per subject, plus its SITE_ID.
+
+    Only raw per-subject edge values are cached here (no fold statistics), so the
+    cache is always safe to reuse across folds.
+    """
+    cached = getattr(dataset, "_edge_value_cache", None)
+    if cached is not None:
+        return cached
+
+    upper = np.triu_indices(int(dataset[0]["adjacency"].shape[0]), k=1)
+    values = []
+    for index in range(len(dataset.records)):
+        magnitude = np.clip(
+            np.abs(dataset[index]["adjacency"].numpy()).astype(np.float32), 0.0, FISHER_CLIP
+        )
+        values.append(np.arctanh(magnitude)[upper].astype(np.float32))
+    cached = (np.stack(values), [str(record["SITE_ID"]) for record in dataset.records])
+    dataset._edge_value_cache = cached
+    return cached
+
+
+def fit_edge_quantile_tables(
+    dataset: AbideFCDataset, train_indices
+) -> tuple[dict[str, tuple[torch.Tensor, torch.Tensor]], torch.Tensor]:
+    """Per-site edge-weight quantile maps fit on TRAINING-fold edges only.
+
+    For each site present in the training folds, the site's |FC| edge weights are
+    rank/quantile mapped onto the pooled training-fold Fisher-z quantiles, which
+    removes site-specific edge scale/outliers while preserving within-site edge
+    ordering (the map is monotone). No held-out subject, site statistic or label
+    is touched. Sites unseen in training fall back to the pooled mapping.
+    """
+    edges, sites = subject_edge_values(dataset)
+    train_indices = list(train_indices)
+    grid = np.linspace(0.0, 1.0, EDGE_QUANTILE_GRID)
+    pooled_q = torch.from_numpy(
+        np.quantile(
+            np.concatenate([edges[index] for index in train_indices]), grid
+        ).astype(np.float32)
+    )
+
+    indices_by_site: dict[str, list[int]] = defaultdict(list)
+    for index in train_indices:
+        indices_by_site[sites[index]].append(index)
+
+    tables: dict[str, tuple[torch.Tensor, torch.Tensor]] = {}
+    for site, site_indices in indices_by_site.items():
+        site_q = np.maximum.accumulate(
+            np.quantile(np.concatenate([edges[index] for index in site_indices]), grid)
+        )
+        tables[site] = (torch.from_numpy(site_q.astype(np.float32)), pooled_q)
+    return tables, pooled_q
+
+
+def build_collate(
+    tables: dict[str, tuple[torch.Tensor, torch.Tensor]], pooled_table
+):
+    """Collate that rank/quantile normalizes each batch's |FC| edge weights per site."""
+
+    def collate(batch: list[dict]) -> dict[str, torch.Tensor | list[str]]:
+        collated = collate_graphs(batch)
+        collated["adjacency"] = quantile_normalize_edges(
+            collated["adjacency"], collated["site_id"], tables, pooled_table
+        )
+        return collated
+
+    return collate
 
 
 def run_fold(
@@ -120,8 +199,18 @@ def run_fold(
     torch.manual_seed(seed)
     np.random.seed(seed)
 
-    train_loader = build_loader(dataset, train_indices, config.batch_size, True)
-    test_loader = build_loader(dataset, test_indices, config.batch_size, False)
+    # Per-site |FC| edge-weight quantile maps, fit on this fold's training edges
+    # only. Sites unseen in training (e.g. the held-out site in a LOSO fold) fall
+    # back to the pooled training-fold mapping, so no held-out statistics are used.
+    tables, pooled_q = fit_edge_quantile_tables(dataset, train_indices)
+    collate = build_collate(tables, (pooled_q, pooled_q))
+
+    train_loader = build_loader(
+        dataset, train_indices, config.batch_size, True, collate
+    )
+    test_loader = build_loader(
+        dataset, test_indices, config.batch_size, False, collate
+    )
 
     num_nodes = int(dataset[0]["node_features"].shape[0])
     model = SimpleGCN(
