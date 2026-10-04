@@ -23,11 +23,23 @@ class GraphConvLayer(nn.Module):
     def __init__(self, in_features: int, out_features: int) -> None:
         super().__init__()
         self.linear = nn.Linear(in_features, out_features, bias=False)
+        # Skip path only needs a parameterised 1x1 projection when dims differ.
+        self.skip = (
+            nn.Linear(in_features, out_features, bias=False)
+            if in_features != out_features
+            else None
+        )
+        if self.skip is not None:
+            # Starting the dim-changing skip at an exact zero map removes the
+            # free random linear pathway, so any learned skip is a deviation
+            # from "no skip" rather than plus-capacity at init.
+            nn.init.zeros_(self.skip.weight)
 
     def forward(self, node_features: torch.Tensor, adjacency: torch.Tensor) -> torch.Tensor:
         # node_features: (B, N, F), adjacency: (B, N, N)
         support = self.linear(node_features)
-        return torch.bmm(adjacency, support)
+        residual = node_features if self.skip is None else self.skip(node_features)
+        return residual + torch.bmm(adjacency, support)
 
 
 class SimpleGCN(nn.Module):
