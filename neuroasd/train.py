@@ -10,12 +10,18 @@ from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from sklearn.model_selection import StratifiedShuffleSplit
 from torch.utils.data import DataLoader, Subset
 
 from neuroasd.fc_dataset import AbideFCDataset, collate_graphs
-from neuroasd.gcn import SimpleGCN
+from neuroasd.gcn import (
+    SITE_ALIGN_LAMBDA,
+    SITE_ALIGN_MIN_SUBJECTS,
+    SimpleGCN,
+    site_coral_loss,
+)
 
 DEFAULT_DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "abide"
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parents[1] / "outputs" / "gcn_baseline"
@@ -96,15 +102,108 @@ def evaluate(model: SimpleGCN, loader: DataLoader, device: torch.device) -> dict
     }
 
 
+class _GradReverse(torch.autograd.Function):
+    """Gradient-reversal layer: identity forward, -lam-scaled gradient backward."""
+
+    @staticmethod
+    def forward(ctx, inputs: torch.Tensor, lam: float) -> torch.Tensor:
+        ctx.lam = float(lam)
+        return inputs.view_as(inputs)
+
+    @staticmethod
+    def backward(ctx, grad_output: torch.Tensor):
+        return -ctx.lam * grad_output, None
+
+
+def grad_reverse(inputs: torch.Tensor, lam: float) -> torch.Tensor:
+    return _GradReverse.apply(inputs, lam)
+
+
+def site_adversarial_loss(
+    adv_head: nn.Module | None,
+    embedding: torch.Tensor,
+    site_ids: list[str],
+    site_to_index: dict[str, int] | None,
+    lam: float,
+    stats: dict[str, int] | None = None,
+) -> torch.Tensor:
+    """Training-only site-adversarial (DANN-style) penalty on the graph embedding.
+
+    `adv_head` classifies the gradient-reversed mean-pooled embedding into the
+    TRAINING fold's SITE_IDs only, so minimising the diagnostic loss pushes the
+    embedding towards a site-invariant representation while the reversed
+    gradient (~ -lam) is what reaches the encoder. Subjects whose site is not a
+    training-fold class are dropped, and when fewer than two distinct
+    training-fold sites are present in the batch the penalty is exactly zero (a
+    one-class CrossEntropy carries no signal).
+
+    `stats` is log-only bookkeeping; every key it touches is initialised here and
+    the site-count loop over an empty/absent mapping is a no-op, so the
+    instrumentation path cannot raise.
+    """
+    if stats is not None:
+        stats.setdefault("adv_batches_seen", 0)
+        stats.setdefault("adv_batches", 0)
+        stats.setdefault("adv_sites_sum", 0)
+        stats.setdefault("adv_subjects_sum", 0)
+        stats.setdefault("sub_quota_sites", 0)
+
+    if adv_head is None or not site_to_index or lam <= 0.0:
+        return embedding.new_zeros(())
+
+    counts: dict[str, int] = {}
+    positions: list[int] = []
+    targets: list[int] = []
+    for position, site in enumerate(site_ids):
+        class_index = site_to_index.get(site)
+        if class_index is None:
+            continue
+        counts[site] = counts.get(site, 0) + 1
+        positions.append(position)
+        targets.append(class_index)
+
+    if stats is not None:
+        stats["adv_batches_seen"] += 1
+        stats["adv_sites_sum"] += len(counts)
+        stats["adv_subjects_sum"] += len(positions)
+        stats["sub_quota_sites"] += sum(
+            1 for count in counts.values() if count < SITE_ALIGN_MIN_SUBJECTS
+        )
+
+    if len(counts) < 2:
+        return embedding.new_zeros(())
+
+    index = torch.tensor(positions, dtype=torch.long, device=embedding.device)
+    target = torch.tensor(targets, dtype=torch.long, device=embedding.device)
+    logits = adv_head(grad_reverse(embedding, lam))[index]
+    if stats is not None:
+        stats["adv_batches"] += 1
+    return F.cross_entropy(logits, target)
+
+
 def train_one_epoch(
     model: SimpleGCN,
     loader: DataLoader,
     optimizer: torch.optim.Optimizer,
     criterion: nn.Module,
     device: torch.device,
+    site_align_lambda: float = SITE_ALIGN_LAMBDA,
+    adv_head: nn.Module | None = None,
+    adv_lambda: float = 0.0,
+    adv_site_to_index: dict[str, int] | None = None,
+    adv_stats: dict[str, int] | None = None,
 ) -> float:
     model.train()
     total_loss = 0.0
+    if adv_stats is not None:
+        for key in (
+            "adv_batches_seen",
+            "adv_batches",
+            "adv_sites_sum",
+            "adv_subjects_sum",
+            "sub_quota_sites",
+        ):
+            adv_stats.setdefault(key, 0)
 
     for batch in loader:
         node_features = batch["node_features"].to(device)
@@ -112,8 +211,28 @@ def train_one_epoch(
         labels = batch["label"].to(device)
 
         optimizer.zero_grad()
-        logits = model(node_features, adjacency)
+        embedding = model.embed(node_features, adjacency)
+        logits = model.classifier(embedding)
         loss = criterion(logits, labels)
+        if site_align_lambda > 0.0:
+            # Second-order alignment of the batch's per-site embeddings. The
+            # loader only ever contains training-fold subjects, so the held-out
+            # site contributes no statistics here.
+            loss = loss + site_align_lambda * site_coral_loss(embedding, batch["site_id"])
+        if adv_head is not None and adv_site_to_index and adv_lambda > 0.0:
+            # Training-only site-adversarial term on the gradient-reversed
+            # embedding. The adversarial head is a separate branch, so the
+            # reversed gradient reaches the encoder but never the classifier's
+            # own weights; at adv_lambda == 0 this branch is skipped entirely and
+            # the step is baseline-identical.
+            loss = loss + site_adversarial_loss(
+                adv_head,
+                embedding,
+                batch["site_id"],
+                adv_site_to_index,
+                adv_lambda,
+                adv_stats,
+            )
         loss.backward()
         optimizer.step()
 
