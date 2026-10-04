@@ -1,0 +1,227 @@
+{
+  "name": "iter2_zero-initializing-the-dim-changi",
+  "stage": "loso-full",
+  "note": "loso-full, frozen iter2 code (neuroasd/gcn.py, commit 77b3483): residual skip h = h + bmm(adjacency, self.linear(node_features)) with 1x1 nn.Linear skip ONLY on dim-changing 111->64 layer, nn.init.zeros_(self.skip.weight); 64->64 layer keeps self.skip is None. Default frozen config (100 ep, bs 32, lr 1e-3, hidden 64, dropout 0.5, wd 1e-4, seeds 42/1337/2026). Official metric final-epoch auc_mean vs loso-full gate 0.66 (baseline 0.6305). best_auc ignored (diagnostic only, FORBIDDEN_GATE_METRICS). Primary comparison: iter2 full vs iter1 full 0.6608. Confound: skip weight-norm telemetry unavailable -> unresolved.",
+  "ran_at": "2026-09-19T20:14:44.615824+00:00",
+  "runtime_seconds": 400.0,
+  "device": "mps",
+  "git": {
+    "branch": "experiment/trial-iter1_adding-a-residual-skip-h-h-f-h-w",
+    "commit": "77b3483"
+  },
+  "config": {
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 0.001,
+    "hidden_dim": 64,
+    "dropout": 0.5,
+    "weight_decay": 0.0001
+  },
+  "seeds": [
+    42,
+    1337,
+    2026
+  ],
+  "model_selection": "final epoch (no selection on the evaluation set)",
+  "summary": {
+    "accuracy_mean": 0.6174,
+    "accuracy_std": 0.0982,
+    "auc_mean": 0.6613,
+    "auc_std": 0.131,
+    "f1_mean": 0.6294,
+    "f1_std": 0.1091,
+    "best_auc_mean": 0.7637,
+    "best_auc_std": 0.0982
+  },
+  "runs": [
+    {
+      "site_id": "CALTECH",
+      "train_size": 847,
+      "test_size": 37,
+      "accuracy": 0.6486486486486487,
+      "f1": 0.6060606060606061,
+      "auc": 0.6666666666666667,
+      "best_auc": 0.7514619883040936
+    },
+    {
+      "site_id": "CMU",
+      "train_size": 879,
+      "test_size": 5,
+      "accuracy": 0.4,
+      "f1": 0.4,
+      "auc": 0.33333333333333337,
+      "best_auc": 0.5
+    },
+    {
+      "site_id": "KKI",
+      "train_size": 845,
+      "test_size": 39,
+      "accuracy": 0.4358974358974359,
+      "f1": 0.42105263157894735,
+      "auc": 0.5895061728395061,
+      "best_auc": 0.691358024691358
+    },
+    {
+      "site_id": "LEUVEN_1",
+      "train_size": 855,
+      "test_size": 29,
+      "accuracy": 0.6896551724137931,
+      "f1": 0.7567567567567568,
+      "auc": 0.6761904761904762,
+      "best_auc": 0.7952380952380952
+    },
+    {
+      "site_id": "LEUVEN_2",
+      "train_size": 852,
+      "test_size": 32,
+      "accuracy": 0.625,
+      "f1": 0.6666666666666666,
+      "auc": 0.6923076923076922,
+      "best_auc": 0.7408906882591093
+    },
+    {
+      "site_id": "MAX_MUN",
+      "train_size": 842,
+      "test_size": 42,
+      "accuracy": 0.5238095238095238,
+      "f1": 0.6,
+      "auc": 0.47916666666666663,
+      "best_auc": 0.6203703703703705
+    },
+    {
+      "site_id": "NYU",
+      "train_size": 713,
+      "test_size": 171,
+      "accuracy": 0.6198830409356725,
+      "f1": 0.6408839779005525,
+      "auc": 0.677243500139782,
+      "best_auc": 0.7970366228683254
+    },
+    {
+      "site_id": "OHSU",
+      "train_size": 861,
+      "test_size": 23,
+      "accuracy": 0.5652173913043478,
+      "f1": 0.5833333333333334,
+      "auc": 0.7045454545454545,
+      "best_auc": 0.7121212121212122
+    },
+    {
+      "site_id": "OLIN",
+      "train_size": 859,
+      "test_size": 25,
+      "accuracy": 0.6,
+      "f1": 0.5454545454545454,
+      "auc": 0.512987012987013,
+      "best_auc": 0.7727272727272727
+    },
+    {
+      "site_id": "PITT",
+      "train_size": 839,
+      "test_size": 45,
+      "accuracy": 0.6222222222222222,
+      "f1": 0.6530612244897959,
+      "auc": 0.6442687747035573,
+      "best_auc": 0.7549407114624506
+    },
+    {
+      "site_id": "SBL",
+      "train_size": 858,
+      "test_size": 26,
+      "accuracy": 0.8076923076923077,
+      "f1": 0.8,
+      "auc": 0.8571428571428571,
+      "best_auc": 0.869047619047619
+    },
+    {
+      "site_id": "SDSU",
+      "train_size": 851,
+      "test_size": 33,
+      "accuracy": 0.5757575757575758,
+      "f1": 0.6666666666666666,
+      "auc": 0.5198412698412698,
+      "best_auc": 0.7420634920634921
+    },
+    {
+      "site_id": "STANFORD",
+      "train_size": 848,
+      "test_size": 36,
+      "accuracy": 0.5277777777777778,
+      "f1": 0.5142857142857142,
+      "auc": 0.6625386996904024,
+      "best_auc": 0.7678018575851393
+    },
+    {
+      "site_id": "TRINITY",
+      "train_size": 840,
+      "test_size": 44,
+      "accuracy": 0.6363636363636364,
+      "f1": 0.6521739130434783,
+      "auc": 0.6438923395445134,
+      "best_auc": 0.7287784679089027
+    },
+    {
+      "site_id": "UCLA_1",
+      "train_size": 829,
+      "test_size": 55,
+      "accuracy": 0.6727272727272727,
+      "f1": 0.6785714285714286,
+      "auc": 0.7301587301587301,
+      "best_auc": 0.8492063492063492
+    },
+    {
+      "site_id": "UCLA_2",
+      "train_size": 864,
+      "test_size": 20,
+      "accuracy": 0.65,
+      "f1": 0.631578947368421,
+      "auc": 0.7083333333333334,
+      "best_auc": 0.8541666666666667
+    },
+    {
+      "site_id": "UM_1",
+      "train_size": 802,
+      "test_size": 82,
+      "accuracy": 0.5853658536585366,
+      "f1": 0.6222222222222222,
+      "auc": 0.6370772946859903,
+      "best_auc": 0.7179951690821257
+    },
+    {
+      "site_id": "UM_2",
+      "train_size": 853,
+      "test_size": 31,
+      "accuracy": 0.8064516129032258,
+      "f1": 0.85,
+      "auc": 0.9385964912280702,
+      "best_auc": 1.0
+    },
+    {
+      "site_id": "USM",
+      "train_size": 823,
+      "test_size": 61,
+      "accuracy": 0.6885245901639344,
+      "f1": 0.5581395348837209,
+      "auc": 0.8100686498855836,
+      "best_auc": 0.8398169336384439
+    },
+    {
+      "site_id": "YALE",
+      "train_size": 836,
+      "test_size": 48,
+      "accuracy": 0.6666666666666666,
+      "f1": 0.7419354838709677,
+      "auc": 0.7421328671328671,
+      "best_auc": 0.7692307692307692
+    }
+  ],
+  "verdict": {
+    "stage": "loso-full",
+    "metric": "auc_mean",
+    "threshold": 0.66,
+    "observed": 0.6613,
+    "margin": 0.0013,
+    "passed": true,
+    "rationale": "About 0.03 above the measured full-LOSO baseline (0.631). Clearing this is the only thing that justifies a new experiments/ directory."
+  }
+}

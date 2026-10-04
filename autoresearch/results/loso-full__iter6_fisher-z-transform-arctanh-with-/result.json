@@ -1,0 +1,227 @@
+{
+  "name": "iter6_fisher-z-transform-arctanh-with-",
+  "stage": "loso-full",
+  "note": "iter6 loso-full, code UNCHANGED (no edits, no epoch selection, no tuning against folds): iter2 zero-init dim-changing skip + mean pooling + exactly ONE new mechanism (Fisher z / arctanh of FC correlations, clipped to +/-0.999 before transform, applied once in SimpleGCN.forward before normalize_adjacency/conv1). Official metric final-epoch auc_mean; gate >= 0.66, best known final-epoch 0.6613 (iter2). Watch item: arctanh slope ~500 near |r|=0.999 at fixed lr=1e-3 \u2014 record per-fold blow-ups/NaN but do not tune.",
+  "ran_at": "2026-09-20T03:10:23.401649+00:00",
+  "runtime_seconds": 443.4,
+  "device": "mps",
+  "git": {
+    "branch": "experiment/trial-iter2_zero-initializing-the-dim-changi",
+    "commit": "7ba1de3"
+  },
+  "config": {
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 0.001,
+    "hidden_dim": 64,
+    "dropout": 0.5,
+    "weight_decay": 0.0001
+  },
+  "seeds": [
+    42,
+    1337,
+    2026
+  ],
+  "model_selection": "final epoch (no selection on the evaluation set)",
+  "summary": {
+    "accuracy_mean": 0.6437,
+    "accuracy_std": 0.1241,
+    "auc_mean": 0.6895,
+    "auc_std": 0.1197,
+    "f1_mean": 0.6487,
+    "f1_std": 0.1352,
+    "best_auc_mean": 0.7616,
+    "best_auc_std": 0.1038
+  },
+  "runs": [
+    {
+      "site_id": "CALTECH",
+      "train_size": 847,
+      "test_size": 37,
+      "accuracy": 0.6756756756756757,
+      "f1": 0.625,
+      "auc": 0.7105263157894737,
+      "best_auc": 0.7602339181286549
+    },
+    {
+      "site_id": "CMU",
+      "train_size": 879,
+      "test_size": 5,
+      "accuracy": 0.4,
+      "f1": 0.4,
+      "auc": 0.5,
+      "best_auc": 0.5
+    },
+    {
+      "site_id": "KKI",
+      "train_size": 845,
+      "test_size": 39,
+      "accuracy": 0.46153846153846156,
+      "f1": 0.4878048780487805,
+      "auc": 0.5864197530864198,
+      "best_auc": 0.6975308641975309
+    },
+    {
+      "site_id": "LEUVEN_1",
+      "train_size": 855,
+      "test_size": 29,
+      "accuracy": 0.7241379310344828,
+      "f1": 0.7894736842105263,
+      "auc": 0.6952380952380952,
+      "best_auc": 0.7857142857142858
+    },
+    {
+      "site_id": "LEUVEN_2",
+      "train_size": 852,
+      "test_size": 32,
+      "accuracy": 0.59375,
+      "f1": 0.6285714285714286,
+      "auc": 0.7044534412955465,
+      "best_auc": 0.7044534412955465
+    },
+    {
+      "site_id": "MAX_MUN",
+      "train_size": 842,
+      "test_size": 42,
+      "accuracy": 0.6428571428571429,
+      "f1": 0.7169811320754716,
+      "auc": 0.5277777777777777,
+      "best_auc": 0.6250000000000001
+    },
+    {
+      "site_id": "NYU",
+      "train_size": 713,
+      "test_size": 171,
+      "accuracy": 0.6432748538011696,
+      "f1": 0.659217877094972,
+      "auc": 0.7018451216102879,
+      "best_auc": 0.7949398937657255
+    },
+    {
+      "site_id": "OHSU",
+      "train_size": 861,
+      "test_size": 23,
+      "accuracy": 0.5217391304347826,
+      "f1": 0.5217391304347826,
+      "auc": 0.5909090909090909,
+      "best_auc": 0.6363636363636364
+    },
+    {
+      "site_id": "OLIN",
+      "train_size": 859,
+      "test_size": 25,
+      "accuracy": 0.56,
+      "f1": 0.47619047619047616,
+      "auc": 0.5324675324675325,
+      "best_auc": 0.7857142857142857
+    },
+    {
+      "site_id": "PITT",
+      "train_size": 839,
+      "test_size": 45,
+      "accuracy": 0.6,
+      "f1": 0.625,
+      "auc": 0.6818181818181819,
+      "best_auc": 0.7806324110671936
+    },
+    {
+      "site_id": "SBL",
+      "train_size": 858,
+      "test_size": 26,
+      "accuracy": 0.9230769230769231,
+      "f1": 0.9090909090909091,
+      "auc": 0.8809523809523809,
+      "best_auc": 0.8988095238095238
+    },
+    {
+      "site_id": "SDSU",
+      "train_size": 851,
+      "test_size": 33,
+      "accuracy": 0.6666666666666666,
+      "f1": 0.7555555555555555,
+      "auc": 0.5833333333333333,
+      "best_auc": 0.7142857142857143
+    },
+    {
+      "site_id": "STANFORD",
+      "train_size": 848,
+      "test_size": 36,
+      "accuracy": 0.5833333333333334,
+      "f1": 0.5161290322580645,
+      "auc": 0.6842105263157894,
+      "best_auc": 0.7647058823529411
+    },
+    {
+      "site_id": "TRINITY",
+      "train_size": 840,
+      "test_size": 44,
+      "accuracy": 0.5454545454545454,
+      "f1": 0.5238095238095238,
+      "auc": 0.6211180124223602,
+      "best_auc": 0.7370600414078675
+    },
+    {
+      "site_id": "UCLA_1",
+      "train_size": 829,
+      "test_size": 55,
+      "accuracy": 0.7272727272727273,
+      "f1": 0.7368421052631579,
+      "auc": 0.8227513227513228,
+      "best_auc": 0.8571428571428572
+    },
+    {
+      "site_id": "UCLA_2",
+      "train_size": 864,
+      "test_size": 20,
+      "accuracy": 0.65,
+      "f1": 0.631578947368421,
+      "auc": 0.75,
+      "best_auc": 0.8541666666666666
+    },
+    {
+      "site_id": "UM_1",
+      "train_size": 802,
+      "test_size": 82,
+      "accuracy": 0.6097560975609756,
+      "f1": 0.6363636363636364,
+      "auc": 0.6642512077294686,
+      "best_auc": 0.7167874396135265
+    },
+    {
+      "site_id": "UM_2",
+      "train_size": 853,
+      "test_size": 31,
+      "accuracy": 0.9032258064516129,
+      "f1": 0.9230769230769231,
+      "auc": 0.9736842105263158,
+      "best_auc": 0.9912280701754386
+    },
+    {
+      "site_id": "USM",
+      "train_size": 823,
+      "test_size": 61,
+      "accuracy": 0.7540983606557377,
+      "f1": 0.6666666666666666,
+      "auc": 0.8283752860411899,
+      "best_auc": 0.8535469107551488
+    },
+    {
+      "site_id": "YALE",
+      "train_size": 836,
+      "test_size": 48,
+      "accuracy": 0.6875,
+      "f1": 0.7457627118644068,
+      "auc": 0.75,
+      "best_auc": 0.7744755244755245
+    }
+  ],
+  "verdict": {
+    "stage": "loso-full",
+    "metric": "auc_mean",
+    "threshold": 0.66,
+    "observed": 0.6895,
+    "margin": 0.0295,
+    "passed": true,
+    "rationale": "About 0.03 above the measured full-LOSO baseline (0.631). Clearing this is the only thing that justifies a new experiments/ directory."
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "name": "iter15_a-train-fold-only-coral-style-se",
+  "stage": "loso-full",
+  "note": "iter15 loso-full (stage required by workspace; one stage only, code unchanged since iter15 loso-subset PASS at commit 0ca17ce). iter14 loso-full PASSING baseline (Fisher-z node features, mean-only readout, per-site rank/quantile edge map) + exactly ONE new mechanism: non-adversarial site_coral_loss (SITE_ALIGN_LAMBDA=0.1, SITE_ALIGN_MIN_SUBJECTS=3, mean over batch sites of ||Cov_s(h)-Cov_pooled(h)||_F^2/(4d^2), degenerate sites exact 0). No DANN/GRL/site head, no class weighting, no embed dropout, no mean+std/2d head, no attention readout, no mean+max, no learnable edge gamma, no top-k sparsification, no per-site node-feature standardization. Official metric: FINAL-EPOCH auc_mean (no epoch selection). Gate loso-full 0.6895; iter14 baseline it must also beat 0.6915.",
+  "ran_at": "2026-09-20T05:16:49.434852+00:00",
+  "runtime_seconds": 1041.1,
+  "device": "mps",
+  "git": {
+    "branch": "experiment/trial-iter14_per-site-rank-quantile-normaliza",
+    "commit": "0ca17ce"
+  },
+  "config": {
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 0.001,
+    "hidden_dim": 64,
+    "dropout": 0.5,
+    "weight_decay": 0.0001
+  },
+  "seeds": [
+    42,
+    1337,
+    2026
+  ],
+  "model_selection": "final epoch (no selection on the evaluation set)",
+  "summary": {
+    "accuracy_mean": 0.6399,
+    "accuracy_std": 0.121,
+    "auc_mean": 0.6917,
+    "auc_std": 0.1151,
+    "f1_mean": 0.6416,
+    "f1_std": 0.1371,
+    "best_auc_mean": 0.7672,
+    "best_auc_std": 0.0994
+  },
+  "runs": [
+    {
+      "site_id": "CALTECH",
+      "train_size": 847,
+      "test_size": 37,
+      "accuracy": 0.7027027027027027,
+      "f1": 0.6451612903225806,
+      "auc": 0.716374269005848,
+      "best_auc": 0.7485380116959064
+    },
+    {
+      "site_id": "CMU",
+      "train_size": 879,
+      "test_size": 5,
+      "accuracy": 0.4,
+      "f1": 0.4,
+      "auc": 0.5,
+      "best_auc": 0.5
+    },
+    {
+      "site_id": "KKI",
+      "train_size": 845,
+      "test_size": 39,
+      "accuracy": 0.4358974358974359,
+      "f1": 0.42105263157894735,
+      "auc": 0.6018518518518519,
+      "best_auc": 0.7067901234567902
+    },
+    {
+      "site_id": "LEUVEN_1",
+      "train_size": 855,
+      "test_size": 29,
+      "accuracy": 0.6896551724137931,
+      "f1": 0.7428571428571429,
+      "auc": 0.6904761904761905,
+      "best_auc": 0.780952380952381
+    },
+    {
+      "site_id": "LEUVEN_2",
+      "train_size": 852,
+      "test_size": 32,
+      "accuracy": 0.59375,
+      "f1": 0.6285714285714286,
+      "auc": 0.7004048582995952,
+      "best_auc": 0.7165991902834008
+    },
+    {
+      "site_id": "MAX_MUN",
+      "train_size": 842,
+      "test_size": 42,
+      "accuracy": 0.5714285714285714,
+      "f1": 0.6785714285714286,
+      "auc": 0.5138888888888888,
+      "best_auc": 0.6180555555555556
+    },
+    {
+      "site_id": "NYU",
+      "train_size": 713,
+      "test_size": 171,
+      "accuracy": 0.6432748538011696,
+      "f1": 0.6666666666666666,
+      "auc": 0.6975118814649147,
+      "best_auc": 0.8026279004752587
+    },
+    {
+      "site_id": "OHSU",
+      "train_size": 861,
+      "test_size": 23,
+      "accuracy": 0.6086956521739131,
+      "f1": 0.6086956521739131,
+      "auc": 0.6666666666666666,
+      "best_auc": 0.712121212121212
+    },
+    {
+      "site_id": "OLIN",
+      "train_size": 859,
+      "test_size": 25,
+      "accuracy": 0.52,
+      "f1": 0.4,
+      "auc": 0.564935064935065,
+      "best_auc": 0.7922077922077921
+    },
+    {
+      "site_id": "PITT",
+      "train_size": 839,
+      "test_size": 45,
+      "accuracy": 0.6444444444444445,
+      "f1": 0.6521739130434783,
+      "auc": 0.6956521739130435,
+      "best_auc": 0.7826086956521741
+    },
+    {
+      "site_id": "SBL",
+      "train_size": 858,
+      "test_size": 26,
+      "accuracy": 0.8846153846153846,
+      "f1": 0.8695652173913043,
+      "auc": 0.8809523809523809,
+      "best_auc": 0.8928571428571428
+    },
+    {
+      "site_id": "SDSU",
+      "train_size": 851,
+      "test_size": 33,
+      "accuracy": 0.6060606060606061,
+      "f1": 0.6976744186046512,
+      "auc": 0.5674603174603174,
+      "best_auc": 0.7142857142857143
+    },
+    {
+      "site_id": "STANFORD",
+      "train_size": 848,
+      "test_size": 36,
+      "accuracy": 0.5555555555555556,
+      "f1": 0.4666666666666667,
+      "auc": 0.6625386996904025,
+      "best_auc": 0.78328173374613
+    },
+    {
+      "site_id": "TRINITY",
+      "train_size": 840,
+      "test_size": 44,
+      "accuracy": 0.6136363636363636,
+      "f1": 0.6222222222222222,
+      "auc": 0.650103519668737,
+      "best_auc": 0.743271221532091
+    },
+    {
+      "site_id": "UCLA_1",
+      "train_size": 829,
+      "test_size": 55,
+      "accuracy": 0.7454545454545455,
+      "f1": 0.7586206896551724,
+      "auc": 0.7526455026455027,
+      "best_auc": 0.843915343915344
+    },
+    {
+      "site_id": "UCLA_2",
+      "train_size": 864,
+      "test_size": 20,
+      "accuracy": 0.6,
+      "f1": 0.5555555555555556,
+      "auc": 0.7083333333333334,
+      "best_auc": 0.84375
+    },
+    {
+      "site_id": "UM_1",
+      "train_size": 802,
+      "test_size": 82,
+      "accuracy": 0.6585365853658537,
+      "f1": 0.6888888888888889,
+      "auc": 0.6666666666666666,
+      "best_auc": 0.7222222222222222
+    },
+    {
+      "site_id": "UM_2",
+      "train_size": 853,
+      "test_size": 31,
+      "accuracy": 0.9032258064516129,
+      "f1": 0.9230769230769231,
+      "auc": 0.9780701754385965,
+      "best_auc": 0.9912280701754386
+    },
+    {
+      "site_id": "USM",
+      "train_size": 823,
+      "test_size": 61,
+      "accuracy": 0.7540983606557377,
+      "f1": 0.6808510638297872,
+      "auc": 0.845537757437071,
+      "best_auc": 0.8569794050343249
+    },
+    {
+      "site_id": "YALE",
+      "train_size": 836,
+      "test_size": 48,
+      "accuracy": 0.6666666666666666,
+      "f1": 0.7241379310344828,
+      "auc": 0.7744755244755245,
+      "best_auc": 0.791958041958042
+    }
+  ],
+  "verdict": {
+    "stage": "loso-full",
+    "metric": "auc_mean",
+    "threshold": 0.6895,
+    "observed": 0.6917,
+    "margin": 0.0022,
+    "passed": true,
+    "rationale": "Raised from 0.66 to the iter6 Fisher-z incumbent (0.6895, accuracy 0.644). Clearing the original 0.63+0.03 bar is no longer enough to open a PR. Loop stop is still accuracy_mean >= 0.80; this gate is the new state of the art, not the clinical 80/80 bar."
+  }
+}
