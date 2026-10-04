@@ -7,26 +7,26 @@ completely before making any change.
 
 ## 1. Objective
 
-Improve ASD vs. healthy-control classification on ABIDE resting-state functional
-connectivity, measured by **cross-site generalization** (leave-one-site-out AUC).
+Improve ASD vs control classification on the DCAN ABIDE I + II dataset
+(`data/abide_dcan`, 1,443 subjects, Gordon + HCP / Power / Markov atlases).
 
-Published results, corrected on 2026-08-27 to report the final epoch:
+**Starting point:** the formal linear baseline, not the old GCN PRs.
 
-| Reference | Validation | AUC |
-|-----------|------------|-----|
-| `baseline_gcn_v1` | random 80/20 split, seed 42 | 0.677 |
-| `loso_cv_gcn_v1` | leave-one-site-out, 20 sites | 0.623 ± 0.118 |
+| Split | Features | Accuracy | Balanced accuracy | AUC | ASD recall |
+|---|---|---|---|---|---|
+| Leave-one-site-out (33 folds) | tangent + ridge | 68.6% | 67.35% | 0.775 | 54.3% |
+| Leave-one-institution-out (23 folds) | tangent + ridge | 67.0% | 67.47% | 0.770 | 55.1% |
 
-Gates are set against this framework's own measurements of the same default config,
-which use identical protocol and are therefore the fair comparison:
+Source: `experiments/linear_baseline_dcan_v1/`, tag `linear-baseline-dcan-v1`.
+The scored function is `neuroasd.model.fit_predict`. It currently implements
+that tangent + ridge model on the Gordon atlas.
 
-| Stage | Measured baseline AUC | Current SOTA (iter6 Fisher-z) |
-|-------|----------------------|-------------------------------|
-| `screen` | 0.628 ± 0.036 (3 seeds, so below the single-seed 0.677) | 0.673 |
-| `loso-subset` | 0.659 ± 0.071 | 0.753 |
-| `loso-full` | 0.631 ± 0.108 | 0.690 (accuracy 0.644) |
+**Primary metric:** fold-mean balanced accuracy
+`(ASD recall + control recall) / 2`. Accuracy and AUC are always reported so
+results can be compared with the literature (those papers mostly report
+accuracy, then AUC; almost none report balanced accuracy).
 
-Full numbers live in `autoresearch/gates.json`.
+Loop stop: leave-one-institution-out accuracy_mean ≥ 80%.
 
 ---
 
@@ -34,17 +34,19 @@ Full numbers live in `autoresearch/gates.json`.
 
 1. **Never commit to `main`.** Every trial runs on its own branch.
 2. **Never modify `experiments/`.** Those directories are frozen published results.
-   New results go in a new directory only after a `loso-full` trial passes.
-3. **Never modify `data/`.** The dataset is fixed at 884 subjects, 111 ROIs.
-4. **Change one thing at a time.** A trial that varies four hyperparameters at once
+   New results go in a new directory only after a `loso-institution` trial passes.
+3. **Never modify `data/`.** The subject list is fixed (1,443 people).
+4. **Change one thing at a time.** A trial that varies four ideas at once
    teaches nothing about which one mattered.
-5. **Gate on final-epoch metrics.** `autoresearch/trial.py` reports these by design;
-   do not add best-epoch selection on the test fold, which leaks.
+5. **Gate on one fit per fold.** `autoresearch/trial.py` reports these by design;
+   do not add best-epoch or test-fold selection.
 6. **Do not stack a new idea on a failed diff.** After a FAIL the loop archives
-   the diff and restores coder-writable files to the last loso-full winner (or
-   HEAD if there is none). The rejected mechanism stays in `workspace.ruled_out`.
-7. **Do not tune against `loso-full`.** It is the confirmation stage, not a search
-   signal. Repeatedly sweeping on it overfits the only honest estimate available.
+   the diff and restores coder-writable files to the last loso-institution winner
+   (or HEAD if there is none). The rejected mechanism stays in `workspace.ruled_out`.
+7. **Do not tune against `loso-institution`.** It is the confirmation stage, not a
+   search signal.
+8. **Do not use FIQ or head motion as predictive features.** They differ by
+   diagnosis and would inflate results. Age and sex are allowed.
 
 ---
 
@@ -52,17 +54,17 @@ Full numbers live in `autoresearch/gates.json`.
 
 Trials are cheap-to-expensive. Do not skip ahead.
 
-| Stage | What it runs | Cost | Gate |
-|-------|--------------|------|------|
-| `screen` | Random 80/20 split × 3 seeds | ~1 min | mean AUC ≥ 0.66 |
-| `loso-subset` | LOSO on NYU, UM_1, USM, UCLA_1, YALE | ~2 min | mean AUC ≥ 0.72 |
-| `loso-full` | LOSO on all 20 sites | ~6 min | mean AUC ≥ 0.6895 |
+| Stage | What it runs | Gate |
+|-------|--------------|------|
+| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | balanced accuracy ≥ 0.64 |
+| `loso-site` | Leave-one-site-out on all 33 sites with both classes | balanced accuracy ≥ 0.65 |
+| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | either split ≥ +1 pp vs the linear baseline, and the other drops by at most 0.5 pp |
 
 Thresholds live in `autoresearch/gates.json`. `trial.py` exits `0` on PASS and `3` on
-FAIL, so `run_trial.sh` can branch on the result.
+FAIL.
 
-Runtimes assume Apple Silicon MPS with the FC matrices cached in memory. They are short
-enough that there is no excuse for skipping a stage.
+A `loso-institution` PASS opens a review PR. The PR body lists balanced accuracy,
+accuracy, AUC, ASD recall, and control recall for both splits.
 
 ---
 
@@ -73,59 +75,41 @@ main                            stable code + published results + this framework
 experiment/trial-<slug>         one trial, opened for review after a win
 ```
 
-The framework lives on `main` under `autoresearch/` (including the multi-agent
-`loop/`). Do not treat `experiment/autoresearch` as the current home.
+The loop never merges to `main` and never edits `gates.json`. After a full PASS
+it keeps the winning code and searches for the next mechanism until institution
+accuracy reaches 80%.
 
-`run_trial.sh` implements the single-trial policy:
-
-1. Require a clean working tree.
-2. Branch from the current HEAD (usually `main`): `experiment/trial-<slug>`.
-3. Apply the change, run the trial.
-4. **PASS** → commit code + `result.json`, push the branch, open a review PR
-   whose description starts with the scores.
-5. **FAIL** → record in the ledger, return to the starting branch, delete the
-   trial branch.
-
-The unbounded agent loop (`python -m autoresearch.loop`) follows the same
-promotion rule: only a protocol-clean `loso-full` PASS opens that PR. It never
-merges to `main` or edits `gates.json`. After a full PASS it keeps the winning
-code and searches for the next mechanism until `loso-full` accuracy reaches
-80%. It does not wait for a merge.
-
-Failed trials leave no remote branch, but they are never lost: every run appends to
-`outputs/autoresearch/ledger.jsonl`, which is gitignored and therefore survives branch
-switches. **Read the ledger before proposing a new config** so the same dead end is not
-explored twice.
+Failed trials leave no remote branch. Every run appends to
+`outputs/autoresearch/ledger.jsonl`. **Read the ledger before proposing a new
+config** so the same dead end is not explored twice. The old ABIDE I GCN ledger
+is archived under `outputs/autoresearch/archive/`.
 
 ---
 
 ## 5. Search space
 
-Hyperparameters exposed by `trial.py` (no code change needed):
-
-| Flag | Default | Sensible range |
-|------|---------|----------------|
-| `--epochs` | 100 | 30–200 |
-| `--batch-size` | 32 | 8–64 |
-| `--lr` | 1e-3 | 1e-4 – 5e-3 |
-| `--hidden-dim` | 64 | 32–256 |
-| `--dropout` | 0.5 | 0.2–0.7 |
-| `--weight-decay` | 1e-4 | 1e-5 – 1e-2 |
-
-Structural changes require editing `neuroasd/gcn.py` on the trial branch. `trial.py`
-imports whatever `SimpleGCN` the branch defines, so no framework change is needed.
+The harness owns data and metrics. You only edit `fit_predict` (and helpers).
+`train` / `test` expose: `fc(atlas)` for `gordon`, `hcp`, `power`, `markov`;
+`age`; `sex`; `groups`; `sites`; and `train.y`. Test labels are hidden.
 
 Ideas worth testing, roughly in order of expected value:
 
-1. **Class weighting** — ASD recall was only 50% in the baseline; the model favours the
-   majority control class.
-2. **Site harmonization** (e.g. ComBat) — site effects are the main obstacle, and
-   per-site AUC ranges from 0.50 to 0.91.
-3. **Edge sparsification** — threshold weak correlations instead of using a dense
-   111×111 adjacency.
-4. **Fisher z-transform** of correlations before use as node features.
-5. **Attention pooling** instead of global mean pooling.
-6. **Deeper or wider GCN**, with the caveat that 884 subjects is a small dataset.
+1. **Class weights or a training-only decision threshold.** Baseline ASD recall
+   is ~54%. Rebalance so the model does not default to "control". Fit any
+   threshold on training folds only (grouped inner CV).
+2. **Site / institution score calibration.** Under leave-one-institution-out,
+   KKI and Leuven lose 17–27 points of accuracy while AUC stays at 0.72–0.80.
+   The ranking survives; the threshold does not.
+3. **Multi-atlas stacking.** Fit one linear model per atlas (Gordon, HCP, Power,
+   Markov) and combine with a logistic meta-learner trained on out-of-fold
+   predictions inside the training sites.
+4. **Age and sex** as extra features (complete for every subject).
+5. **Ensembles** of linear models across atlases and feature types. A strongly
+   regularized GNN is allowed only as one ensemble member — the GCN on this
+   dataset overfits.
+
+Do not start from the old GCN trial PRs (#2–#13). Those were fit on C-PAC
+ABIDE I (884 subjects, 111 ROIs) and are below this linear baseline.
 
 ---
 
@@ -135,17 +119,17 @@ Before running:
 
 - [ ] Read `outputs/autoresearch/ledger.jsonl`; confirm this config is new.
 - [ ] State a one-line hypothesis and pass it via `--note`.
-- [ ] Confirm exactly one thing differs from the best known config.
+- [ ] Confirm exactly one thing differs from the last win (or from
+      `neuroasd/model.py` if there is no win yet).
 
 After running:
 
 - [ ] Record the outcome, including failures, with the observed margin.
 - [ ] On FAIL, say what the result rules out — that is the useful output.
-- [ ] On PASS at `screen`, promote to `loso-subset`; on PASS there, promote to
-      `loso-full`.
-- [ ] On PASS at `loso-full`, create `experiments/<name>_v1/` with `run_config.json`,
-      `results.json`, and a `README.md` following the format of
-      `experiments/loso_cv_gcn_v1/README.md`, then open the branch for review.
+- [ ] On PASS at `screen`, promote to `loso-site`; on PASS there, promote to
+      `loso-institution`.
+- [ ] On PASS at `loso-institution`, create `experiments/<name>_v1/` and open
+      the branch for review. Do not merge.
 
 ---
 
@@ -153,16 +137,13 @@ After running:
 
 ```bash
 # Single trial, screening stage
-./autoresearch/run_trial.sh --name dropout03 --stage screen -- --dropout 0.3
+./autoresearch/run_trial.sh --name class-weight --stage screen -- --note "class-weighted ridge"
 
 # Promote a promising config
-./autoresearch/run_trial.sh --name dropout03 --stage loso-subset -- --dropout 0.3
+./autoresearch/run_trial.sh --name class-weight --stage loso-site -- --note "class-weighted ridge"
 
 # Run the trial directly, without branch management
-uv run python -m autoresearch.trial --name dropout03 --stage screen --dropout 0.3
-
-# Review history
-cat outputs/autoresearch/ledger.jsonl | jq -r '[.name,.stage,.summary.auc_mean,.verdict.passed] | @tsv'
+uv run python -m autoresearch.trial --name class-weight --stage screen --note "class-weighted ridge"
 
 # Multi-agent write → lint → trial loop (needs an LLM key)
 uv run python -m autoresearch.loop.check_loop
@@ -173,6 +154,7 @@ uv run python -m autoresearch.loop
 
 ## 8. Reporting
 
-When reporting to the user, lead with the outcome: what was tried, what the number was,
-and whether it beat the reference. Include the margin, not just PASS/FAIL. Never claim
-an improvement from a `screen` result alone — it is a filter, not evidence.
+When reporting to the user, lead with the outcome: what was tried, balanced
+accuracy, accuracy, AUC, ASD recall, and whether it beat the linear baseline.
+Include the margin, not just PASS/FAIL. Never claim an improvement from a
+`screen` result alone — it is a filter, not evidence.

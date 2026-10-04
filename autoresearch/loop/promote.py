@@ -1,4 +1,4 @@
-"""Promote a loso-full PASS: freeze results and open a review PR.
+"""Promote a loso-institution PASS: freeze results and open a review PR.
 
 Commits only this trial's training/evaluation files plus its frozen experiment
 folder, on a branch cut from main. Never merges to main and never edits
@@ -133,7 +133,7 @@ def pr_title(result: dict[str, Any]) -> str:
     margin = verdict.get("margin")
     margin_s = f"{float(margin):+.3f}" if isinstance(margin, (int, float)) else "n/a"
     return (
-        f"Trial {name}: {stage} AUC {_fmt(summary.get('auc_mean'))} "
+        f"Trial {name}: {stage} bal.acc {_fmt(summary.get('balanced_accuracy_mean'))} "
         f"({passed} {margin_s})"
     )
 
@@ -150,8 +150,6 @@ def pr_body(result: dict[str, Any], *, prior: dict[str, Any] | None = None) -> s
     passed = "PASS" if verdict.get("passed") else "FAIL"
     margin = verdict.get("margin")
     margin_s = f"{float(margin):+.4f}" if isinstance(margin, (int, float)) else "n/a"
-    best = summary.get("best_auc_mean")
-    best_s = _fmt(best) if best is not None else "n/a"
     name = result.get("name") or "trial"
     stage = result.get("stage") or "unknown"
     reproduce = (
@@ -161,36 +159,42 @@ def pr_body(result: dict[str, Any], *, prior: dict[str, Any] | None = None) -> s
     lines = [
         "## Scores",
         "",
-        "Official metric is **final-epoch `auc_mean`**. Best-epoch numbers are diagnostic only.",
+        "Official metric is **fold-mean balanced accuracy** (one fit per fold). "
+        "Accuracy and AUC are reported so the number can be compared with the literature.",
         "",
         f"**This trial (`{stage}`)**",
         "",
         "| Metric | Mean ± Std |",
         "|--------|------------|",
-        f"| **AUC** | **{_fmt_pm(summary.get('auc_mean'), summary.get('auc_std'))}** |",
+        f"| **Balanced accuracy** | **{_fmt_pm(summary.get('balanced_accuracy_mean'), summary.get('balanced_accuracy_std'))}** |",
         f"| Accuracy | {_fmt_pm(summary.get('accuracy_mean'), summary.get('accuracy_std'))} |",
-        f"| F1 | {_fmt_pm(summary.get('f1_mean'), summary.get('f1_std'))} |",
+        f"| AUC | {_fmt_pm(summary.get('auc_mean'), summary.get('auc_std'))} |",
+        f"| ASD recall | {_fmt_pm(summary.get('sensitivity_mean'), summary.get('sensitivity_std'))} |",
+        f"| Control recall | {_fmt_pm(summary.get('specificity_mean'), summary.get('specificity_std'))} |",
         "",
         (
-            f"**Gate:** `{verdict.get('metric', 'auc_mean')}` "
-            f"{_fmt(verdict.get('observed'), 4)} vs "
-            f"{_fmt(verdict.get('threshold'), 4)} "
-            f"(margin **{margin_s}**) → **{passed}**"
+            f"**Gate:** `{verdict.get('metric', 'balanced_accuracy_mean')}` "
+            f"{_fmt(verdict.get('observed'), 4)} "
+            + (
+                f"site {verdict.get('delta_site', 'n/a')} / "
+                f"institution {verdict.get('delta_institution', 'n/a')} "
+                if verdict.get("delta_site") is not None
+                else f"vs {_fmt(verdict.get('threshold'), 4)} (margin **{margin_s}**) "
+            )
+            + f"→ **{passed}**"
         ),
-        "",
-        f"Diagnostic best-epoch AUC (not a result): {best_s}.",
         "",
     ]
 
     ladder_rows = []
-    for prior_stage in ("screen", "loso-subset", "loso-full"):
+    for prior_stage in ("screen", "loso-site", "loso-institution"):
         row = prior.get(prior_stage)
         if not isinstance(row, dict):
             continue
         if prior_stage == stage:
             continue
         ladder_rows.append(
-            f"| `{prior_stage}` | {_fmt(row.get('auc_mean'))} | "
+            f"| `{prior_stage}` | {_fmt(row.get('balanced_accuracy_mean') or row.get('auc_mean'))} | "
             f"{row.get('margin', 'n/a')} | "
             f"{'PASS' if row.get('passed') else 'FAIL'} |"
         )
@@ -199,7 +203,7 @@ def pr_body(result: dict[str, Any], *, prior: dict[str, Any] | None = None) -> s
             [
                 "Earlier stages of the same change:",
                 "",
-                "| Stage | AUC | Margin | Verdict |",
+                "| Stage | Bal. acc | Margin | Verdict |",
                 "|-------|-----|--------|---------|",
                 *ladder_rows,
                 "",
@@ -292,7 +296,7 @@ def write_experiment_freeze(result: dict[str, Any]) -> Path:
     folder = EXPERIMENTS_DIR / f"{name}_v1"
     folder.mkdir(parents=True, exist_ok=True)
     summary = result["summary"]
-    config = result["config"]
+    config = result.get("config") or {}
     (folder / "results.json").write_text(
         json.dumps(result, indent=2) + "\n", encoding="utf-8"
     )
@@ -303,11 +307,9 @@ def write_experiment_freeze(result: dict[str, Any]) -> Path:
             "model_selection", "final epoch (no selection on the evaluation set)"
         ),
         "data": {
-            "dataset": "ABIDE Preprocessed rois_ho",
-            "num_subjects": 884,
-            "num_rois": 111,
-            "fc_method": "Pearson correlation",
-            "num_sites": 20,
+            "dataset": "DCAN ABIDE I + II (Gordon / optional HCP, Power, Markov)",
+            "num_subjects": 1443,
+            "source": "data/abide_dcan",
         },
         "hyperparameters": config,
         "reproduce": (
@@ -323,7 +325,7 @@ def write_experiment_freeze(result: dict[str, Any]) -> Path:
     files = ", ".join(workspace.get("files_changed") or []) or "(see git diff)"
     readme = f"""# {name} v1 — Autoresearch promotion
 
-Frozen after a `loso-full` PASS. Metrics are **final-epoch** only.
+Frozen after a `loso-institution` PASS. Metrics are one fit per fold.
 
 > **Evaluated:** {date.today().isoformat()}
 > **Hypothesis:** {hypothesis}
@@ -333,11 +335,11 @@ Frozen after a `loso-full` PASS. Metrics are **final-epoch** only.
 
 | Metric | Mean ± Std |
 |--------|------------|
+| **Balanced accuracy** | **{summary.get('balanced_accuracy_mean', 0):.3f} ± {summary.get('balanced_accuracy_std', 0):.3f}** |
 | Accuracy | {summary['accuracy_mean']:.3f} ± {summary['accuracy_std']:.3f} |
-| **AUC** | **{summary['auc_mean']:.3f} ± {summary['auc_std']:.3f}** |
-| F1 | {summary['f1_mean']:.3f} ± {summary['f1_std']:.3f} |
-
-Diagnostic best-epoch AUC (not reported): {summary.get('best_auc_mean', 'n/a')}.
+| AUC | {summary['auc_mean']:.3f} ± {summary['auc_std']:.3f} |
+| ASD recall | {summary.get('sensitivity_mean', 0):.3f} ± {summary.get('sensitivity_std', 0):.3f} |
+| Control recall | {summary.get('specificity_mean', 0):.3f} ± {summary.get('specificity_std', 0):.3f} |
 
 ## Reproduce
 
@@ -355,8 +357,8 @@ def promote(result: dict[str, Any], *, push: bool) -> dict[str, Any]:
     """Copy the score, freeze experiments/, commit a narrow trial branch."""
     name = str(result["name"])
     stage = str(result["stage"])
-    if stage != "loso-full":
-        raise ValueError("promotion is only allowed after a loso-full PASS")
+    if stage != "loso-institution":
+        raise ValueError("promotion is only allowed after a loso-institution PASS")
 
     staged_result = results_dir() / f"{stage}__{name}" / "result.json"
     staged_result.parent.mkdir(parents=True, exist_ok=True)

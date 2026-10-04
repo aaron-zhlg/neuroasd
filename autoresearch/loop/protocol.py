@@ -12,7 +12,7 @@ import re
 from typing import Any
 
 FORBIDDEN_GATE_METRICS = frozenset({"best_auc", "best_auc_mean"})
-REQUIRED_MODEL_SELECTION = "final epoch"
+REQUIRED_MODEL_SELECTION = ("final epoch", "final fit")
 
 # Edits that typically reintroduce the leak.
 _LEAK_PATTERNS = (
@@ -40,10 +40,10 @@ def leak_reasons_in_source(content: str) -> list[str]:
 def protocol_notes(result: dict[str, Any]) -> list[str]:
     """Notes the experimenter must surface; first items are hard failures."""
     notes: list[str] = []
-    selection = str(result.get("model_selection", ""))
-    if REQUIRED_MODEL_SELECTION not in selection.lower():
+    selection = str(result.get("model_selection", "")).lower()
+    if not any(token in selection for token in REQUIRED_MODEL_SELECTION):
         notes.append(
-            "PROTOCOL FAIL: result is not marked as final-epoch. "
+            "PROTOCOL FAIL: result is not marked as a final fit / final epoch. "
             "Do not treat this number as an improvement."
         )
 

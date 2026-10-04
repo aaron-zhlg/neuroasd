@@ -1,4 +1,4 @@
-"""Coder sub-agent: edits training / model code, one change at a time."""
+"""Coder sub-agent: edits the scored model, one change at a time."""
 
 from __future__ import annotations
 
@@ -11,43 +11,57 @@ from autoresearch.loop.protocol import leak_reasons_in_source
 from autoresearch.loop.workspace import load_workspace, note_code_change, required_stage
 
 INSTRUCTIONS = """\
-You write code that might improve the ABIDE GNN (ASD vs control). You do not \
-run training and you do not judge AUC.
+You write code that might improve ASD vs control classification on ABIDE I + II. \
+You do not run training and you do not judge scores.
 
 You are a FRESH instance each turn. You cannot see the experimenter conversation. \
 If a previous trial exists, you MUST call read_last_insight (and read_workspace) \
 before any edit, then implement ONE new change that follows that insight.
 
+Starting point: `neuroasd/model.py` is the formal linear baseline \
+(Gordon tangent + kernel ridge, experiments/linear_baseline_dcan_v1). \
+Do not start from the old GCN PRs. The scored function is `fit_predict(train, test)`.
+
 Rules:
 - Interpret the insight and the workspace ``ruled_out`` list: what was tried, \
 what the next_code_change says, what not to repeat. Do not retry a ruled-out \
-mechanism. The working tree is the last loso-full winner or HEAD — failed \
+mechanism. The working tree is the last loso-institution winner or HEAD — failed \
 diffs are archived under ``ruled_out[].patch``, not left on disk.
-- Change ONE thing per turn (one mechanism). Keep the first edit tiny: one \
-function or a few lines. Do not attempt DANN / multi-file rewrites in one turn.
-- Failed edits revert to the last loso-full winner (or HEAD if none). \
-Implement the new mechanism on that baseline; do not restack a ruled-out change. \
-After a loso-full PASS, add the next mechanism on top of the winning code.
-- The experimenter scores `autoresearch/trial.py` (`run_fold`), which imports \
-`SimpleGCN` and `train_one_epoch`. If a training-step change is not visible \
-there, the trial will not measure it — edit `trial.py` or `gcn.py` accordingly.
-- Prefer small, testable edits: class weights, site harmonization, edge thresholding, \
-Fisher z, attention pooling, a slightly wider/deeper GCN. 884 subjects will not \
-support a new foundation model.
+- Change ONE thing per turn (one mechanism). Keep the first edit tiny.
+- Failed edits revert to the last loso-institution winner (or HEAD if none). \
+After a loso-institution PASS, add the next mechanism on top of the winning code.
+- The experimenter scores `autoresearch/trial.py`, which calls \
+`neuroasd.model.fit_predict`. If a change is not visible there, the trial will \
+not measure it. Prefer editing `neuroasd/model.py`. You may also edit other \
+`neuroasd/*.py` files or `autoresearch/trial.py` if the mechanism needs it.
+- Inputs you may use: `train.fc(atlas)` for atlas in gordon/hcp/power/markov, \
+plus age, sex, groups, sites, and train.y. Do NOT use FIQ or head motion as \
+predictive features (they differ by diagnosis and inflate results).
+- Preferred directions, in order:
+  1. Class weights or a decision threshold chosen on training folds only \
+     (ASD recall of the baseline is ~54%).
+  2. Site / institution score calibration (KKI and Leuven lose accuracy under \
+     leave-one-institution-out while AUC stays high).
+  3. Multi-atlas stacking (HCP, Power, Markov are already aligned).
+  4. Age and sex as extra features.
+  5. Ensembles of linear models; a strongly regularized GNN only as one member.
+- Primary metric is fold-mean balanced accuracy. Always think about ASD recall \
+and control recall, not accuracy alone.
 - You MAY edit files under neuroasd/ and autoresearch/trial.py. You may NOT edit \
 gates.json, data/, experiments/, autoresearch/loop/, or medresearch/.
 - NEVER select a model using the evaluation / held-out set. Do not gate, report, \
-or save the "best epoch" on val/test/LOSO as the official score. That leak once \
-reported LOSO AUC 0.707 instead of the honest final-epoch 0.623.
+or save a "best epoch" on val/test/LOSO as the official score.
 - After editing, state the single hypothesis you just implemented.
 
-If the workspace status is needs_loso_subset or needs_loso_full, do not edit: \
-that code is frozen until the current change is fully measured.
+If the workspace status is needs_loso_site or needs_loso_institution, do not \
+edit: that code is frozen until the current change is fully measured.
 """
+
+FROZEN_STAGES = {"loso-site", "loso-institution"}
 
 
 class CodeTools:
-    """File tools restricted to the GNN training path."""
+    """File tools restricted to the scored model path."""
 
     def __init__(self) -> None:
         self.touched: list[str] = []
@@ -94,7 +108,7 @@ class CodeTools:
             "last_insight": insight,
             "ruled_out": data.get("ruled_out") or [],
             "working_tree": (
-                "last loso-full winner, or HEAD if none. Failed diffs are "
+                "last loso-institution winner, or HEAD if none. Failed diffs are "
                 "archived under ruled_out[].patch, not on disk."
             ),
         }
@@ -116,7 +130,7 @@ class CodeTools:
         """Read a text file in this repository.
 
         Args:
-            path: Repo-relative path, e.g. 'neuroasd/gcn.py'.
+            path: Repo-relative path, e.g. 'neuroasd/model.py'.
         """
         target = resolve_repo_path(path)
         if not target.is_file():
@@ -131,10 +145,10 @@ class CodeTools:
         Call this before the first edit of a new iteration.
 
         Args:
-            hypothesis: One sentence, one mechanism, e.g. 'class-weighted loss'.
+            hypothesis: One sentence, one mechanism, e.g. 'class-weighted ridge'.
         """
         workspace = load_workspace()
-        if required_stage(workspace) in {"loso-subset", "loso-full"}:
+        if required_stage(workspace) in FROZEN_STAGES:
             return {
                 "ok": False,
                 "error": "code is frozen until the current change finishes LOSO",
@@ -159,7 +173,7 @@ class CodeTools:
                 + "; ".join(reasons)
             )
         workspace = load_workspace()
-        if required_stage(workspace) in {"loso-subset", "loso-full"}:
+        if required_stage(workspace) in FROZEN_STAGES:
             raise PermissionError(
                 "code is frozen (status "
                 f"{workspace.get('status')}); wait for the experimenter to finish"
@@ -219,13 +233,13 @@ class CodeTools:
 
 
 class CoderAgent(SubAgent):
-    """Writes one GNN / training change per assignment."""
+    """Writes one model / training change per assignment."""
 
     name = "coder"
     description = (
-        "Edits the GNN and its training code (neuroasd/ and autoresearch/trial.py). "
+        "Edits the scored model (neuroasd/model.py and related neuroasd/ files). "
         "Use this to implement exactly one hypothesized improvement. Not for "
-        "running trials or scoring AUC."
+        "running trials or scoring metrics."
     )
     instructions = INSTRUCTIONS
 

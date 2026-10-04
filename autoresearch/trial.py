@@ -1,266 +1,266 @@
-"""Run one autoresearch trial and score it against the promotion gates.
+"""Run one autoresearch trial of `neuroasd.model` and score it against the gates.
 
-A trial trains the current branch's model under a given hyperparameter config and
-reports metrics for one of three evaluation stages (see `autoresearch/program.md`):
+The harness owns data loading, fold splits, and metrics. The model only sees
+what `Split` exposes (FC per atlas, age, sex, fold groups, site, and training
+labels), so it cannot read FIQ, head motion, or test labels.
 
-    screen       fast multi-seed random split, used to reject bad ideas
-    loso-subset  leave-one-site-out on the largest sites, mid-cost confirmation
-    loso-full    leave-one-site-out on all 20 sites, publication-grade
+Stages, cheap to expensive (see `autoresearch/program.md`):
 
-Gating uses **final-epoch** metrics, never best-epoch, so that the number of epochs
-stays an honest hyperparameter and no model selection happens on the test fold.
+    screen            leave-one-site-out on 6 mixed ABIDE I / II sites
+    loso-site         leave-one-site-out on all 33 sites with both classes
+    loso-institution  leave-one-institution-out on 23 institutions (final)
+
+Primary metric: fold-mean balanced accuracy. Every metric comes from one fit
+per fold; nothing is selected on a test fold.
 """
 
 from __future__ import annotations
 
 import argparse
+import csv
 import json
+import os
+import random
 import subprocess
+import threading
 import time
-from collections import defaultdict
-from dataclasses import asdict, dataclass
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
-import torch
-import torch.nn as nn
-from sklearn.model_selection import StratifiedShuffleSplit
-from torch.utils.data import DataLoader, Subset
+from sklearn.metrics import roc_auc_score
 
-from neuroasd.fc_dataset import AbideFCDataset, collate_graphs
-from neuroasd.gcn import SimpleGCN
-from neuroasd.train import evaluate, pick_device, train_one_epoch
+from autoresearch.loop.paths import trials_dir
+from neuroasd.linear_baseline import GROUPINGS, clean_fc
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DATA_DIR = REPO_ROOT / "data" / "abide"
-TRIALS_DIR = REPO_ROOT / "outputs" / "autoresearch" / "trials"
+DATA_DIRS = {
+    "gordon": REPO_ROOT / "data" / "abide_dcan",
+    "hcp": REPO_ROOT / "data" / "abide_dcan_hcp",
+    "power": REPO_ROOT / "data" / "abide_dcan_power",
+    "markov": REPO_ROOT / "data" / "abide_dcan_markov",
+}
 LEDGER_PATH = REPO_ROOT / "outputs" / "autoresearch" / "ledger.jsonl"
 GATES_PATH = Path(__file__).resolve().parent / "gates.json"
 
-# Sites with the largest held-out sets; the cheap LOSO stage uses only these.
-SUBSET_SITES = ("NYU", "UM_1", "USM", "UCLA_1", "YALE")
+# Mixed ABIDE I / II sites with both classes and 47-161 subjects each.
+SCREEN_SITES = ("NYU", "UM_1", "USM", "ABIDEII-OHSU_1", "ABIDEII-NYU_1", "ABIDEII-SDSU_1")
 
-STAGES = ("screen", "loso-subset", "loso-full")
+STAGES = ("screen", "loso-site", "loso-institution")
+STAGE_GROUPING = {"screen": "site", "loso-site": "site", "loso-institution": "institution"}
+FINAL_STAGE = "loso-institution"
+PRIMARY_METRIC = "balanced_accuracy_mean"
+MODEL_SELECTION = "final fit (no selection on the evaluation set)"
+ASD_LABEL = 0
 
 PASS_EXIT_CODE = 0
 FAIL_EXIT_CODE = 3
 
 
-@dataclass(frozen=True)
-class TrialConfig:
-    epochs: int
-    batch_size: int
-    lr: float
-    hidden_dim: int
-    dropout: float
-    weight_decay: float
+class Source:
+    """All subjects of the DCAN ABIDE I + II dataset; FC loaded lazily per atlas."""
+
+    def __init__(self, data_dirs: dict[str, Path] = DATA_DIRS) -> None:
+        self.data_dirs = data_dirs
+        with (data_dirs["gordon"] / "processed" / "manifest.csv").open(newline="", encoding="utf-8") as handle:
+            self.rows = list(csv.DictReader(handle))
+        self.file_ids = [row["FILE_ID"] for row in self.rows]
+        self.y = np.array([int(row["label"]) for row in self.rows])
+        self.sites = np.array([row["SITE_ID"] for row in self.rows])
+        self.age = np.array([float(row["AGE_AT_SCAN"]) for row in self.rows])
+        self.sex = np.array([int(float(row["SEX"])) for row in self.rows])
+        self._fc: dict[str, np.ndarray] = {}
+        self._lock = threading.Lock()
+
+    def fc(self, atlas: str) -> np.ndarray:
+        with self._lock:
+            if atlas not in self._fc:
+                if atlas not in self.data_dirs:
+                    raise KeyError(f"unknown atlas {atlas!r}; choose from {sorted(self.data_dirs)}")
+                root = self.data_dirs[atlas]
+                with (root / "processed" / "manifest.csv").open(newline="", encoding="utf-8") as handle:
+                    rows = list(csv.DictReader(handle))
+                if [row["FILE_ID"] for row in rows] != self.file_ids:
+                    raise RuntimeError(f"{root} does not hold the same subjects as data/abide_dcan")
+                stack = [np.load(root / row["fc_path"]) for row in rows]
+                self._fc[atlas] = clean_fc(np.stack(stack).astype(np.float32))
+            return self._fc[atlas]
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--name", required=True, help="Short trial identifier")
-    parser.add_argument("--stage", choices=STAGES, default="screen")
-    parser.add_argument("--note", default="", help="One-line hypothesis being tested")
+class Split:
+    """What a model may see for one side of a fold. `y` is None on the test side."""
 
-    parser.add_argument("--epochs", type=int, default=100)
-    parser.add_argument("--batch-size", type=int, default=32)
-    parser.add_argument("--lr", type=float, default=1e-3)
-    parser.add_argument("--hidden-dim", type=int, default=64)
-    parser.add_argument("--dropout", type=float, default=0.5)
-    parser.add_argument("--weight-decay", type=float, default=1e-4)
+    def __init__(self, source, idx: np.ndarray, groups: np.ndarray, with_labels: bool) -> None:
+        self._source = source
+        self._idx = idx
+        self.groups = groups[idx]
+        self.sites = source.sites[idx]
+        self.age = source.age[idx]
+        self.sex = source.sex[idx]
+        self.y = source.y[idx] if with_labels else None
 
-    parser.add_argument(
-        "--seeds",
-        type=int,
-        nargs="+",
-        default=[42, 1337, 2026],
-        help="Seeds averaged in the screen stage (LOSO stages use the first seed)",
-    )
-    parser.add_argument("--val-ratio", type=float, default=0.2)
-    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
-    parser.add_argument("--cpu", action="store_true")
-    parser.add_argument("--quiet", action="store_true", help="Suppress per-fold logs")
-    return parser.parse_args()
+    def __len__(self) -> int:
+        return len(self._idx)
+
+    def fc(self, atlas: str) -> np.ndarray:
+        return self._source.fc(atlas)[self._idx]
 
 
-def git_revision() -> dict[str, str]:
-    def run(*cmd: str) -> str:
-        try:
-            return subprocess.run(
-                cmd, cwd=REPO_ROOT, capture_output=True, text=True, check=True
-            ).stdout.strip()
-        except (subprocess.CalledProcessError, OSError):
-            return "unknown"
-
+def fold_metrics(y: np.ndarray, score: np.ndarray, pred: np.ndarray) -> dict[str, float]:
+    asd, ctl = y == ASD_LABEL, y != ASD_LABEL
+    sensitivity = float((pred[asd] == ASD_LABEL).mean())
+    specificity = float((pred[ctl] != ASD_LABEL).mean())
+    tp = float(((pred == 1) & (y == 1)).sum())
+    precision = tp / max(float((pred == 1).sum()), 1.0)
+    recall = tp / max(float((y == 1).sum()), 1.0)
     return {
-        "branch": run("git", "rev-parse", "--abbrev-ref", "HEAD"),
-        "commit": run("git", "rev-parse", "--short", "HEAD"),
+        "accuracy": float((pred == y).mean()),
+        "balanced_accuracy": (sensitivity + specificity) / 2.0,
+        "auc": float(roc_auc_score(y, score)),
+        "sensitivity": sensitivity,
+        "specificity": specificity,
+        "f1": 0.0 if precision + recall == 0 else 2 * precision * recall / (precision + recall),
     }
 
 
-def build_loader(dataset: AbideFCDataset, indices, batch_size: int, shuffle: bool):
-    return DataLoader(
-        Subset(dataset, list(indices)),
-        batch_size=batch_size,
-        shuffle=shuffle,
-        collate_fn=collate_graphs,
-    )
+def check_prediction(score, pred, n: int) -> tuple[np.ndarray, np.ndarray]:
+    score = np.asarray(score, dtype=float).reshape(-1)
+    pred = np.asarray(pred).reshape(-1)
+    if score.shape != (n,) or pred.shape != (n,):
+        raise ValueError(f"fit_predict must return {n} scores and {n} labels, got {score.shape} / {pred.shape}")
+    if not np.isfinite(score).all():
+        raise ValueError("fit_predict returned non-finite scores")
+    if not set(np.unique(pred)) <= {0, 1}:
+        raise ValueError("fit_predict labels must be 0 (ASD) or 1 (control)")
+    return score, pred.astype(int)
 
 
-def run_fold(
-    dataset: AbideFCDataset,
-    train_indices,
-    test_indices,
-    config: TrialConfig,
-    seed: int,
-    device: torch.device,
-) -> dict[str, float]:
-    """Train once and return final-epoch metrics (plus best-epoch for reference)."""
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-
-    train_loader = build_loader(dataset, train_indices, config.batch_size, True)
-    test_loader = build_loader(dataset, test_indices, config.batch_size, False)
-
-    num_nodes = int(dataset[0]["node_features"].shape[0])
-    model = SimpleGCN(
-        in_features=num_nodes,
-        hidden_dim=config.hidden_dim,
-        num_classes=2,
-        dropout=config.dropout,
-    ).to(device)
-    optimizer = torch.optim.Adam(
-        model.parameters(), lr=config.lr, weight_decay=config.weight_decay
-    )
-    criterion = nn.CrossEntropyLoss()
-
-    best_auc = -1.0
-    metrics: dict[str, float] = {}
-    for _ in range(config.epochs):
-        train_one_epoch(model, train_loader, optimizer, criterion, device)
-        metrics = evaluate(model, test_loader, device)
-        best_auc = max(best_auc, metrics["auc"])
-
-    return {**metrics, "best_auc": best_auc}
+def test_groups(groups: np.ndarray, y: np.ndarray, only: tuple[str, ...] | None) -> list[str]:
+    eligible = sorted(g for g in set(groups) if len(np.unique(y[groups == g])) == 2)
+    if only is None:
+        return eligible
+    missing = [g for g in only if g not in eligible]
+    if missing:
+        raise SystemExit(f"not a two-class test fold: {', '.join(missing)}")
+    return list(only)
 
 
-def summarize(fold_metrics: list[dict[str, float]]) -> dict[str, float]:
+def run_folds(source, stage: str, workers: int, log=print) -> list[dict]:
+    from neuroasd.model import fit_predict
+
+    grouping = STAGE_GROUPING[stage]
+    groups = np.array([GROUPINGS[grouping](s) for s in source.sites])
+    held_out = test_groups(groups, source.y, SCREEN_SITES if stage == "screen" else None)
+
+    def one(position: int, group: str) -> dict:
+        train_idx = np.where(groups != group)[0]
+        test_idx = np.where(groups == group)[0]
+        random.seed(position)
+        np.random.seed(position)
+        started = time.time()
+        score, pred = fit_predict(
+            Split(source, train_idx, groups, with_labels=True),
+            Split(source, test_idx, groups, with_labels=False),
+        )
+        score, pred = check_prediction(score, pred, len(test_idx))
+        record = {
+            "test_group": group,
+            "test_sites": sorted(set(source.sites[test_idx])),
+            "train_size": int(len(train_idx)),
+            "test_size": int(len(test_idx)),
+            "seconds": round(time.time() - started, 1),
+            **fold_metrics(source.y[test_idx], score, pred),
+        }
+        log(f"  {group:<16} n={len(test_idx):<4} bacc={record['balanced_accuracy']:.3f} "
+            f"acc={record['accuracy']:.3f} auc={record['auc']:.3f}")
+        return record
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+        folds = list(pool.map(lambda args: one(*args), enumerate(held_out)))
+    return folds
+
+
+def summarize(folds: list[dict]) -> dict[str, float]:
     summary: dict[str, float] = {}
-    for key in ("accuracy", "auc", "f1", "best_auc"):
-        values = [float(fold[key]) for fold in fold_metrics]
-        summary[f"{key}_mean"] = float(np.mean(values))
-        summary[f"{key}_std"] = float(np.std(values))
+    for key in ("balanced_accuracy", "accuracy", "auc", "sensitivity", "specificity", "f1"):
+        values = np.array([fold[key] for fold in folds])
+        summary[f"{key}_mean"] = float(values.mean())
+        summary[f"{key}_std"] = float(values.std())
+    n = np.array([fold["test_size"] for fold in folds], dtype=float)
+    acc = np.array([fold["accuracy"] for fold in folds])
+    summary["accuracy_pooled"] = float((acc * n).sum() / n.sum())
+    summary["folds"] = len(folds)
     return summary
-
-
-def group_indices_by_site(dataset: AbideFCDataset) -> dict[str, list[int]]:
-    groups: dict[str, list[int]] = defaultdict(list)
-    for record_index, record in enumerate(dataset.records):
-        groups[str(record["SITE_ID"])].append(record_index)
-    return dict(sorted(groups.items()))
-
-
-def run_screen_stage(
-    dataset: AbideFCDataset,
-    config: TrialConfig,
-    args: argparse.Namespace,
-    device: torch.device,
-) -> tuple[list[dict], dict[str, float]]:
-    labels = np.array([int(record["label"]) for record in dataset.records])
-    runs: list[dict] = []
-
-    for seed in args.seeds:
-        splitter = StratifiedShuffleSplit(
-            n_splits=1, test_size=args.val_ratio, random_state=seed
-        )
-        train_idx, val_idx = next(splitter.split(np.zeros(len(labels)), labels))
-        metrics = run_fold(dataset, train_idx, val_idx, config, seed, device)
-        runs.append({"seed": seed, "test_size": len(val_idx), **metrics})
-        if not args.quiet:
-            print(
-                f"  seed {seed} | acc={metrics['accuracy']:.3f} "
-                f"auc={metrics['auc']:.3f} f1={metrics['f1']:.3f}",
-                flush=True,
-            )
-
-    return runs, summarize(runs)
-
-
-def run_loso_stage(
-    dataset: AbideFCDataset,
-    config: TrialConfig,
-    args: argparse.Namespace,
-    device: torch.device,
-    sites: tuple[str, ...] | None,
-) -> tuple[list[dict], dict[str, float]]:
-    all_groups = group_indices_by_site(dataset)
-    groups = all_groups
-    if sites is not None:
-        missing = [site for site in sites if site not in all_groups]
-        if missing:
-            raise SystemExit(f"Unknown SITE_ID(s) in subset: {', '.join(missing)}")
-        groups = {site: all_groups[site] for site in sites}
-
-    seed = args.seeds[0]
-    runs: list[dict] = []
-
-    for position, (site_id, test_indices) in enumerate(groups.items(), start=1):
-        # Held-out site is always excluded from training, even when scoring a subset.
-        train_indices = [
-            index
-            for other_site, indices in all_groups.items()
-            if other_site != site_id
-            for index in indices
-        ]
-        metrics = run_fold(dataset, train_indices, test_indices, config, seed, device)
-        runs.append(
-            {
-                "site_id": site_id,
-                "train_size": len(train_indices),
-                "test_size": len(test_indices),
-                **metrics,
-            }
-        )
-        if not args.quiet:
-            print(
-                f"  [{position}/{len(groups)}] {site_id:<9} n={len(test_indices):<4} "
-                f"acc={metrics['accuracy']:.3f} auc={metrics['auc']:.3f}",
-                flush=True,
-            )
-
-    return runs, summarize(runs)
 
 
 def load_gates() -> dict:
     return json.loads(GATES_PATH.read_text(encoding="utf-8"))
 
 
-# Reported / gated metrics must be final-epoch. Best-epoch selection on the
-# evaluation fold leaked ~0.07 LOSO AUC in an earlier revision (0.707 vs 0.623).
-FORBIDDEN_GATE_METRICS = frozenset({"best_auc", "best_auc_mean"})
-MODEL_SELECTION = "final epoch (no selection on the evaluation set)"
+def either_split_improves(site: float, inst: float, ref_site: float, ref_inst: float, rule: dict) -> dict:
+    """PASS if one split gains >= improve_margin and the other drops <= regress_tolerance."""
+    margin, tolerance = float(rule["improve_margin"]), float(rule["regress_tolerance"])
+    d_site, d_inst = site - ref_site, inst - ref_inst
+    site_wins = d_site >= margin and d_inst >= -tolerance
+    inst_wins = d_inst >= margin and d_site >= -tolerance
+    return {
+        "passed": bool(site_wins or inst_wins),
+        "delta_site": round(d_site, 4),
+        "delta_institution": round(d_inst, 4),
+        "improved_on": [name for name, won in (("site", site_wins), ("institution", inst_wins)) if won],
+        "margin": round(max(min(d_site - margin, d_inst + tolerance), min(d_inst - margin, d_site + tolerance)), 4),
+    }
 
 
-def apply_gate(stage: str, summary: dict[str, float]) -> dict:
-    gate = load_gates()["gates"][stage]
-    metric = gate["metric"]
-    if metric in FORBIDDEN_GATE_METRICS or metric.startswith("best_"):
-        raise SystemExit(
-            f"refusing to gate on {metric!r}: best-epoch metrics leak the "
-            "evaluation set (historical LOSO bias ~0.07 AUC)"
-        )
-    observed = summary[metric]
-    passed = observed >= gate["threshold"]
+def site_stage_summary(name: str) -> dict[str, float]:
+    path = trials_dir() / f"loso-site__{name}" / "result.json"
+    if not path.is_file():
+        raise SystemExit(f"loso-institution needs the loso-site result of the same trial: {path}")
+    return json.loads(path.read_text(encoding="utf-8"))["summary"]
+
+
+def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
+    gates = load_gates()
+    gate = gates["gates"][stage]
+    observed = summary[PRIMARY_METRIC]
+    if stage != FINAL_STAGE:
+        threshold = float(gate["threshold"])
+        return {
+            "stage": stage,
+            "metric": PRIMARY_METRIC,
+            "threshold": threshold,
+            "observed": round(observed, 4),
+            "margin": round(observed - threshold, 4),
+            "passed": observed >= threshold,
+            "rationale": gate["rationale"],
+        }
+    reference = gates["reference"]
+    site = summary["site_" + PRIMARY_METRIC]
+    rule = either_split_improves(
+        site, observed,
+        reference["loso-site"][PRIMARY_METRIC], reference["loso-institution"][PRIMARY_METRIC],
+        gates["rule"],
+    )
     return {
         "stage": stage,
-        "metric": metric,
-        "threshold": gate["threshold"],
+        "metric": PRIMARY_METRIC,
+        "rule": "either split improves; the other does not regress",
         "observed": round(observed, 4),
-        "margin": round(observed - gate["threshold"], 4),
-        "passed": passed,
+        "observed_site": round(site, 4),
+        **rule,
         "rationale": gate["rationale"],
     }
+
+
+def git_revision() -> dict[str, str]:
+    def run(*cmd: str) -> str:
+        try:
+            return subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True, check=True).stdout.strip()
+        except (subprocess.CalledProcessError, OSError):
+            return "unknown"
+
+    return {"branch": run("git", "rev-parse", "--abbrev-ref", "HEAD"), "commit": run("git", "rev-parse", "--short", "HEAD")}
 
 
 def append_ledger(entry: dict) -> None:
@@ -269,40 +269,74 @@ def append_ledger(entry: dict) -> None:
         handle.write(json.dumps(entry) + "\n")
 
 
+class SyntheticSource:
+    """Small fake dataset with the same interface as `Source`, for lint smoke tests."""
+
+    def __init__(self, n_sites: int = 4, per_site: int = 24, seed: int = 0) -> None:
+        rng = np.random.default_rng(seed)
+        n = n_sites * per_site
+        self.y = np.tile(np.arange(2), n // 2)
+        self.sites = np.repeat([f"S{k}" for k in range(n_sites)], per_site)
+        self.age = rng.uniform(7, 30, n)
+        self.sex = rng.integers(1, 3, n)
+        self._fc = {}
+        for atlas, p in (("gordon", 14), ("hcp", 15), ("power", 8), ("markov", 10)):
+            mats = []
+            for label in self.y:
+                ts = rng.standard_normal((60, p))
+                ts[:, 1] += 0.6 * label * ts[:, 0]
+                mats.append(np.corrcoef(ts, rowvar=False))
+            self._fc[atlas] = np.stack(mats).astype(np.float32)
+
+    def fc(self, atlas: str) -> np.ndarray:
+        return self._fc[atlas]
+
+
+def smoke_check() -> dict:
+    """Run neuroasd.model.fit_predict on synthetic data; raises if the interface breaks."""
+    from neuroasd.model import fit_predict
+
+    source = SyntheticSource()
+    groups = source.sites
+    test_idx = np.where(groups == "S0")[0]
+    train_idx = np.where(groups != "S0")[0]
+    score, pred = fit_predict(
+        Split(source, train_idx, groups, with_labels=True),
+        Split(source, test_idx, groups, with_labels=False),
+    )
+    score, pred = check_prediction(score, pred, len(test_idx))
+    return fold_metrics(source.y[test_idx], score, pred)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--name", required=True, help="Short trial identifier")
+    parser.add_argument("--stage", choices=STAGES, default="screen")
+    parser.add_argument("--note", default="", help="One-line hypothesis being tested")
+    parser.add_argument("--workers", type=int, default=int(os.environ.get("AUTORESEARCH_TRIAL_WORKERS", "4")))
+    parser.add_argument("--quiet", action="store_true", help="Suppress per-fold logs")
+    return parser.parse_args()
+
+
 def main() -> None:
     args = parse_args()
-    config = TrialConfig(
-        epochs=args.epochs,
-        batch_size=args.batch_size,
-        lr=args.lr,
-        hidden_dim=args.hidden_dim,
-        dropout=args.dropout,
-        weight_decay=args.weight_decay,
-    )
-
-    device = pick_device(force_cpu=args.cpu)
-    dataset = AbideFCDataset(args.data_dir)
     revision = git_revision()
-
     print(f"Trial   : {args.name}")
-    print(f"Stage   : {args.stage}")
+    print(f"Stage   : {args.stage} ({STAGE_GROUPING[args.stage]} folds)")
     print(f"Branch  : {revision['branch']} @ {revision['commit']}")
-    print(f"Device  : {device}")
-    print(f"Config  : {asdict(config)}")
     if args.note:
         print(f"Note    : {args.note}")
     print("")
 
     started = time.time()
-    if args.stage == "screen":
-        runs, summary = run_screen_stage(dataset, config, args, device)
-    elif args.stage == "loso-subset":
-        runs, summary = run_loso_stage(dataset, config, args, device, SUBSET_SITES)
-    else:
-        runs, summary = run_loso_stage(dataset, config, args, device, None)
+    source = Source()
+    folds = run_folds(source, args.stage, args.workers, log=(lambda _m: None) if args.quiet else print)
+    summary = summarize(folds)
+    if args.stage == FINAL_STAGE:
+        site = site_stage_summary(args.name)
+        summary.update({f"site_{key}": value for key, value in site.items() if key != "folds"})
     elapsed = time.time() - started
-
-    verdict = apply_gate(args.stage, summary)
+    verdict = apply_gate(args.stage, args.name, summary)
 
     result = {
         "name": args.name,
@@ -310,51 +344,31 @@ def main() -> None:
         "note": args.note,
         "ran_at": datetime.now(timezone.utc).isoformat(),
         "runtime_seconds": round(elapsed, 1),
-        "device": str(device),
         "git": revision,
-        "config": asdict(config),
-        "seeds": args.seeds,
+        "data": {"subjects": len(source.y), "atlases": sorted(DATA_DIRS)},
         "model_selection": MODEL_SELECTION,
         "summary": {key: round(value, 4) for key, value in summary.items()},
-        "runs": runs,
+        "folds": folds,
         "verdict": verdict,
     }
-
-    trial_dir = TRIALS_DIR / f"{args.stage}__{args.name}"
+    trial_dir = trials_dir() / f"{args.stage}__{args.name}"
     trial_dir.mkdir(parents=True, exist_ok=True)
-    (trial_dir / "result.json").write_text(
-        json.dumps(result, indent=2) + "\n", encoding="utf-8"
-    )
-    append_ledger(
-        {
-            key: result[key]
-            for key in (
-                "name",
-                "stage",
-                "ran_at",
-                "git",
-                "config",
-                "model_selection",
-                "summary",
-                "verdict",
-            )
-        }
-    )
+    (trial_dir / "result.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    append_ledger({key: result[key] for key in ("name", "stage", "note", "ran_at", "git", "model_selection", "summary", "verdict")})
 
     print("")
-    print(f"accuracy : {summary['accuracy_mean']:.3f} ± {summary['accuracy_std']:.3f}")
-    print(f"auc      : {summary['auc_mean']:.3f} ± {summary['auc_std']:.3f}")
-    print(f"f1       : {summary['f1_mean']:.3f} ± {summary['f1_std']:.3f}")
+    for key, label in (("balanced_accuracy", "bal. acc"), ("accuracy", "accuracy"), ("auc", "auc"),
+                       ("sensitivity", "ASD rec."), ("specificity", "ctl rec.")):
+        print(f"{label:9s}: {summary[key + '_mean']:.3f} ± {summary[key + '_std']:.3f}")
     print(f"runtime  : {elapsed / 60:.1f} min")
-    print("")
-    print(
-        f"gate     : {verdict['metric']} {verdict['observed']:.4f} "
-        f"vs threshold {verdict['threshold']:.4f} "
-        f"(margin {verdict['margin']:+.4f})"
-    )
+    if args.stage == FINAL_STAGE:
+        print(f"gate     : site {verdict['delta_site']:+.4f}, institution {verdict['delta_institution']:+.4f} "
+              f"vs reference (improved on: {', '.join(verdict['improved_on']) or 'none'})")
+    else:
+        print(f"gate     : {PRIMARY_METRIC} {verdict['observed']:.4f} vs threshold {verdict['threshold']:.4f} "
+              f"(margin {verdict['margin']:+.4f})")
     print(f"result   : {trial_dir / 'result.json'}")
     print(f"VERDICT: {'PASS' if verdict['passed'] else 'FAIL'}")
-
     raise SystemExit(PASS_EXIT_CODE if verdict["passed"] else FAIL_EXIT_CODE)
 
 

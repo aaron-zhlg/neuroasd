@@ -1,6 +1,6 @@
 """Exercise the write → measure → insight → rewrite state machine.
 
-This does not call an LLM and does not train a GNN. It checks whether the
+This does not call an LLM and does not train. It checks whether the
 loop's bookkeeping has bugs: role order, insight handoff, frozen code, and
 the historical best-epoch leak guard.
 """
@@ -200,30 +200,30 @@ def test_promotion_freezes_code() -> None:
     record_lint({"passed": True, "errors": []})
     name = load_workspace()["current_name"]
     apply_trial_outcome("screen", name, _fake_verdict("screen", True, 0.64), {"auc_mean": 0.64}, False)
-    _check("screen PASS → loso-subset", load_workspace()["status"] == "needs_loso_subset")
+    _check("screen PASS → loso-site", load_workspace()["status"] == "needs_loso_site")
     _check("subset still experimenter", next_role() == "experimenter")
 
     frozen = CodeTools()
     frozen.read_last_insight()
     try:
         _write_scratch(frozen, "gcn_edit.py", "hidden = 128\n")
-        _check("coder frozen on loso-subset", False, "write succeeded")
+        _check("coder frozen on loso-site", False, "write succeeded")
     except PermissionError as exc:
-        _check("coder frozen on loso-subset", "frozen" in str(exc), str(exc))
+        _check("coder frozen on loso-site", "frozen" in str(exc), str(exc))
 
     apply_trial_outcome(
-        "loso-subset", name, _fake_verdict("loso-subset", True, 0.68), {"auc_mean": 0.68}, False
+        "loso-site", name, _fake_verdict("loso-site", True, 0.68), {"auc_mean": 0.68}, False
     )
     apply_trial_outcome(
-        "loso-full",
+        "loso-institution",
         name,
-        _fake_verdict("loso-full", True, 0.67),
+        _fake_verdict("loso-institution", True, 0.67),
         {"auc_mean": 0.67, "accuracy_mean": 0.60},
         False,
     )
     after_win = load_workspace()
     _check(
-        "loso-full PASS below target continues",
+        "loso-institution PASS below target continues",
         after_win["status"] == "awaiting_new_code",
         after_win["status"],
     )
@@ -251,9 +251,9 @@ def test_promotion_freezes_code() -> None:
         (_TMP / "gcn_edit.py").read_text() if (_TMP / "gcn_edit.py").exists() else "missing",
     )
     apply_trial_outcome(
-        "loso-full",
+        "loso-institution",
         name,
-        _fake_verdict("loso-full", True, 0.70),
+        _fake_verdict("loso-institution", True, 0.70),
         {"auc_mean": 0.70, "accuracy_mean": 0.81},
         False,
     )
@@ -274,16 +274,20 @@ def test_protocol_and_coverage() -> None:
     }
     _check("best-epoch result is protocol fail", not protocol_ok(leak))
     honest = {
-        "model_selection": "final epoch (no selection on the evaluation set)",
-        "verdict": {"metric": "auc_mean"},
-        "summary": {"auc_mean": 0.62, "best_auc_mean": 0.63},
+        "model_selection": "final fit (no selection on the evaluation set)",
+        "verdict": {"metric": "balanced_accuracy_mean"},
+        "summary": {"auc_mean": 0.62},
     }
-    _check("final-epoch result is protocol ok", protocol_ok(honest))
+    _check("final-fit result is protocol ok", protocol_ok(honest))
     notes = measurement_coverage(["neuroasd/train.py"])
     _check("train.py-only change warns measurement gap", any("MEASUREMENT GAP" in n for n in notes))
     _check(
-        "gcn.py-only change has no gap",
-        measurement_coverage(["neuroasd/gcn.py"]) == [],
+        "gcn.py-only change warns measurement gap",
+        any("MEASUREMENT GAP" in n for n in measurement_coverage(["neuroasd/gcn.py"])),
+    )
+    _check(
+        "model.py-only change has no gap",
+        measurement_coverage(["neuroasd/model.py"]) == [],
     )
 
 
@@ -315,37 +319,43 @@ def test_pr_body_leads_with_scores() -> None:
     print("review PR leads with scores")
     result = {
         "name": "dropout03",
-        "stage": "loso-full",
+        "stage": "loso-institution",
         "note": "less regularisation",
         "summary": {
-            "auc_mean": 0.671,
+            "balanced_accuracy_mean": 0.671,
+            "balanced_accuracy_std": 0.08,
+            "auc_mean": 0.75,
             "auc_std": 0.09,
             "accuracy_mean": 0.62,
             "accuracy_std": 0.1,
+            "sensitivity_mean": 0.58,
+            "sensitivity_std": 0.1,
+            "specificity_mean": 0.76,
+            "specificity_std": 0.1,
             "f1_mean": 0.61,
             "f1_std": 0.11,
-            "best_auc_mean": 0.71,
         },
         "verdict": {
-            "metric": "auc_mean",
+            "metric": "balanced_accuracy_mean",
             "observed": 0.671,
             "threshold": 0.66,
             "margin": 0.011,
             "passed": True,
+            "delta_site": 0.012,
+            "delta_institution": 0.011,
         },
     }
     title = pr_title(result)
     body = pr_body(
         result,
-        prior={"screen": {"auc_mean": 0.64, "margin": 0.01, "passed": True}},
+        prior={"screen": {"balanced_accuracy_mean": 0.64, "margin": 0.01, "passed": True}},
     )
-    _check("PR title has AUC and PASS", "0.671" in title and "PASS" in title, title)
+    _check("PR title has balanced acc and PASS", "0.671" in title and "PASS" in title, title)
     _check("PR body starts with Scores", body.lstrip().startswith("## Scores"), body[:80])
     _check(
-        "AUC appears before hypothesis",
-        body.index("**AUC**") < body.index("## Hypothesis"),
+        "balanced accuracy appears before hypothesis",
+        body.index("**Balanced accuracy**") < body.index("## Hypothesis"),
     )
-    _check("best-epoch marked diagnostic", "not a result" in body)
 
 
 def test_promote_requires_training_source() -> None:
@@ -354,17 +364,17 @@ def test_promote_requires_training_source() -> None:
     from autoresearch.loop.workspace import default_workspace, save_workspace
 
     data = default_workspace()
-    data["files_changed"] = ["neuroasd/gcn.py"]
+    data["files_changed"] = ["neuroasd/model.py"]
     save_workspace(data)
     sources = source_files_to_promote()
     _check(
-        "files_changed gcn.py is promoted even if git status misses it",
-        any(path.name == "gcn.py" and path.is_file() for path in sources),
+        "files_changed model.py is promoted even if git status misses it",
+        any(path.name == "model.py" and path.is_file() for path in sources),
         str(sources),
     )
     from autoresearch.loop.promote import freeze_relpaths
 
-    frozen = freeze_relpaths("iter25_cosine", "loso-full")
+    frozen = freeze_relpaths("iter25_cosine", "loso-institution")
     _check(
         "freeze paths are this trial only",
         all("iter25_cosine" in path for path in frozen)
@@ -434,7 +444,7 @@ def test_crash_or_skip_does_not_respin_experimenter() -> None:
     after_pass = load_workspace()
     _check(
         "screen PASS is not treated as a skip",
-        after_pass["status"] == "needs_loso_subset" and next_role() == "experimenter",
+        after_pass["status"] == "needs_loso_site" and next_role() == "experimenter",
         f"status={after_pass['status']} role={next_role()}",
     )
 
@@ -450,6 +460,19 @@ def test_experimenter_runs_one_stage() -> None:
         "already ran" in str(refused.get("error")),
         str(refused.get("error")),
     )
+
+
+def test_either_split_gate() -> None:
+    print("either-split gate")
+    from autoresearch.trial import either_split_improves
+
+    rule = {"improve_margin": 0.01, "regress_tolerance": 0.005}
+    win = either_split_improves(0.685, 0.672, 0.6735, 0.6747, rule)
+    _check("site +1.15pp / institution -0.27pp PASSes", win["passed"] and "site" in win["improved_on"])
+    lose = either_split_improves(0.690, 0.660, 0.6735, 0.6747, rule)
+    _check("site win with institution -1.5pp FAILs", not lose["passed"])
+    both = either_split_improves(0.690, 0.690, 0.6735, 0.6747, rule)
+    _check("both splits +1.5pp PASSes", both["passed"])
 
 
 def test_coder_cannot_write_gates() -> None:
@@ -477,6 +500,7 @@ def main() -> None:
         test_promote_requires_training_source,
         test_crash_or_skip_does_not_respin_experimenter,
         test_experimenter_runs_one_stage,
+        test_either_split_gate,
         test_coder_cannot_write_gates,
     ]
     for test in tests:

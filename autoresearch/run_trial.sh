@@ -6,7 +6,7 @@
 #
 # Examples:
 #   ./autoresearch/run_trial.sh --name dropout03 -- --dropout 0.3
-#   ./autoresearch/run_trial.sh --name dropout03 --stage loso-subset -- --dropout 0.3
+#   ./autoresearch/run_trial.sh --name class-weight --stage loso-site -- --note "class-weighted ridge"
 #   ./autoresearch/run_trial.sh --name baseline --note "calibrate gates" --
 #
 # Trials branch from the current branch unless --base says otherwise.

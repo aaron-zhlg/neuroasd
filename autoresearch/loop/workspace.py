@@ -19,8 +19,8 @@ STATUSES = (
     "coder_failed",
     "lint_failed",
     "needs_screen",
-    "needs_loso_subset",
-    "needs_loso_full",
+    "needs_loso_site",
+    "needs_loso_institution",
     "awaiting_new_code",
     "promoted",
     "target_reached",
@@ -28,13 +28,13 @@ STATUSES = (
 
 STAGE_FOR_STATUS = {
     "needs_screen": "screen",
-    "needs_loso_subset": "loso-subset",
-    "needs_loso_full": "loso-full",
+    "needs_loso_site": "loso-site",
+    "needs_loso_institution": "loso-institution",
 }
 
 NEXT_STATUS_ON_PASS = {
-    "screen": "needs_loso_subset",
-    "loso-subset": "needs_loso_full",
+    "screen": "needs_loso_site",
+    "loso-site": "needs_loso_institution",
 }
 
 
@@ -196,18 +196,20 @@ def apply_trial_outcome(
 ) -> dict[str, Any]:
     data = load_workspace()
     gate_passed = bool(verdict.get("passed")) and not protocol_failed
+    bacc = summary.get("balanced_accuracy_mean")
     auc = summary.get("auc_mean")
     acc = summary.get("accuracy_mean")
     last_win = data.get("last_win")
     improved = True
-    if gate_passed and stage == "loso-full" and isinstance(last_win, dict):
-        prev_auc = last_win.get("auc_mean")
-        if prev_auc is not None and auc is not None and float(auc) <= float(prev_auc):
+    if gate_passed and stage == "loso-institution" and isinstance(last_win, dict):
+        prev = last_win.get("balanced_accuracy_mean")
+        if prev is not None and bacc is not None and float(bacc) <= float(prev):
             improved = False
     won = gate_passed and improved
     data.setdefault("last_results", {})[stage] = {
         "name": name,
         "passed": won,
+        "balanced_accuracy_mean": bacc,
         "auc_mean": auc,
         "accuracy_mean": acc,
         "margin": verdict.get("margin"),
@@ -223,6 +225,7 @@ def apply_trial_outcome(
                 "name": name,
                 "stage": stage,
                 "hypothesis": data.get("hypothesis") or "",
+                "balanced_accuracy_mean": bacc,
                 "auc_mean": auc,
                 "accuracy_mean": acc,
                 "margin": verdict.get("margin"),
@@ -235,9 +238,10 @@ def apply_trial_outcome(
         data["lint_report"] = None
         data["archived"] = archived
         data["reverted"] = revert_coder_files(files)
-    elif stage == "loso-full":
+    elif stage == "loso-institution":
         data["last_win"] = {
             "name": name,
+            "balanced_accuracy_mean": bacc,
             "auc_mean": auc,
             "accuracy_mean": acc,
         }
@@ -259,6 +263,7 @@ def apply_trial_outcome(
             "name": name,
             "stage": stage,
             "passed": data["last_results"][stage]["passed"],
+            "balanced_accuracy_mean": bacc,
             "auc_mean": auc,
             "accuracy_mean": acc,
         }
@@ -292,7 +297,7 @@ def record_unmeasured_trial(
     hypothesis = str(data.get("hypothesis") or "")
     verdict = {
         "stage": stage,
-        "metric": "auc_mean",
+        "metric": "balanced_accuracy_mean",
         "threshold": None,
         "observed": None,
         "margin": None,
@@ -314,6 +319,7 @@ def record_unmeasured_trial(
             "name": name,
             "stage": stage,
             "hypothesis": hypothesis,
+            "balanced_accuracy_mean": None,
             "auc_mean": None,
             "margin": None,
             "passed": False,
@@ -322,13 +328,13 @@ def record_unmeasured_trial(
             "hint": hint,
             "narrative": (
                 f"UNMEASURED {stage}: {error}. exit_code={exit_code}. "
-                "No result.json, no official auc_mean. Not a metric FAIL and not "
+                "No result.json, no official balanced_accuracy_mean. Not a metric FAIL and not "
                 "a PASS. The diff was archived and reverted.\n"
                 + excerpt
             ),
             "next_code_change": (
                 "Do not retry the reverted patch. Implement exactly one different "
-                "mechanism on the last loso-full winner (or HEAD)."
+                "mechanism on the last loso-institution winner (or HEAD)."
             ),
         }
     )
@@ -339,7 +345,7 @@ def ensure_stage_recorded() -> dict[str, Any]:
     """If this experimenter returned without scoring its stage, fail closed.
 
     Uses ``pending_stage`` captured at dispatch so a screen PASS (which advances
-    status to needs_loso_subset) is not mistaken for a skipped subset run.
+    status to needs_loso_site) is not mistaken for a skipped site run.
     """
     data = load_workspace()
     pending = data.get("pending_stage")

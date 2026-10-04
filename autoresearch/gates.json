@@ -1,56 +1,51 @@
 {
-  "updated_at": "2026-09-20",
-  "published_reference": {
-    "note": "Corrected on 2026-08-27 to final-epoch metrics, so these now use the same protocol as the trials and are directly comparable. Earlier revisions reported 0.688 and 0.707 via best-epoch selection on the evaluation set.",
-    "baseline_gcn_v1": {
-      "validation": "random 80/20 split, seed 42, final-epoch",
-      "auc": 0.677,
-      "source": "experiments/baseline_gcn_v1/results.json"
+  "updated_at": "2026-10-04",
+  "primary_metric": "balanced_accuracy_mean",
+  "reference": {
+    "name": "linear_baseline_dcan_v1",
+    "tag": "linear-baseline-dcan-v1",
+    "source": "experiments/linear_baseline_dcan_v1/results.json",
+    "features": "Gordon tangent space + kernel ridge",
+    "note": "The loop starts from this model (neuroasd/model.py), not from the old GCN PRs. A trial wins only if it beats these numbers under the rule below.",
+    "loso-site": {
+      "balanced_accuracy_mean": 0.6735,
+      "accuracy_mean": 0.6856,
+      "auc_mean": 0.775,
+      "sensitivity_mean": 0.5433,
+      "specificity_mean": 0.8036
     },
-    "loso_cv_gcn_v1": {
-      "validation": "leave-one-site-out, 20 sites, final-epoch",
-      "auc_mean": 0.6225,
-      "auc_std": 0.1183,
-      "source": "experiments/loso_cv_gcn_v1/results.json"
+    "loso-institution": {
+      "balanced_accuracy_mean": 0.6747,
+      "accuracy_mean": 0.67,
+      "auc_mean": 0.77,
+      "sensitivity_mean": 0.551,
+      "specificity_mean": 0.798
+    },
+    "screen": {
+      "sites": ["NYU", "UM_1", "USM", "ABIDEII-OHSU_1", "ABIDEII-NYU_1", "ABIDEII-SDSU_1"],
+      "balanced_accuracy_mean": 0.6774
     }
   },
-  "measured_baseline": {
-    "note": "Default config scored through this framework. Screen averages 3 seeds, so it sits below the single-seed 0.677 of baseline_gcn_v1; the LOSO figures differ slightly from experiments/ because of run-to-run and device variation.",
-    "config": {
-      "epochs": 100,
-      "batch_size": 32,
-      "lr": 0.001,
-      "hidden_dim": 64,
-      "dropout": 0.5,
-      "weight_decay": 0.0001
-    },
-    "screen": { "auc_mean": 0.6276, "auc_std": 0.0361, "runtime_min": 1.0 },
-    "loso-subset": { "auc_mean": 0.6595, "auc_std": 0.0713, "runtime_min": 1.7 },
-    "loso-full": { "auc_mean": 0.6305, "auc_std": 0.1078, "runtime_min": 6.1 }
-  },
-  "current_sota": {
-    "note": "Gates were raised on 2026-09-20 to the Fisher-z incumbent (iter6). Later trials must beat this, not the original 0.63 LOSO baseline. Loop stop remains loso-full accuracy_mean >= 0.80.",
-    "name": "iter6_fisher-z-transform-arctanh-with-",
-    "review_pr": "https://github.com/aaron-zhlg/neuroasd/pull/4",
-    "loso-full": { "auc_mean": 0.6895, "accuracy_mean": 0.6437 },
-    "loso-subset": { "auc_mean": 0.7534 },
-    "screen": { "auc_mean": 0.6731 }
+  "rule": {
+    "improve_margin": 0.01,
+    "regress_tolerance": 0.005,
+    "note": "PASS if either split's fold-mean balanced accuracy is at least 1pp above the reference and the other split drops by at most 0.5pp."
   },
   "gates": {
     "screen": {
-      "metric": "auc_mean",
-      "threshold": 0.66,
-      "rationale": "Raised from 0.64 after iter6. Must clear the Fisher-z screen (0.673) within cheap-stage noise rather than the original 3-seed baseline (0.628). 0.66 still sits below typical current screens (~0.67) so it stays a filter, not the destination."
+      "metric": "balanced_accuracy_mean",
+      "threshold": 0.64,
+      "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The tangent baseline scores 0.677 here. 0.64 is above chance and below the reference, so class-weight and threshold trials are not killed by fold noise."
     },
-    "loso-subset": {
-      "metric": "auc_mean",
-      "threshold": 0.72,
-      "rationale": "Raised from 0.67 after iter6 (subset 0.753). The old 0.67 no longer filtered anything on the Fisher-z stack. 0.72 is above the original subset baseline (0.659) and below the incumbent subset, so a candidate must show a real cross-site gain before the full sweep."
+    "loso-site": {
+      "metric": "balanced_accuracy_mean",
+      "threshold": 0.65,
+      "rationale": "Must stay near the linear site-LOSO reference (0.674) before paying for the institution sweep. 0.65 is a filter, not the destination."
     },
-    "loso-full": {
-      "metric": "auc_mean",
-      "threshold": 0.6895,
-      "rationale": "Raised from 0.66 to the iter6 Fisher-z incumbent (0.6895, accuracy 0.644). Clearing the original 0.63+0.03 bar is no longer enough to open a PR. Loop stop is still accuracy_mean >= 0.80; this gate is the new state of the art, not the clinical 80/80 bar."
+    "loso-institution": {
+      "metric": "balanced_accuracy_mean",
+      "rule": "either_split_improves",
+      "rationale": "Open a PR if site or institution balanced accuracy gains >= 0.01 vs linear_baseline_dcan_v1 and the other split drops by at most 0.005. Always report accuracy, AUC, ASD recall, and control recall so the number can be compared with the literature."
     }
   }
 }

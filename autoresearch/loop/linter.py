@@ -27,9 +27,9 @@ verbatim. Do not override a FAIL.
 """
 
 _SCORED_IMPORT = (
-    "from neuroasd.gcn import SimpleGCN\n"
-    "from neuroasd.train import train_one_epoch, evaluate\n"
-    "import autoresearch.trial\n"
+    "from neuroasd.model import fit_predict\n"
+    "from autoresearch.trial import smoke_check\n"
+    "smoke_check()\n"
 )
 
 
@@ -69,7 +69,7 @@ def lint_paths(files_changed: list[str]) -> dict[str, Any]:
     errors.extend(measurement_coverage(files_changed))
 
     touches_scored_tree = any(
-        path.endswith(("gcn.py", "train.py", "trial.py", "fc_dataset.py"))
+        path.endswith(("model.py", "trial.py", "linear_baseline.py"))
         for path in files_changed
     )
     if touches_scored_tree:
@@ -82,11 +82,11 @@ def lint_paths(files_changed: list[str]) -> dict[str, Any]:
         )
         if probe.returncode != 0:
             errors.append(
-                "import check failed (SimpleGCN / train_one_epoch / trial):\n"
+                "import check failed (neuroasd.model.fit_predict / trial.smoke_check):\n"
                 + (probe.stderr or probe.stdout)[-1500:]
             )
         else:
-            notes.append("scored-path imports ok")
+            notes.append("scored-path smoke_check ok")
 
     passed = not errors
     return {
@@ -131,7 +131,7 @@ class LintAgent(SubAgent):
     description = (
         "Lints the coder's pending edit: syntax, evaluation-leak patterns, "
         "whether trial.py will actually score the change, and imports of "
-        "SimpleGCN / train_one_epoch / autoresearch.trial. Use after a coder "
+        "neuroasd.model.fit_predict / autoresearch.trial. Use after a coder "
         "finishes and before any training. Not for writing code or running trials."
     )
     instructions = INSTRUCTIONS

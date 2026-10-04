@@ -1,4 +1,4 @@
-"""Lead agent for the GNN write → measure → insight → rewrite loop."""
+"""Lead agent for the write → measure → insight → rewrite loop."""
 
 from __future__ import annotations
 
@@ -23,22 +23,24 @@ from autoresearch.loop.workspace import (
 )
 
 DEFAULT_GOAL = (
-    "Improve the GNN's cross-site ASD vs control accuracy on ABIDE toward 80% "
-    "by editing training or model code, measuring each change with final-epoch "
-    "gates, and iterating on the experimenter's insight. Change one mechanism "
-    "at a time. A loso-full PASS is a new baseline, not a stop."
+    "Improve ASD vs control classification on DCAN ABIDE I + II toward 80% "
+    "accuracy, starting from the linear tangent baseline in neuroasd/model.py. "
+    "Optimize fold-mean balanced accuracy. Measure each change with the "
+    "screen → loso-site → loso-institution gates. Change one mechanism at a "
+    "time. A loso-institution PASS is a new baseline, not a stop."
 )
 
 MISSION = """\
-You coordinate a GNN research loop whose only job is a better, honest classifier. \
+You coordinate a research loop whose only job is a better, honest classifier. \
 Sequence is write code → lint → run a trial → write an insight → write the next change. \
 Never train until lint PASS. Never run coder and experimenter in the same round. \
 Never treat a screen PASS as a better model. Never use best-epoch scores \
-(that leak once inflated LOSO by ~0.07 AUC).
+(that leak once inflated LOSO by ~0.07 AUC). Start from the linear baseline, \
+not from the old GCN PRs.
 """
 
 PLANNER_INSTRUCTIONS = """\
-You are the lead of a GNN experiment loop. You do not edit code or train yourself.
+You are the lead of an ASD classification experiment loop. You do not edit code or train yourself.
 
 The loop is sequential. First assignment this round must be a SINGLE subagent:
 - If the coder has not finished a clean edit, dispatch coder.
@@ -48,7 +50,7 @@ Never dispatch more than one.
 
 When briefing the coder, demand ONE tiny mechanism (a few lines). Do not ask \
 for DANN, multi-file rewrites, or new training flags on the first turn. The \
-scored path is autoresearch/trial.py + neuroasd/gcn.py.
+scored path is neuroasd/model.py (called by autoresearch/trial.py).
 
 Available subagent types:
 {roster}
@@ -74,13 +76,13 @@ You inspect findings and decide the next SINGLE step of the loop.
 - After coder PASS: spawn linter. Do not train yet.
 - After lint FAIL: spawn coder with the lint errors.
 - After lint PASS: spawn experimenter.
-- After experimenter, if the same code still needs loso-subset or loso-full: \
+- After experimenter, if the same code still needs loso-site or loso-institution: \
 spawn experimenter again. One stage per experimenter instance.
 - After experimenter FAIL (or a completed stage that needs a new idea): spawn \
 coder. The failed diff has been reverted. Do not describe that code as current. \
 Put workspace.ruled_out, the insight, and next_code_change into the coder \
 objective. The coder is a fresh instance and cannot see this chat.
-- After loso-full PASS: if accuracy is still below the 80% target, spawn coder \
+- After loso-institution PASS: if accuracy is still below the 80% target, spawn coder \
 on the winning code (do not revert). complete is true only when accuracy \
 reaches the target.
 - Never claim a best-epoch number as progress.
@@ -106,8 +108,8 @@ If complete is true, "follow_up" must be an empty list.
 SYNTHESIZER_INSTRUCTIONS = """\
 Write the session report from the subagent findings only.
 
-Open with whether a better GNN was found (loso-full PASS only). Then:
-- Each change tried, final-epoch AUC, gate margin, PASS/FAIL.
+Open with whether a better model was found (loso-institution PASS only). Then:
+- Each change tried, balanced accuracy, accuracy, AUC, ASD recall, gate margin, PASS/FAIL.
 - What was ruled out.
 - If a review branch was opened, say so; a human still has to merge.
 - Diagnostic best-epoch AUC is not a result.
@@ -147,7 +149,7 @@ def _coder_assignment(goal: str, proposed: Assignment | None = None) -> Assignme
         "coder",
         (
             f"{extra}\n\n{_ruled_out_block()}\n\n{_insight_block()}\n\n"
-            "The working tree is the last loso-full winner or HEAD, not the last "
+            "The working tree is the last loso-institution winner or HEAD, not the last "
             "failed diff. Implement exactly one new mechanism. Do not repeat a "
             "ruled-out idea."
         ),
@@ -183,10 +185,10 @@ def _experimenter_assignment(proposed: Assignment | None = None) -> Assignment:
         (
             f"{objective}\n\n"
             "Run the required stage, then store_insight so the next coder can "
-            "read it. Official metric: final-epoch auc_mean."
+            "read it. Official metric: fold-mean balanced accuracy."
         ),
         (
-            "stage, auc_mean, gate margin, PASS/FAIL, what is ruled out, "
+            "stage, balanced_accuracy_mean, accuracy, AUC, ASD recall, gate margin, PASS/FAIL, what is ruled out, "
             "and next_code_change or next stage."
         ),
     )
@@ -274,7 +276,7 @@ class GNNLead(Orchestrator):
     def run(self, goal: str) -> OrchestratorReport:
         """Loop write → lint → trial until accuracy target, max_rounds, or Ctrl-C.
 
-        ``max_rounds <= 0`` means no cap. A loso-full PASS keeps the winning
+        ``max_rounds <= 0`` means no cap. A loso-institution PASS keeps the winning
         code and continues. Workspace is kept across process restarts.
         """
         self._reset_logs()
@@ -282,7 +284,7 @@ class GNNLead(Orchestrator):
         self._log(f"\n[lead] planning: {goal}")
         if unlimited:
             self._log(
-                "[lead] max_rounds=0; run until loso-full accuracy target or Ctrl-C"
+                "[lead] max_rounds=0; run until loso-institution accuracy target or Ctrl-C"
             )
         complexity, assignments = self._plan(goal)
         self._log(f"[lead] complexity={complexity}; {len(assignments)} initial task(s)")
@@ -337,7 +339,7 @@ def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="GNN write→run→insight loop (coder + experimenter)."
+        description="Write→run→insight loop (coder + experimenter) on the linear baseline."
     )
     parser.add_argument("goal", nargs="*", help="Research goal; omit for the default.")
     parser.add_argument("--lead-model", default=None, help="Model for the lead.")
@@ -352,14 +354,14 @@ def main() -> None:
         "--target-acc",
         type=float,
         default=0.80,
-        help="Stop after a loso-full PASS whose accuracy_mean reaches this (default 0.80).",
+        help="Stop after a loso-institution PASS whose accuracy_mean reaches this (default 0.80).",
     )
     parser.add_argument(
         "--fresh",
         action="store_true",
         help="Delete the session workspace and start from idle.",
     )
-    parser.add_argument("--no-push", action="store_true", help="Do not git push on loso-full PASS.")
+    parser.add_argument("--no-push", action="store_true", help="Do not git push on loso-institution PASS.")
     parser.add_argument("--no-promote", action="store_true", help="Do not open a review branch.")
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--log-dir", default="outputs/autoresearch/loop/logs")

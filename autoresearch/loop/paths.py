@@ -204,7 +204,7 @@ def _baseline_copy_path(path: Path) -> Path:
 
 
 def snapshot_coder_files(rel_paths: list[str]) -> list[str]:
-    """Keep a copy of the last loso-full winner. Later FAILs revert to this, not main."""
+    """Keep a copy of the last loso-institution winner. Later FAILs revert to this, not main."""
     saved: list[str] = []
     for user_path in rel_paths:
         try:

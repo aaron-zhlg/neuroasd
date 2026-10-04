@@ -30,43 +30,44 @@ model code.
 Rules:
 - Read the workspace first. Run the stage it requires; do not skip ahead.
 - Call run_trial exactly once, then store_insight and stop. If screen PASSed, \
-the lead will dispatch a fresh experimenter for loso-subset. Do not chain stages.
-- Official metric is final-epoch auc_mean. best_auc_mean is diagnostic only.
+the lead will dispatch a fresh experimenter for loso-site. Do not chain stages.
+- Official metric is fold-mean balanced accuracy from one fit per fold. \
+Accuracy, AUC, ASD recall, and control recall are always reported alongside it.
 - A 2026-08-27 revision showed that picking the best epoch on the evaluation \
-set inflated LOSO from 0.623 to 0.707 (~0.07 AUC). If a result is not \
-final-epoch, it is not an improvement.
-- screen PASS is a filter, not evidence of a better model. Only loso-full PASS \
-justifies promotion.
+set inflated LOSO from 0.623 to 0.707 (~0.07 AUC). If a result is selected on \
+the test fold, it is not an improvement.
+- screen PASS is a filter, not evidence of a better model. Only \
+loso-institution PASS justifies promotion.
 - On FAIL, say what the result rules out. On PASS, say the margin versus the gate.
 - Never claim a win from a protocol failure.
 - After run_trial, call store_insight with a coder-actionable writeup: what was \
-tried, final-epoch AUC vs gate, what this rules out, and the ONE next code change \
+tried, balanced accuracy vs gate, what this rules out, and the ONE next code change \
 worth trying (or "promote to next stage" if the same code should continue).
 
 Return a short structured insight the coder can act on.
 """
 
 def measurement_coverage(files_changed: list[str] | None) -> list[str]:
-    """Warn when the scored path (`trial.py`) likely missed the coder's edit."""
+    """Warn when the scored path (`model.py` / `trial.py`) likely missed the coder's edit."""
     files = files_changed or []
     notes: list[str] = []
-    scored = any(path.endswith("trial.py") or path.endswith("gcn.py") for path in files)
+    scored = any(path.endswith("trial.py") or path.endswith("model.py") for path in files)
     training_only = any(
-        path.endswith("train.py") or path.endswith("loso_cv.py") for path in files
+        path.endswith(("train.py", "loso_cv.py", "gcn.py")) for path in files
     )
     if training_only and not scored:
         notes.append(
-            "MEASUREMENT GAP: coder edited train.py/loso_cv.py but not "
-            "autoresearch/trial.py or neuroasd/gcn.py. Screen/LOSO run "
-            "autoresearch.trial.run_fold, so this trial may not measure the change."
+            "MEASUREMENT GAP: coder edited train.py/loso_cv.py/gcn.py but not "
+            "neuroasd/model.py or autoresearch/trial.py. Trials call "
+            "neuroasd.model.fit_predict, so this trial may not measure the change."
         )
     return notes
 
 
 STAGE_TIMEOUT = {
-    "screen": 15 * 60,
-    "loso-subset": 20 * 60,
-    "loso-full": 40 * 60,
+    "screen": 20 * 60,
+    "loso-site": 90 * 60,
+    "loso-institution": 90 * 60,
 }
 
 
@@ -126,7 +127,7 @@ class ExperimenterTools:
 
         Args:
             name: Trial slug, e.g. 'iter1_class-weight'.
-            stage: 'screen', 'loso-subset', or 'loso-full'.
+            stage: 'screen', 'loso-site', or 'loso-institution'.
         """
         path = trials_dir() / f"{stage}__{name}" / "result.json"
         if not path.is_file():
@@ -137,7 +138,7 @@ class ExperimenterTools:
     def run_trial(self, note: str = "") -> dict[str, Any]:
         """Train and score the current code at the workspace-required stage.
 
-        The stage is taken from the workspace (screen → loso-subset → loso-full).
+        The stage is taken from the workspace (screen → loso-site → loso-institution).
         You cannot pick a more expensive stage yourself.
 
         Args:
@@ -251,7 +252,7 @@ class ExperimenterTools:
         last = (workspace.get("last_results") or {}).get(stage) or {}
         if (
             self.promote_on_pass
-            and stage == "loso-full"
+            and stage == "loso-institution"
             and last.get("passed")
             and not failed_protocol
         ):
@@ -266,10 +267,11 @@ class ExperimenterTools:
             "stage": stage,
             "hypothesis": hypothesis,
             "files_changed": workspace.get("files_changed"),
+            "balanced_accuracy_mean": summary.get("balanced_accuracy_mean"),
+            "accuracy_mean": summary.get("accuracy_mean"),
             "auc_mean": summary.get("auc_mean"),
-            "auc_std": summary.get("auc_std"),
-            "best_auc_mean": summary.get("best_auc_mean"),
-            "best_auc_is_diagnostic_only": True,
+            "sensitivity_mean": summary.get("sensitivity_mean"),
+            "specificity_mean": summary.get("specificity_mean"),
             "model_selection": result.get("model_selection"),
             "gate": {
                 "metric": verdict.get("metric"),
@@ -290,6 +292,7 @@ class ExperimenterTools:
                 "name": name,
                 "stage": stage,
                 "hypothesis": hypothesis,
+                "balanced_accuracy_mean": summary.get("balanced_accuracy_mean"),
                 "auc_mean": summary.get("auc_mean"),
                 "margin": verdict.get("margin"),
                 "passed": bool(verdict.get("passed")) and not failed_protocol,
@@ -313,7 +316,7 @@ class ExperimenterTools:
         This write-up is how it knows what to try next.
 
         Args:
-            narrative: What was measured, final-epoch AUC vs the gate, and why.
+            narrative: What was measured, balanced accuracy vs the gate, and why.
             next_code_change: One concrete code change to try next, or empty if
                 the same code should continue to the next evaluation stage.
             ruled_out: What this result eliminates, if anything.
@@ -342,31 +345,33 @@ def _insight_hint(
         )
     if stage == "screen":
         return (
-            "screen PASS is only a filter. Do not claim the GNN is better. "
-            "Next: experimenter runs loso-subset on the same code."
+            "screen PASS is only a filter. Do not claim the model is better. "
+            "Next: experimenter runs loso-site on the same code."
         )
-    if stage == "loso-subset":
+    if stage == "loso-site":
         return (
-            "loso-subset PASS. Next: experimenter runs loso-full on the same code. "
+            "loso-site PASS. Next: experimenter runs loso-institution on the same code. "
             "Still not a published improvement."
         )
     last = (workspace.get("last_results") or {}).get(stage) or {}
     if last.get("did_not_beat_last_win"):
         return (
-            "loso-full met the gate but did not beat the last win's AUC. "
-            "Reverted to the winning snapshot. Next: coder, one new mechanism."
+            "loso-institution met the gate but did not beat the last win's "
+            "balanced accuracy. Reverted to the winning snapshot. Next: coder, "
+            "one new mechanism."
         )
     last_win = workspace.get("last_win") or {}
     acc = last_win.get("accuracy_mean")
     if workspace.get("status") == "target_reached":
         return (
-            "loso-full PASS and accuracy target reached. A review PR may be open. "
+            "loso-institution PASS and accuracy target reached. A review PR may be open. "
             "Loop stops. Do not raise gates.json."
         )
     return (
-        "loso-full PASS. Keep this code as the new baseline and add ONE new "
-        f"mechanism. Last win AUC {last_win.get('auc_mean')} accuracy {acc}. "
-        "A review PR may be open; do not wait for merge. Do not raise gates.json."
+        "loso-institution PASS. Keep this code as the new baseline and add ONE new "
+        f"mechanism. Last win balanced acc {last_win.get('balanced_accuracy_mean')} "
+        f"accuracy {acc}. A review PR may be open; do not wait for merge. "
+        "Do not raise gates.json."
     )
 
 
@@ -375,8 +380,8 @@ class ExperimenterAgent(SubAgent):
 
     name = "experimenter"
     description = (
-        "Trains the current GNN code with autoresearch.trial, scores final-epoch "
-        "AUC against the gates, and returns what the result rules in or out. "
+        "Scores the current model with autoresearch.trial (balanced accuracy "
+        "against the linear baseline), and returns what the result rules in or out. "
         "Use after the coder has landed a change, or to promote a passing change "
         "to the next stage. Not for writing model code."
     )
