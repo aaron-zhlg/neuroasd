@@ -25,12 +25,20 @@ from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from sklearn.model_selection import StratifiedShuffleSplit
 from torch.utils.data import DataLoader, Subset
 
 from neuroasd.fc_dataset import AbideFCDataset, collate_graphs
-from neuroasd.gcn import SimpleGCN
-from neuroasd.train import evaluate, pick_device, train_one_epoch
+from neuroasd.gcn import FISHER_CLIP, SimpleGCN, quantile_normalize_edges
+from neuroasd.train import (
+    EDGE_DROP_P,
+    MIXUP_ALPHA,
+    edge_drop_mask,
+    evaluate,
+    pick_device,
+    train_one_epoch,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATA_DIR = REPO_ROOT / "data" / "abide"
@@ -42,6 +50,32 @@ GATES_PATH = Path(__file__).resolve().parent / "gates.json"
 SUBSET_SITES = ("NYU", "UM_1", "USM", "UCLA_1", "YALE")
 
 STAGES = ("screen", "loso-subset", "loso-full")
+
+# Grid size of the per-site edge-weight quantile map (train-fold statistics only).
+EDGE_QUANTILE_GRID = 129
+
+# Decay of the long-window weight EMA, applied ONCE PER EPOCH. Per-epoch 0.99 gives
+# an effective window of ~1/(1-0.99) = 100 epochs, i.e. the whole cosine anneal
+# (a per-step 0.99 would only span ~4 epochs and just repeat iter18's null 10-epoch
+# SWA). The EMA never influences the live model, so step 0 is bit-identical to the
+# iter25 winner and the averaged weights are read exactly once, at the final epoch.
+EMA_DECAY = 0.99
+
+# Max weight of the training-only site-adversarial (gradient-reversal) penalty.
+# Lambda ramps linearly 0 -> ADV_LAMBDA_MAX across epochs, so epoch 0 is
+# baseline-identical and the last epoch carries the full adversarial pressure.
+ADV_LAMBDA_MAX = 0.1
+
+# Eval-time augmentation averaging (TTA): at the single final-epoch read of the
+# EMA weights the held-out batches are scored TTA_K times, each with an
+# independent draw of the SAME iter39 DropEdge mask (EDGE_DROP_P) the model was
+# TRAINED under, and the per-subject class probabilities are averaged over the
+# draws. Both constants are fixed a-priori: TTA_K is not swept and there is no
+# flag that can disable the averaging. TTA_SEED_OFFSET only decorrelates the K
+# mask draws from the training stream; it is derived from nothing but the fold
+# seed, never from labels, scores or any evaluation statistic.
+TTA_K = 8
+TTA_SEED_OFFSET = 917_000
 
 PASS_EXIT_CODE = 0
 FAIL_EXIT_CODE = 3
@@ -99,13 +133,160 @@ def git_revision() -> dict[str, str]:
     }
 
 
-def build_loader(dataset: AbideFCDataset, indices, batch_size: int, shuffle: bool):
+def build_loader(
+    dataset: AbideFCDataset,
+    indices,
+    batch_size: int,
+    shuffle: bool,
+    collate_fn=collate_graphs,
+):
     return DataLoader(
         Subset(dataset, list(indices)),
         batch_size=batch_size,
         shuffle=shuffle,
-        collate_fn=collate_graphs,
+        collate_fn=collate_fn,
     )
+
+
+def subject_edge_values(dataset: AbideFCDataset) -> tuple[np.ndarray, list[str]]:
+    """Fisher-z |FC| upper-triangle edge weights per subject, plus its SITE_ID.
+
+    Only raw per-subject edge values are cached here (no fold statistics), so the
+    cache is always safe to reuse across folds.
+    """
+    cached = getattr(dataset, "_edge_value_cache", None)
+    if cached is not None:
+        return cached
+
+    upper = np.triu_indices(int(dataset[0]["adjacency"].shape[0]), k=1)
+    values = []
+    for index in range(len(dataset.records)):
+        magnitude = np.clip(
+            np.abs(dataset[index]["adjacency"].numpy()).astype(np.float32), 0.0, FISHER_CLIP
+        )
+        values.append(np.arctanh(magnitude)[upper].astype(np.float32))
+    cached = (np.stack(values), [str(record["SITE_ID"]) for record in dataset.records])
+    dataset._edge_value_cache = cached
+    return cached
+
+
+def fit_edge_quantile_tables(
+    dataset: AbideFCDataset, train_indices
+) -> tuple[dict[str, tuple[torch.Tensor, torch.Tensor]], torch.Tensor]:
+    """Per-site edge-weight quantile maps fit on TRAINING-fold edges only.
+
+    For each site present in the training folds, the site's |FC| edge weights are
+    rank/quantile mapped onto the pooled training-fold Fisher-z quantiles, which
+    removes site-specific edge scale/outliers while preserving within-site edge
+    ordering (the map is monotone). No held-out subject, site statistic or label
+    is touched. Sites unseen in training fall back to the pooled mapping.
+    """
+    edges, sites = subject_edge_values(dataset)
+    train_indices = list(train_indices)
+    grid = np.linspace(0.0, 1.0, EDGE_QUANTILE_GRID)
+    pooled_q = torch.from_numpy(
+        np.quantile(
+            np.concatenate([edges[index] for index in train_indices]), grid
+        ).astype(np.float32)
+    )
+
+    indices_by_site: dict[str, list[int]] = defaultdict(list)
+    for index in train_indices:
+        indices_by_site[sites[index]].append(index)
+
+    tables: dict[str, tuple[torch.Tensor, torch.Tensor]] = {}
+    for site, site_indices in indices_by_site.items():
+        site_q = np.maximum.accumulate(
+            np.quantile(np.concatenate([edges[index] for index in site_indices]), grid)
+        )
+        tables[site] = (torch.from_numpy(site_q.astype(np.float32)), pooled_q)
+    return tables, pooled_q
+
+
+def build_collate(
+    tables: dict[str, tuple[torch.Tensor, torch.Tensor]], pooled_table
+):
+    """Collate that rank/quantile normalizes each batch's |FC| edge weights per site."""
+
+    def collate(batch: list[dict]) -> dict[str, torch.Tensor | list[str]]:
+        collated = collate_graphs(batch)
+        collated["adjacency"] = quantile_normalize_edges(
+            collated["adjacency"], collated["site_id"], tables, pooled_table
+        )
+        return collated
+
+    return collate
+
+
+@torch.no_grad()
+def evaluate_tta(
+    model: SimpleGCN,
+    loader: DataLoader,
+    device: torch.device,
+    seed: int,
+) -> tuple[dict[str, float], dict[str, float]]:
+    """Final-epoch evaluation with K-draw adjacency-augmentation averaging.
+
+    Inference only: the model's weights (the single final-epoch EMA copy) are held
+    fixed, and every held-out batch is scored TTA_K times, each time with an
+    independent draw of the EXISTING train-time DropEdge mask (same
+    edge_drop_mask() helper, same EDGE_DROP_P semantics: symmetrized, self-loops
+    kept). The per-subject class probabilities are averaged over the K draws and
+    that average is what the reported final-epoch metric is computed from.
+
+    No labels, site ids or per-site statistics are read here (the loader supplies
+    labels only to the metric at the end, exactly as the plain evaluate() did), no
+    epoch/checkpoint is selected, no statistic is fitted on evaluation data, and
+    the held-out loader stays the plain shuffle=False loader. The draws are
+    seeded solely from the fold seed plus the fixed TTA_SEED_OFFSET, so re-running
+    a fold reproduces the same K masks; the global RNG state is restored
+    afterwards so nothing downstream shifts. tta_* keys are log-only.
+    """
+    model.eval()
+    all_labels: list[int] = []
+    all_preds: list[int] = []
+    all_probs: list[float] = []
+    draw_deviations: list[float] = []
+    draws_total = 0
+
+    with torch.random.fork_rng():
+        torch.manual_seed(seed + TTA_SEED_OFFSET)
+        for batch in loader:
+            node_features = batch["node_features"].to(device)
+            adjacency = batch["adjacency"].to(device)
+            labels = batch["label"].to(device)
+
+            draw_probs = []
+            for _ in range(TTA_K):
+                mask = edge_drop_mask(adjacency, EDGE_DROP_P)
+                logits = model(node_features, adjacency * mask)
+                draw_probs.append(torch.softmax(logits, dim=1))
+                draws_total += 1
+            stacked = torch.stack(draw_probs, dim=0)  # (K, B, num_classes)
+            mean_probs = stacked.mean(dim=0)
+            # Log-only spread of the per-subject ASD-class probability across the
+            # K draws (mean absolute deviation): separates a genuine null from a
+            # dead averaging path. Never gates or selects anything.
+            per_draw = stacked[:, :, 1]
+            draw_deviations.append(
+                float((per_draw - per_draw.mean(dim=0, keepdim=True)).abs().mean())
+            )
+
+            all_labels.extend(labels.cpu().tolist())
+            all_preds.extend(mean_probs.argmax(dim=1).cpu().tolist())
+            all_probs.extend(mean_probs[:, 1].cpu().tolist())
+
+    metrics = {
+        "accuracy": float(accuracy_score(all_labels, all_preds)),
+        "f1": float(f1_score(all_labels, all_preds)),
+        "auc": float(roc_auc_score(all_labels, all_probs)),
+    }
+    tta_stats = {
+        "tta_k": float(TTA_K),
+        "tta_draws": float(draws_total),
+        "tta_prob_mad": float(np.mean(draw_deviations)) if draw_deviations else 0.0,
+    }
+    return metrics, tta_stats
 
 
 def run_fold(
@@ -120,8 +301,18 @@ def run_fold(
     torch.manual_seed(seed)
     np.random.seed(seed)
 
-    train_loader = build_loader(dataset, train_indices, config.batch_size, True)
-    test_loader = build_loader(dataset, test_indices, config.batch_size, False)
+    # Per-site |FC| edge-weight quantile maps, fit on this fold's training edges
+    # only. Sites unseen in training (e.g. the held-out site in a LOSO fold) fall
+    # back to the pooled training-fold mapping, so no held-out statistics are used.
+    tables, pooled_q = fit_edge_quantile_tables(dataset, train_indices)
+    collate = build_collate(tables, (pooled_q, pooled_q))
+
+    train_loader = build_loader(
+        dataset, train_indices, config.batch_size, True, collate
+    )
+    test_loader = build_loader(
+        dataset, test_indices, config.batch_size, False, collate
+    )
 
     num_nodes = int(dataset[0]["node_features"].shape[0])
     model = SimpleGCN(
@@ -130,19 +321,210 @@ def run_fold(
         num_classes=2,
         dropout=config.dropout,
     ).to(device)
+
+    # Training-only site-adversarial head over the mean-pooled embedding. Its
+    # classes are THIS fold's training sites (sorted), so the held-out site is
+    # never a class. The head is initialised under a restored RNG state so the
+    # baseline's batch-shuffle stream is untouched, and its parameters join the
+    # SAME Adam optimizer (Adam is per-parameter, so the extra params change
+    # nothing for the encoder at lambda = 0).
+    adv_site_to_index = {site: index for index, site in enumerate(sorted(tables))}
+    rng_state = torch.get_rng_state()
+    adv_head = (
+        nn.Sequential(
+            nn.Linear(config.hidden_dim, 32),
+            nn.ReLU(),
+            nn.Linear(32, len(adv_site_to_index)),
+        ).to(device)
+        if adv_site_to_index
+        else None
+    )
+    torch.set_rng_state(rng_state)
+    adv_stats: dict[str, int] = {
+        "adv_batches_seen": 0,
+        "adv_batches": 0,
+        "adv_sites_sum": 0,
+        "adv_subjects_sum": 0,
+        "sub_quota_sites": 0,
+    }
+    # Log-only bookkeeping for the worst-site (group-DRO) classification
+    # reweighting; never read for gating or selection.
+    dro_stats: dict[str, float] = {}
+    # Log-only bookkeeping for the train-fold-only site-stratified mixup; never
+    # read for gating or selection.
+    mixup_stats: dict[str, float] = {}
+    # Log-only bookkeeping for the train-fold-only DropEdge-style adjacency
+    # perturbation; never read for gating or selection.
+    edge_drop_stats: dict[str, float] = {}
+    parameters = list(model.parameters()) + (
+        list(adv_head.parameters()) if adv_head is not None else []
+    )
     optimizer = torch.optim.Adam(
-        model.parameters(), lr=config.lr, weight_decay=config.weight_decay
+        parameters, lr=config.lr, weight_decay=config.weight_decay
+    )
+    # Cosine LR annealing (LR schedule only; peak LR stays config.lr). The gated
+    # metric is the FINAL-EPOCH auc_mean, and the ledger shows scores peak
+    # mid-training then decay under a constant LR for all 100 epochs (~0.075
+    # final-vs-best gap); annealing toward zero targets that largest measured
+    # untapped quantity without epoch selection, early stopping, or held-out data.
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer, T_max=config.epochs, eta_min=1e-5
     )
     criterion = nn.CrossEntropyLoss()
 
+    # Shadow EMA of the weights (long window, decay EMA_DECAY per epoch). It is a
+    # detached copy only; the live model trains exactly as the iter25 winner does.
+    ema_state = {key: value.detach().clone() for key, value in model.state_dict().items()}
+
     best_auc = -1.0
     metrics: dict[str, float] = {}
-    for _ in range(config.epochs):
-        train_one_epoch(model, train_loader, optimizer, criterion, device)
+    for step in range(config.epochs):
+        # Linear 0 -> ADV_LAMBDA_MAX ramp over epochs: exactly 0 at epoch 0 (so
+        # the first epoch and its first optimizer step are baseline-identical)
+        # and ADV_LAMBDA_MAX at the final epoch.
+        adv_lambda = ADV_LAMBDA_MAX * step / max(1, config.epochs - 1)
+        train_one_epoch(
+            model,
+            train_loader,
+            optimizer,
+            criterion,
+            device,
+            adv_head=adv_head,
+            adv_lambda=adv_lambda,
+            adv_site_to_index=adv_site_to_index,
+            adv_stats=adv_stats,
+            dro_stats=dro_stats,
+            mixup_alpha=MIXUP_ALPHA,
+            mixup_stats=mixup_stats,
+            edge_drop_p=EDGE_DROP_P,
+            edge_drop_stats=edge_drop_stats,
+        )
+        scheduler.step()  # advance the LR once per epoch, after its optimizer steps
+        with torch.no_grad():
+            live_state = model.state_dict()
+            for key, value in ema_state.items():
+                value.mul_(EMA_DECAY).add_(live_state[key], alpha=1.0 - EMA_DECAY)
         metrics = evaluate(model, test_loader, device)
         best_auc = max(best_auc, metrics["auc"])
 
-    return {**metrics, "best_auc": best_auc}
+    # Single final-epoch read of the EMA weights, reported as this stage's number:
+    # no epoch selection, no early stopping, no best-epoch read. This one read is
+    # the ONLY place the eval-time K-draw mask averaging happens: the same frozen
+    # weights are scored TTA_K times per held-out batch and the per-subject
+    # probabilities are averaged before scoring. Training (losses, optimizer,
+    # schedule, EMA cadence, loaders) is untouched.
+    final_state = {key: value.detach().clone() for key, value in model.state_dict().items()}
+    model.load_state_dict(ema_state)
+    metrics, tta_stats = evaluate_tta(model, test_loader, device, seed)
+    model.load_state_dict(final_state)
+
+    # Log-only instrumentation (fold totals; never touches the reported
+    # final-epoch metric): whether the adversarial branch ever fired, the
+    # average number of sites a training batch carried, and how often a
+    # participating site contributed fewer than SITE_ALIGN_MIN_SUBJECTS subjects.
+    batches_seen = int(adv_stats["adv_batches_seen"])
+    applied = int(adv_stats["adv_batches"])
+    sites_total = int(adv_stats["adv_sites_sum"])
+    sub_quota_total = int(adv_stats["sub_quota_sites"])
+    adv_sites_mean = sites_total / batches_seen if batches_seen else 0.0
+    adv_batch_fraction = applied / batches_seen if batches_seen else 0.0
+    print(
+        f"  [adv] batches={batches_seen} applied={applied} "
+        f"frac={adv_batch_fraction:.3f} mean_sites={adv_sites_mean:.2f} "
+        f"sub_quota_sites={sub_quota_total}",
+        flush=True,
+    )
+
+    # Log-only worst-site reweighting diagnostics: how many sites entered the
+    # reweighted CE term per batch, and the spread of w_s = softmax(r_s / 1.0).
+    dro_batches = int(dro_stats.get("dro_batches", 0))
+    dro_seen = int(dro_stats.get("dro_batches_seen", 0))
+    dro_applied = dro_batches / dro_seen if dro_seen else 0.0
+    dro_sites_mean = (
+        float(dro_stats.get("dro_sites_sum", 0.0)) / dro_batches if dro_batches else 0.0
+    )
+    dro_w_spread_mean = (
+        float(dro_stats.get("dro_w_spread_sum", 0.0)) / dro_batches
+        if dro_batches
+        else 0.0
+    )
+    print(
+        f"  [dro] batches={dro_seen} "
+        f"applied_frac={dro_applied:.3f} sites_entering={dro_sites_mean:.2f} "
+        f"w_spread_mean={dro_w_spread_mean:.4f} "
+        f"w_min={float(dro_stats.get('dro_w_min', 1.0)):.4f} "
+        f"w_max={float(dro_stats.get('dro_w_max', 1.0)):.4f}",
+        flush=True,
+    )
+
+    # Log-only mixup liveness/behaviour counters: how many training batches were
+    # mixed (training-fold subjects only), the mean lam, and the fraction of rows
+    # whose mixing partner was a different subject in the SAME site.
+    mixup_batches = int(mixup_stats.get("mixup_batches", 0.0))
+    mixup_lam_mean = (
+        float(mixup_stats.get("mixup_lam_sum", 0.0)) / mixup_batches
+        if mixup_batches
+        else 0.0
+    )
+    mixup_paired_frac = (
+        float(mixup_stats.get("mixup_paired_frac_sum", 0.0)) / mixup_batches
+        if mixup_batches
+        else 0.0
+    )
+    print(
+        f"  [mixup] alpha={MIXUP_ALPHA} batches={mixup_batches} "
+        f"lam_mean={mixup_lam_mean:.4f} paired_frac={mixup_paired_frac:.4f}",
+        flush=True,
+    )
+
+    # Log-only DropEdge liveness counter: how many TRAINING batches had their
+    # adjacency perturbed and the mean fraction of off-diagonal edges actually
+    # dropped (should sit at EDGE_DROP_P). Held-out batches are never perturbed.
+    edge_drop_batches = int(edge_drop_stats.get("edge_drop_batches", 0.0))
+    edge_drop_frac_mean = (
+        float(edge_drop_stats.get("edge_drop_dropped_sum", 0.0)) / edge_drop_batches
+        if edge_drop_batches
+        else 0.0
+    )
+    print(
+        f"  [edge_drop] p={EDGE_DROP_P} batches={edge_drop_batches} "
+        f"dropped_frac_mean={edge_drop_frac_mean:.4f} "
+        f"kept_frac_mean={1.0 - edge_drop_frac_mean:.4f}",
+        flush=True,
+    )
+
+    # Log-only TTA liveness counters for the single final-epoch read: how many
+    # mask draws were averaged over (exactly TTA_K per held-out batch) and the
+    # mean per-subject probability spread across those draws. Never read for
+    # gating, selection or the reported metric.
+    print(
+        f"  [tta] k={int(tta_stats['tta_k'])} draws={int(tta_stats['tta_draws'])} "
+        f"p={EDGE_DROP_P} prob_mad={tta_stats['tta_prob_mad']:.4f}",
+        flush=True,
+    )
+
+    return {
+        **metrics,
+        "best_auc": best_auc,
+        "adv_batches_seen": float(batches_seen),
+        "adv_batches_applied": float(applied),
+        "adv_sites_mean": float(adv_sites_mean),
+        "sub_quota_sites": float(sub_quota_total),
+        "dro_batches_applied": float(dro_batches),
+        "dro_batch_fraction": float(dro_applied),
+        "dro_sites_mean": float(dro_sites_mean),
+        "dro_w_spread_mean": float(dro_w_spread_mean),
+        "mixup_alpha": float(MIXUP_ALPHA),
+        "mixup_batches": float(mixup_batches),
+        "mixup_lam_mean": float(mixup_lam_mean),
+        "mixup_paired_frac": float(mixup_paired_frac),
+        "edge_drop_p": float(EDGE_DROP_P),
+        "edge_drop_batches": float(edge_drop_batches),
+        "edge_drop_frac_mean": float(edge_drop_frac_mean),
+        "tta_k": float(TTA_K),
+        "tta_draws": float(tta_stats["tta_draws"]),
+        "tta_prob_mad": float(tta_stats["tta_prob_mad"]),
+    }
 
 
 def summarize(fold_metrics: list[dict[str, float]]) -> dict[str, float]:
