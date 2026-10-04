@@ -1,0 +1,2227 @@
+{
+  "name": "linear_baseline_dcan_v1",
+  "evaluated_at": "2026-10-04",
+  "label_convention": "label 0 = ASD, 1 = control; sensitivity = ASD recall; f1 = control F1 (as neuroasd.train)",
+  "summary": {
+    "site": {
+      "tangent": {
+        "all_folds": {
+          "folds": 33,
+          "subjects": 1401,
+          "accuracy_mean": 0.6856,
+          "accuracy_std": 0.077,
+          "auc_mean": 0.7746,
+          "auc_std": 0.1008,
+          "f1_mean": 0.7349,
+          "f1_std": 0.0791,
+          "sensitivity_mean": 0.5433,
+          "sensitivity_std": 0.1865,
+          "specificity_mean": 0.8036,
+          "specificity_std": 0.1378,
+          "accuracy_pooled": 0.6902
+        },
+        "abide1_folds": {
+          "folds": 20,
+          "subjects": 789,
+          "accuracy_mean": 0.7094,
+          "accuracy_std": 0.0785,
+          "auc_mean": 0.8031,
+          "auc_std": 0.1021,
+          "f1_mean": 0.7493,
+          "f1_std": 0.0816,
+          "sensitivity_mean": 0.5958,
+          "sensitivity_std": 0.2054,
+          "specificity_mean": 0.7999,
+          "specificity_std": 0.1628,
+          "accuracy_pooled": 0.7047
+        },
+        "abide2_folds": {
+          "folds": 13,
+          "subjects": 612,
+          "accuracy_mean": 0.6489,
+          "accuracy_std": 0.0582,
+          "auc_mean": 0.7307,
+          "auc_std": 0.0812,
+          "f1_mean": 0.7127,
+          "f1_std": 0.0695,
+          "sensitivity_mean": 0.4626,
+          "sensitivity_std": 0.1127,
+          "specificity_mean": 0.8093,
+          "specificity_std": 0.0858,
+          "accuracy_pooled": 0.6716
+        },
+        "subsample_repeats": {
+          "accuracy_mean": {
+            "mean": 0.6863,
+            "std": 0.0111
+          },
+          "accuracy_pooled": {
+            "mean": 0.6868,
+            "std": 0.0072
+          },
+          "auc_mean": {
+            "mean": 0.7734,
+            "std": 0.003
+          }
+        }
+      },
+      "fisherz": {
+        "all_folds": {
+          "folds": 33,
+          "subjects": 1401,
+          "accuracy_mean": 0.6738,
+          "accuracy_std": 0.0877,
+          "auc_mean": 0.7469,
+          "auc_std": 0.0907,
+          "f1_mean": 0.7205,
+          "f1_std": 0.0873,
+          "sensitivity_mean": 0.5551,
+          "sensitivity_std": 0.1447,
+          "specificity_mean": 0.7775,
+          "specificity_std": 0.1393,
+          "accuracy_pooled": 0.6916
+        },
+        "abide1_folds": {
+          "folds": 20,
+          "subjects": 789,
+          "accuracy_mean": 0.6779,
+          "accuracy_std": 0.0943,
+          "auc_mean": 0.7616,
+          "auc_std": 0.102,
+          "f1_mean": 0.7234,
+          "f1_std": 0.0923,
+          "sensitivity_mean": 0.5712,
+          "sensitivity_std": 0.1568,
+          "specificity_mean": 0.7748,
+          "specificity_std": 0.1524,
+          "accuracy_pooled": 0.7022
+        },
+        "abide2_folds": {
+          "folds": 13,
+          "subjects": 612,
+          "accuracy_mean": 0.6675,
+          "accuracy_std": 0.076,
+          "auc_mean": 0.7243,
+          "auc_std": 0.0637,
+          "f1_mean": 0.7159,
+          "f1_std": 0.0787,
+          "sensitivity_mean": 0.5303,
+          "sensitivity_std": 0.1198,
+          "specificity_mean": 0.7818,
+          "specificity_std": 0.1163,
+          "accuracy_pooled": 0.6781
+        },
+        "subsample_repeats": {
+          "accuracy_mean": {
+            "mean": 0.6749,
+            "std": 0.0019
+          },
+          "accuracy_pooled": {
+            "mean": 0.6911,
+            "std": 0.0008
+          },
+          "auc_mean": {
+            "mean": 0.7455,
+            "std": 0.0073
+          }
+        }
+      }
+    },
+    "institution": {
+      "tangent": {
+        "all_folds": {
+          "folds": 23,
+          "subjects": 1443,
+          "accuracy_mean": 0.6698,
+          "accuracy_std": 0.0861,
+          "auc_mean": 0.7703,
+          "auc_std": 0.0778,
+          "f1_mean": 0.7185,
+          "f1_std": 0.0871,
+          "sensitivity_mean": 0.5515,
+          "sensitivity_std": 0.1846,
+          "specificity_mean": 0.7979,
+          "specificity_std": 0.1584,
+          "accuracy_pooled": 0.6604
+        },
+        "abide1_folds": {
+          "folds": 9,
+          "subjects": 366,
+          "accuracy_mean": 0.7149,
+          "accuracy_std": 0.0775,
+          "auc_mean": 0.7836,
+          "auc_std": 0.0939,
+          "f1_mean": 0.7412,
+          "f1_std": 0.1019,
+          "sensitivity_mean": 0.6592,
+          "sensitivity_std": 0.1857,
+          "specificity_mean": 0.7594,
+          "specificity_std": 0.1795,
+          "accuracy_pooled": 0.694
+        },
+        "abide1+abide2_folds": {
+          "folds": 8,
+          "subjects": 890,
+          "accuracy_mean": 0.6386,
+          "accuracy_std": 0.0849,
+          "auc_mean": 0.7711,
+          "auc_std": 0.0545,
+          "f1_mean": 0.699,
+          "f1_std": 0.0755,
+          "sensitivity_mean": 0.5132,
+          "sensitivity_std": 0.1628,
+          "specificity_mean": 0.8037,
+          "specificity_std": 0.1613,
+          "accuracy_pooled": 0.6472
+        },
+        "abide2_folds": {
+          "folds": 6,
+          "subjects": 187,
+          "accuracy_mean": 0.6437,
+          "accuracy_std": 0.0689,
+          "auc_mean": 0.7491,
+          "auc_std": 0.0728,
+          "f1_mean": 0.7104,
+          "f1_std": 0.0675,
+          "sensitivity_mean": 0.4412,
+          "sensitivity_std": 0.1096,
+          "specificity_mean": 0.8479,
+          "specificity_std": 0.0913,
+          "accuracy_pooled": 0.6578
+        },
+        "subsample_repeats": {
+          "accuracy_mean": {
+            "mean": 0.6593,
+            "std": 0.0045
+          },
+          "accuracy_pooled": {
+            "mean": 0.6562,
+            "std": 0.0055
+          },
+          "auc_mean": {
+            "mean": 0.7631,
+            "std": 0.0033
+          }
+        }
+      },
+      "fisherz": {
+        "all_folds": {
+          "folds": 23,
+          "subjects": 1443,
+          "accuracy_mean": 0.653,
+          "accuracy_std": 0.1013,
+          "auc_mean": 0.7332,
+          "auc_std": 0.0871,
+          "f1_mean": 0.6984,
+          "f1_std": 0.0938,
+          "sensitivity_mean": 0.5609,
+          "sensitivity_std": 0.1595,
+          "specificity_mean": 0.7517,
+          "specificity_std": 0.1457,
+          "accuracy_pooled": 0.6701
+        },
+        "abide1_folds": {
+          "folds": 9,
+          "subjects": 366,
+          "accuracy_mean": 0.6535,
+          "accuracy_std": 0.1263,
+          "auc_mean": 0.7304,
+          "auc_std": 0.1116,
+          "f1_mean": 0.6939,
+          "f1_std": 0.122,
+          "sensitivity_mean": 0.5832,
+          "sensitivity_std": 0.1782,
+          "specificity_mean": 0.707,
+          "specificity_std": 0.1583,
+          "accuracy_pooled": 0.7022
+        },
+        "abide1+abide2_folds": {
+          "folds": 8,
+          "subjects": 890,
+          "accuracy_mean": 0.6471,
+          "accuracy_std": 0.094,
+          "auc_mean": 0.7502,
+          "auc_std": 0.0801,
+          "f1_mean": 0.7001,
+          "f1_std": 0.0786,
+          "sensitivity_mean": 0.5489,
+          "sensitivity_std": 0.1535,
+          "specificity_mean": 0.7792,
+          "specificity_std": 0.1411,
+          "accuracy_pooled": 0.6584
+        },
+        "abide2_folds": {
+          "folds": 6,
+          "subjects": 187,
+          "accuracy_mean": 0.6601,
+          "accuracy_std": 0.0595,
+          "auc_mean": 0.7147,
+          "auc_std": 0.0331,
+          "f1_mean": 0.7029,
+          "f1_std": 0.0559,
+          "sensitivity_mean": 0.5433,
+          "sensitivity_std": 0.1314,
+          "specificity_mean": 0.7823,
+          "specificity_std": 0.111,
+          "accuracy_pooled": 0.6631
+        },
+        "subsample_repeats": {
+          "accuracy_mean": {
+            "mean": 0.6552,
+            "std": 0.0057
+          },
+          "accuracy_pooled": {
+            "mean": 0.6678,
+            "std": 0.0037
+          },
+          "auc_mean": {
+            "mean": 0.7315,
+            "std": 0.0046
+          }
+        }
+      }
+    }
+  },
+  "folds": {
+    "site": {
+      "tangent": [
+        {
+          "test_group": "ABIDEII-BNI_1",
+          "test_sites": [
+            "ABIDEII-BNI_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5652173913043478,
+          "auc": 0.6439393939393939,
+          "f1": 0.6428571428571428,
+          "sensitivity": 0.3333333333333333,
+          "specificity": 0.8181818181818182
+        },
+        {
+          "test_group": "ABIDEII-EMC_1",
+          "test_sites": [
+            "ABIDEII-EMC_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 3162.2776601683795,
+          "accuracy": 0.5769230769230769,
+          "auc": 0.6428571428571428,
+          "f1": 0.6206896551724139,
+          "sensitivity": 0.42857142857142855,
+          "specificity": 0.75
+        },
+        {
+          "test_group": "ABIDEII-GU_1",
+          "test_sites": [
+            "ABIDEII-GU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1404,
+          "test_size": 39,
+          "alpha": 1000.0,
+          "accuracy": 0.717948717948718,
+          "auc": 0.7714285714285714,
+          "f1": 0.7755102040816326,
+          "sensitivity": 0.6428571428571429,
+          "specificity": 0.76
+        },
+        {
+          "test_group": "ABIDEII-IP_1",
+          "test_sites": [
+            "ABIDEII-IP_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1398,
+          "test_size": 45,
+          "alpha": 10.0,
+          "accuracy": 0.6666666666666666,
+          "auc": 0.7478991596638656,
+          "f1": 0.736842105263158,
+          "sensitivity": 0.5294117647058824,
+          "specificity": 0.75
+        },
+        {
+          "test_group": "ABIDEII-IU_1",
+          "test_sites": [
+            "ABIDEII-IU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1412,
+          "test_size": 31,
+          "alpha": 10000.0,
+          "accuracy": 0.6774193548387096,
+          "auc": 0.8125,
+          "f1": 0.75,
+          "sensitivity": 0.4,
+          "specificity": 0.9375
+        },
+        {
+          "test_group": "ABIDEII-KKI_1",
+          "test_sites": [
+            "ABIDEII-KKI_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1319,
+          "test_size": 124,
+          "alpha": 10000.0,
+          "accuracy": 0.7258064516129032,
+          "auc": 0.7358333333333333,
+          "f1": 0.8152173913043479,
+          "sensitivity": 0.625,
+          "specificity": 0.75
+        },
+        {
+          "test_group": "ABIDEII-NYU_1",
+          "test_sites": [
+            "ABIDEII-NYU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1383,
+          "test_size": 60,
+          "alpha": 100.0,
+          "accuracy": 0.5666666666666667,
+          "auc": 0.6832579185520362,
+          "f1": 0.5937499999999999,
+          "sensitivity": 0.4411764705882353,
+          "specificity": 0.7307692307692307
+        },
+        {
+          "test_group": "ABIDEII-OHSU_1",
+          "test_sites": [
+            "ABIDEII-OHSU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1351,
+          "test_size": 92,
+          "alpha": 3162.2776601683795,
+          "accuracy": 0.75,
+          "auc": 0.8045634920634921,
+          "f1": 0.8188976377952756,
+          "sensitivity": 0.4722222222222222,
+          "specificity": 0.9285714285714286
+        },
+        {
+          "test_group": "ABIDEII-ONRC_2",
+          "test_sites": [
+            "ABIDEII-ONRC_2"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1392,
+          "test_size": 51,
+          "alpha": 316.22776601683796,
+          "accuracy": 0.6666666666666666,
+          "auc": 0.6661184210526315,
+          "f1": 0.7384615384615384,
+          "sensitivity": 0.5263157894736842,
+          "specificity": 0.75
+        },
+        {
+          "test_group": "ABIDEII-SDSU_1",
+          "test_sites": [
+            "ABIDEII-SDSU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1396,
+          "test_size": 47,
+          "alpha": 316.22776601683796,
+          "accuracy": 0.6595744680851063,
+          "auc": 0.793233082706767,
+          "f1": 0.6363636363636364,
+          "sensitivity": 0.6071428571428571,
+          "specificity": 0.7368421052631579
+        },
+        {
+          "test_group": "ABIDEII-TCD_1",
+          "test_sites": [
+            "ABIDEII-TCD_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1416,
+          "test_size": 27,
+          "alpha": 10000.0,
+          "accuracy": 0.6296296296296297,
+          "auc": 0.5588235294117647,
+          "f1": 0.7368421052631577,
+          "sensitivity": 0.3,
+          "specificity": 0.8235294117647058
+        },
+        {
+          "test_group": "ABIDEII-UCD_1",
+          "test_sites": [
+            "ABIDEII-UCD_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6086956521739131,
+          "auc": 0.8384615384615385,
+          "f1": 0.6896551724137931,
+          "sensitivity": 0.3076923076923077,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "ABIDEII-USM_1",
+          "test_sites": [
+            "ABIDEII-USM_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1419,
+          "test_size": 24,
+          "alpha": 10000.0,
+          "accuracy": 0.625,
+          "auc": 0.8,
+          "f1": 0.7096774193548386,
+          "sensitivity": 0.4,
+          "specificity": 0.7857142857142857
+        },
+        {
+          "test_group": "CALTECH",
+          "test_sites": [
+            "CALTECH"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 10000.0,
+          "accuracy": 0.6153846153846154,
+          "auc": 0.6303030303030303,
+          "f1": 0.5,
+          "sensitivity": 1.0,
+          "specificity": 0.3333333333333333
+        },
+        {
+          "test_group": "CMU",
+          "test_sites": [
+            "CMU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7777777777777778,
+          "auc": 0.7,
+          "f1": 0.8333333333333333,
+          "sensitivity": 0.5,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "KKI",
+          "test_sites": [
+            "KKI"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1409,
+          "test_size": 34,
+          "alpha": 10000.0,
+          "accuracy": 0.6176470588235294,
+          "auc": 0.7124999999999999,
+          "f1": 0.7450980392156864,
+          "sensitivity": 0.2,
+          "specificity": 0.7916666666666666
+        },
+        {
+          "test_group": "LEUVEN_1",
+          "test_sites": [
+            "LEUVEN_1"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1419,
+          "test_size": 24,
+          "alpha": 10000.0,
+          "accuracy": 0.625,
+          "auc": 0.6923076923076923,
+          "f1": 0.6896551724137931,
+          "sensitivity": 0.38461538461538464,
+          "specificity": 0.9090909090909091
+        },
+        {
+          "test_group": "LEUVEN_2",
+          "test_sites": [
+            "LEUVEN_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1418,
+          "test_size": 25,
+          "alpha": 10000.0,
+          "accuracy": 0.84,
+          "auc": 1.0,
+          "f1": 0.8666666666666666,
+          "sensitivity": 0.6666666666666666,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "MAX_MUN",
+          "test_sites": [
+            "MAX_MUN"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1397,
+          "test_size": 46,
+          "alpha": 3.1622776601683795,
+          "accuracy": 0.6304347826086957,
+          "auc": 0.672514619883041,
+          "f1": 0.6792452830188679,
+          "sensitivity": 0.5789473684210527,
+          "specificity": 0.6666666666666666
+        },
+        {
+          "test_group": "NYU",
+          "test_sites": [
+            "NYU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1282,
+          "test_size": 161,
+          "alpha": 100.0,
+          "accuracy": 0.7267080745341615,
+          "auc": 0.8184294871794873,
+          "f1": 0.744186046511628,
+          "sensitivity": 0.8153846153846154,
+          "specificity": 0.6666666666666666
+        },
+        {
+          "test_group": "OHSU",
+          "test_sites": [
+            "OHSU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1416,
+          "test_size": 27,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6666666666666666,
+          "auc": 0.7747252747252747,
+          "f1": 0.7096774193548386,
+          "sensitivity": 0.5384615384615384,
+          "specificity": 0.7857142857142857
+        },
+        {
+          "test_group": "OLIN",
+          "test_sites": [
+            "OLIN"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1436,
+          "test_size": 7,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.8571428571428571,
+          "auc": 1.0,
+          "f1": 0.8571428571428571,
+          "sensitivity": 0.75,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "PITT",
+          "test_sites": [
+            "PITT"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7391304347826086,
+          "auc": 0.8412698412698413,
+          "f1": 0.7692307692307692,
+          "sensitivity": 0.7777777777777778,
+          "specificity": 0.7142857142857143
+        },
+        {
+          "test_group": "SBL",
+          "test_sites": [
+            "SBL"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7777777777777778,
+          "auc": 0.9,
+          "f1": 0.8000000000000002,
+          "sensitivity": 0.75,
+          "specificity": 0.8
+        },
+        {
+          "test_group": "SDSU",
+          "test_sites": [
+            "SDSU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1413,
+          "test_size": 30,
+          "alpha": 10000.0,
+          "accuracy": 0.6666666666666666,
+          "auc": 0.7083333333333334,
+          "f1": 0.7222222222222222,
+          "sensitivity": 0.5833333333333334,
+          "specificity": 0.7222222222222222
+        },
+        {
+          "test_group": "STANFORD",
+          "test_sites": [
+            "STANFORD"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1411,
+          "test_size": 32,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.71875,
+          "auc": 0.7896825396825397,
+          "f1": 0.7428571428571428,
+          "sensitivity": 0.7142857142857143,
+          "specificity": 0.7222222222222222
+        },
+        {
+          "test_group": "TRINITY",
+          "test_sites": [
+            "TRINITY"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1409,
+          "test_size": 34,
+          "alpha": 0.1,
+          "accuracy": 0.7058823529411765,
+          "auc": 0.8321428571428571,
+          "f1": 0.7222222222222223,
+          "sensitivity": 0.7857142857142857,
+          "specificity": 0.65
+        },
+        {
+          "test_group": "UCLA_1",
+          "test_sites": [
+            "UCLA_1"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1391,
+          "test_size": 52,
+          "alpha": 31.622776601683793,
+          "accuracy": 0.6923076923076923,
+          "auc": 0.7692307692307692,
+          "f1": 0.7499999999999999,
+          "sensitivity": 0.46153846153846156,
+          "specificity": 0.9230769230769231
+        },
+        {
+          "test_group": "UCLA_2",
+          "test_sites": [
+            "UCLA_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1426,
+          "test_size": 17,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5882352941176471,
+          "auc": 0.7575757575757576,
+          "f1": 0.6666666666666666,
+          "sensitivity": 0.5,
+          "specificity": 0.6363636363636364
+        },
+        {
+          "test_group": "UM_1",
+          "test_sites": [
+            "UM_1"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1362,
+          "test_size": 81,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6666666666666666,
+          "auc": 0.7815656565656566,
+          "f1": 0.7567567567567567,
+          "sensitivity": 0.36363636363636365,
+          "specificity": 0.875
+        },
+        {
+          "test_group": "UM_2",
+          "test_sites": [
+            "UM_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1414,
+          "test_size": 29,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6896551724137931,
+          "auc": 0.868421052631579,
+          "f1": 0.7999999999999999,
+          "sensitivity": 0.2,
+          "specificity": 0.9473684210526315
+        },
+        {
+          "test_group": "USM",
+          "test_sites": [
+            "USM"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1362,
+          "test_size": 81,
+          "alpha": 10000.0,
+          "accuracy": 0.7283950617283951,
+          "auc": 0.8765356265356266,
+          "f1": 0.7608695652173914,
+          "sensitivity": 0.5454545454545454,
+          "specificity": 0.9459459459459459
+        },
+        {
+          "test_group": "YALE",
+          "test_sites": [
+            "YALE"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1401,
+          "test_size": 42,
+          "alpha": 0.1,
+          "accuracy": 0.8571428571428571,
+          "auc": 0.9363636363636363,
+          "f1": 0.8695652173913043,
+          "sensitivity": 0.8,
+          "specificity": 0.9090909090909091
+        }
+      ],
+      "fisherz": [
+        {
+          "test_group": "ABIDEII-BNI_1",
+          "test_sites": [
+            "ABIDEII-BNI_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6521739130434783,
+          "auc": 0.6893939393939394,
+          "f1": 0.7142857142857143,
+          "sensitivity": 0.4166666666666667,
+          "specificity": 0.9090909090909091
+        },
+        {
+          "test_group": "ABIDEII-EMC_1",
+          "test_sites": [
+            "ABIDEII-EMC_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 100000.0,
+          "accuracy": 0.7307692307692307,
+          "auc": 0.7083333333333334,
+          "f1": 0.7199999999999999,
+          "sensitivity": 0.7142857142857143,
+          "specificity": 0.75
+        },
+        {
+          "test_group": "ABIDEII-GU_1",
+          "test_sites": [
+            "ABIDEII-GU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1404,
+          "test_size": 39,
+          "alpha": 100000.0,
+          "accuracy": 0.7435897435897436,
+          "auc": 0.76,
+          "f1": 0.8076923076923077,
+          "sensitivity": 0.5714285714285714,
+          "specificity": 0.84
+        },
+        {
+          "test_group": "ABIDEII-IP_1",
+          "test_sites": [
+            "ABIDEII-IP_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1398,
+          "test_size": 45,
+          "alpha": 100000.0,
+          "accuracy": 0.5777777777777777,
+          "auc": 0.7373949579831933,
+          "f1": 0.6274509803921569,
+          "sensitivity": 0.5882352941176471,
+          "specificity": 0.5714285714285714
+        },
+        {
+          "test_group": "ABIDEII-IU_1",
+          "test_sites": [
+            "ABIDEII-IU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1412,
+          "test_size": 31,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5806451612903226,
+          "auc": 0.6625,
+          "f1": 0.6285714285714286,
+          "sensitivity": 0.4666666666666667,
+          "specificity": 0.6875
+        },
+        {
+          "test_group": "ABIDEII-KKI_1",
+          "test_sites": [
+            "ABIDEII-KKI_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1319,
+          "test_size": 124,
+          "alpha": 100000.0,
+          "accuracy": 0.6774193548387096,
+          "auc": 0.6758333333333333,
+          "f1": 0.7777777777777777,
+          "sensitivity": 0.5833333333333334,
+          "specificity": 0.7
+        },
+        {
+          "test_group": "ABIDEII-NYU_1",
+          "test_sites": [
+            "ABIDEII-NYU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1383,
+          "test_size": 60,
+          "alpha": 100000.0,
+          "accuracy": 0.6166666666666667,
+          "auc": 0.6855203619909502,
+          "f1": 0.6229508196721311,
+          "sensitivity": 0.5294117647058824,
+          "specificity": 0.7307692307692307
+        },
+        {
+          "test_group": "ABIDEII-OHSU_1",
+          "test_sites": [
+            "ABIDEII-OHSU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1351,
+          "test_size": 92,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.8260869565217391,
+          "auc": 0.7981150793650793,
+          "f1": 0.8620689655172413,
+          "sensitivity": 0.7222222222222222,
+          "specificity": 0.8928571428571429
+        },
+        {
+          "test_group": "ABIDEII-ONRC_2",
+          "test_sites": [
+            "ABIDEII-ONRC_2"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1392,
+          "test_size": 51,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5490196078431373,
+          "auc": 0.6118421052631579,
+          "f1": 0.6229508196721311,
+          "sensitivity": 0.47368421052631576,
+          "specificity": 0.59375
+        },
+        {
+          "test_group": "ABIDEII-SDSU_1",
+          "test_sites": [
+            "ABIDEII-SDSU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1396,
+          "test_size": 47,
+          "alpha": 100000.0,
+          "accuracy": 0.7021276595744681,
+          "auc": 0.825187969924812,
+          "f1": 0.6818181818181819,
+          "sensitivity": 0.6428571428571429,
+          "specificity": 0.7894736842105263
+        },
+        {
+          "test_group": "ABIDEII-TCD_1",
+          "test_sites": [
+            "ABIDEII-TCD_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1416,
+          "test_size": 27,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7037037037037037,
+          "auc": 0.6882352941176471,
+          "f1": 0.7999999999999999,
+          "sensitivity": 0.3,
+          "specificity": 0.9411764705882353
+        },
+        {
+          "test_group": "ABIDEII-UCD_1",
+          "test_sites": [
+            "ABIDEII-UCD_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6086956521739131,
+          "auc": 0.7384615384615385,
+          "f1": 0.6666666666666667,
+          "sensitivity": 0.38461538461538464,
+          "specificity": 0.9
+        },
+        {
+          "test_group": "ABIDEII-USM_1",
+          "test_sites": [
+            "ABIDEII-USM_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1419,
+          "test_size": 24,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7083333333333334,
+          "auc": 0.8357142857142857,
+          "f1": 0.7741935483870968,
+          "sensitivity": 0.5,
+          "specificity": 0.8571428571428571
+        },
+        {
+          "test_group": "CALTECH",
+          "test_sites": [
+            "CALTECH"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5,
+          "auc": 0.5515151515151515,
+          "f1": 0.48,
+          "sensitivity": 0.6363636363636364,
+          "specificity": 0.4
+        },
+        {
+          "test_group": "CMU",
+          "test_sites": [
+            "CMU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.4444444444444444,
+          "auc": 0.55,
+          "f1": 0.5454545454545454,
+          "sensitivity": 0.25,
+          "specificity": 0.6
+        },
+        {
+          "test_group": "KKI",
+          "test_sites": [
+            "KKI"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1409,
+          "test_size": 34,
+          "alpha": 100000.0,
+          "accuracy": 0.7647058823529411,
+          "auc": 0.85,
+          "f1": 0.8333333333333334,
+          "sensitivity": 0.6,
+          "specificity": 0.8333333333333334
+        },
+        {
+          "test_group": "LEUVEN_1",
+          "test_sites": [
+            "LEUVEN_1"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1419,
+          "test_size": 24,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.625,
+          "auc": 0.7342657342657343,
+          "f1": 0.7096774193548387,
+          "sensitivity": 0.3076923076923077,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "LEUVEN_2",
+          "test_sites": [
+            "LEUVEN_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1418,
+          "test_size": 25,
+          "alpha": 100000.0,
+          "accuracy": 0.68,
+          "auc": 0.8012820512820513,
+          "f1": 0.7333333333333334,
+          "sensitivity": 0.5,
+          "specificity": 0.8461538461538461
+        },
+        {
+          "test_group": "MAX_MUN",
+          "test_sites": [
+            "MAX_MUN"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1397,
+          "test_size": 46,
+          "alpha": 100000.0,
+          "accuracy": 0.6739130434782609,
+          "auc": 0.7329434697855751,
+          "f1": 0.7540983606557378,
+          "sensitivity": 0.42105263157894735,
+          "specificity": 0.8518518518518519
+        },
+        {
+          "test_group": "NYU",
+          "test_sites": [
+            "NYU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1282,
+          "test_size": 161,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7018633540372671,
+          "auc": 0.7669871794871794,
+          "f1": 0.7241379310344829,
+          "sensitivity": 0.7692307692307693,
+          "specificity": 0.65625
+        },
+        {
+          "test_group": "OHSU",
+          "test_sites": [
+            "OHSU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1416,
+          "test_size": 27,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6296296296296297,
+          "auc": 0.7967032967032966,
+          "f1": 0.6875000000000001,
+          "sensitivity": 0.46153846153846156,
+          "specificity": 0.7857142857142857
+        },
+        {
+          "test_group": "OLIN",
+          "test_sites": [
+            "OLIN"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1436,
+          "test_size": 7,
+          "alpha": 100000.0,
+          "accuracy": 0.7142857142857143,
+          "auc": 0.5833333333333334,
+          "f1": 0.7499999999999999,
+          "sensitivity": 0.5,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "PITT",
+          "test_sites": [
+            "PITT"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6956521739130435,
+          "auc": 0.7142857142857143,
+          "f1": 0.7586206896551724,
+          "sensitivity": 0.5555555555555556,
+          "specificity": 0.7857142857142857
+        },
+        {
+          "test_group": "SBL",
+          "test_sites": [
+            "SBL"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5555555555555556,
+          "auc": 0.8,
+          "f1": 0.6,
+          "sensitivity": 0.5,
+          "specificity": 0.6
+        },
+        {
+          "test_group": "SDSU",
+          "test_sites": [
+            "SDSU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1413,
+          "test_size": 30,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7,
+          "auc": 0.7592592592592592,
+          "f1": 0.7567567567567567,
+          "sensitivity": 0.5833333333333334,
+          "specificity": 0.7777777777777778
+        },
+        {
+          "test_group": "STANFORD",
+          "test_sites": [
+            "STANFORD"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1411,
+          "test_size": 32,
+          "alpha": 100000.0,
+          "accuracy": 0.71875,
+          "auc": 0.753968253968254,
+          "f1": 0.7096774193548387,
+          "sensitivity": 0.8571428571428571,
+          "specificity": 0.6111111111111112
+        },
+        {
+          "test_group": "TRINITY",
+          "test_sites": [
+            "TRINITY"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1409,
+          "test_size": 34,
+          "alpha": 100000.0,
+          "accuracy": 0.6764705882352942,
+          "auc": 0.7642857142857143,
+          "f1": 0.717948717948718,
+          "sensitivity": 0.6428571428571429,
+          "specificity": 0.7
+        },
+        {
+          "test_group": "UCLA_1",
+          "test_sites": [
+            "UCLA_1"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1391,
+          "test_size": 52,
+          "alpha": 100000.0,
+          "accuracy": 0.6153846153846154,
+          "auc": 0.7662721893491125,
+          "f1": 0.6875,
+          "sensitivity": 0.38461538461538464,
+          "specificity": 0.8461538461538461
+        },
+        {
+          "test_group": "UCLA_2",
+          "test_sites": [
+            "UCLA_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1426,
+          "test_size": 17,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7058823529411765,
+          "auc": 0.7727272727272727,
+          "f1": 0.7368421052631579,
+          "sensitivity": 0.8333333333333334,
+          "specificity": 0.6363636363636364
+        },
+        {
+          "test_group": "UM_1",
+          "test_sites": [
+            "UM_1"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1362,
+          "test_size": 81,
+          "alpha": 100000.0,
+          "accuracy": 0.7283950617283951,
+          "auc": 0.793560606060606,
+          "f1": 0.7708333333333333,
+          "sensitivity": 0.6666666666666666,
+          "specificity": 0.7708333333333334
+        },
+        {
+          "test_group": "UM_2",
+          "test_sites": [
+            "UM_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1414,
+          "test_size": 29,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.8275862068965517,
+          "auc": 0.9052631578947368,
+          "f1": 0.8780487804878049,
+          "sensitivity": 0.6,
+          "specificity": 0.9473684210526315
+        },
+        {
+          "test_group": "USM",
+          "test_sites": [
+            "USM"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1362,
+          "test_size": 81,
+          "alpha": 100000.0,
+          "accuracy": 0.7901234567901234,
+          "auc": 0.9017199017199017,
+          "f1": 0.7951807228915664,
+          "sensitivity": 0.7045454545454546,
+          "specificity": 0.8918918918918919
+        },
+        {
+          "test_group": "YALE",
+          "test_sites": [
+            "YALE"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1401,
+          "test_size": 42,
+          "alpha": 100000.0,
+          "accuracy": 0.8095238095238095,
+          "auc": 0.9340909090909091,
+          "f1": 0.84,
+          "sensitivity": 0.65,
+          "specificity": 0.9545454545454546
+        }
+      ]
+    },
+    "institution": {
+      "tangent": [
+        {
+          "test_group": "ABIDEII-BNI_1",
+          "test_sites": [
+            "ABIDEII-BNI_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5652173913043478,
+          "auc": 0.6439393939393939,
+          "f1": 0.6428571428571428,
+          "sensitivity": 0.3333333333333333,
+          "specificity": 0.8181818181818182
+        },
+        {
+          "test_group": "ABIDEII-EMC_1",
+          "test_sites": [
+            "ABIDEII-EMC_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5384615384615384,
+          "auc": 0.6666666666666667,
+          "f1": 0.6,
+          "sensitivity": 0.35714285714285715,
+          "specificity": 0.75
+        },
+        {
+          "test_group": "ABIDEII-GU_1",
+          "test_sites": [
+            "ABIDEII-GU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1404,
+          "test_size": 39,
+          "alpha": 10000.0,
+          "accuracy": 0.717948717948718,
+          "auc": 0.7714285714285714,
+          "f1": 0.7755102040816326,
+          "sensitivity": 0.6428571428571429,
+          "specificity": 0.76
+        },
+        {
+          "test_group": "ABIDEII-IP_1",
+          "test_sites": [
+            "ABIDEII-IP_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1398,
+          "test_size": 45,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7111111111111111,
+          "auc": 0.7542016806722689,
+          "f1": 0.7796610169491526,
+          "sensitivity": 0.5294117647058824,
+          "specificity": 0.8214285714285714
+        },
+        {
+          "test_group": "ABIDEII-IU_1",
+          "test_sites": [
+            "ABIDEII-IU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1412,
+          "test_size": 31,
+          "alpha": 10000.0,
+          "accuracy": 0.6774193548387096,
+          "auc": 0.8125,
+          "f1": 0.75,
+          "sensitivity": 0.4,
+          "specificity": 0.9375
+        },
+        {
+          "test_group": "ABIDEII-UCD_1",
+          "test_sites": [
+            "ABIDEII-UCD_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 10000.0,
+          "accuracy": 0.6521739130434783,
+          "auc": 0.8461538461538461,
+          "f1": 0.7142857142857143,
+          "sensitivity": 0.38461538461538464,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "CALTECH",
+          "test_sites": [
+            "CALTECH"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 100.0,
+          "accuracy": 0.6153846153846154,
+          "auc": 0.6484848484848486,
+          "f1": 0.5,
+          "sensitivity": 1.0,
+          "specificity": 0.3333333333333333
+        },
+        {
+          "test_group": "CMU",
+          "test_sites": [
+            "CMU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7777777777777778,
+          "auc": 0.7,
+          "f1": 0.8333333333333333,
+          "sensitivity": 0.5,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "KKI",
+          "test_sites": [
+            "ABIDEII-KKI_1",
+            "KKI"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1285,
+          "test_size": 158,
+          "alpha": 10000.0,
+          "accuracy": 0.5379746835443038,
+          "auc": 0.7236717267552182,
+          "f1": 0.6137566137566138,
+          "sensitivity": 0.7941176470588235,
+          "specificity": 0.46774193548387094
+        },
+        {
+          "test_group": "LEUVEN",
+          "test_sites": [
+            "ABIDEII-KUL_3",
+            "LEUVEN_1",
+            "LEUVEN_2"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1370,
+          "test_size": 73,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.4657534246575342,
+          "auc": 0.7967687074829932,
+          "f1": 0.5517241379310345,
+          "sensitivity": 0.20408163265306123,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "MAX_MUN",
+          "test_sites": [
+            "MAX_MUN"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1397,
+          "test_size": 46,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6086956521739131,
+          "auc": 0.6783625730994152,
+          "f1": 0.6666666666666666,
+          "sensitivity": 0.5263157894736842,
+          "specificity": 0.6666666666666666
+        },
+        {
+          "test_group": "NYU",
+          "test_sites": [
+            "ABIDEII-NYU_1",
+            "ABIDEII-NYU_2",
+            "NYU"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1204,
+          "test_size": 239,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.702928870292887,
+          "auc": 0.7894073139974779,
+          "f1": 0.7491166077738516,
+          "sensitivity": 0.5299145299145299,
+          "specificity": 0.8688524590163934
+        },
+        {
+          "test_group": "OHSU",
+          "test_sites": [
+            "ABIDEII-OHSU_1",
+            "OHSU"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1324,
+          "test_size": 119,
+          "alpha": 100.0,
+          "accuracy": 0.7394957983193278,
+          "auc": 0.8075801749271136,
+          "f1": 0.8025477707006369,
+          "sensitivity": 0.5102040816326531,
+          "specificity": 0.9
+        },
+        {
+          "test_group": "OLIN",
+          "test_sites": [
+            "ABIDEII-ONRC_2",
+            "OLIN"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1385,
+          "test_size": 58,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6551724137931034,
+          "auc": 0.7080745341614907,
+          "f1": 0.736842105263158,
+          "sensitivity": 0.43478260869565216,
+          "specificity": 0.8
+        },
+        {
+          "test_group": "PITT",
+          "test_sites": [
+            "PITT"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 10000.0,
+          "accuracy": 0.7391304347826086,
+          "auc": 0.8333333333333334,
+          "f1": 0.7692307692307692,
+          "sensitivity": 0.7777777777777778,
+          "specificity": 0.7142857142857143
+        },
+        {
+          "test_group": "SBL",
+          "test_sites": [
+            "SBL"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7777777777777778,
+          "auc": 0.9,
+          "f1": 0.8000000000000002,
+          "sensitivity": 0.75,
+          "specificity": 0.8
+        },
+        {
+          "test_group": "SDSU",
+          "test_sites": [
+            "ABIDEII-SDSU_1",
+            "SDSU"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1366,
+          "test_size": 77,
+          "alpha": 0.1,
+          "accuracy": 0.6753246753246753,
+          "auc": 0.7648648648648649,
+          "f1": 0.691358024691358,
+          "sensitivity": 0.6,
+          "specificity": 0.7567567567567568
+        },
+        {
+          "test_group": "STANFORD",
+          "test_sites": [
+            "STANFORD"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1411,
+          "test_size": 32,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.71875,
+          "auc": 0.7896825396825397,
+          "f1": 0.7428571428571428,
+          "sensitivity": 0.7142857142857143,
+          "specificity": 0.7222222222222222
+        },
+        {
+          "test_group": "TRINITY",
+          "test_sites": [
+            "ABIDEII-TCD_1",
+            "TRINITY"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1382,
+          "test_size": 61,
+          "alpha": 1000.0,
+          "accuracy": 0.6557377049180327,
+          "auc": 0.7038288288288288,
+          "f1": 0.7042253521126761,
+          "sensitivity": 0.625,
+          "specificity": 0.6756756756756757
+        },
+        {
+          "test_group": "UCLA",
+          "test_sites": [
+            "UCLA_1",
+            "UCLA_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1374,
+          "test_size": 69,
+          "alpha": 31.622776601683793,
+          "accuracy": 0.6666666666666666,
+          "auc": 0.7592905405405406,
+          "f1": 0.7294117647058824,
+          "sensitivity": 0.46875,
+          "specificity": 0.8378378378378378
+        },
+        {
+          "test_group": "UM",
+          "test_sites": [
+            "UM_1",
+            "UM_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1333,
+          "test_size": 110,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6727272727272727,
+          "auc": 0.7979868101353697,
+          "f1": 0.7599999999999999,
+          "sensitivity": 0.3953488372093023,
+          "specificity": 0.8507462686567164
+        },
+        {
+          "test_group": "USM",
+          "test_sites": [
+            "ABIDEII-USM_1",
+            "USM"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1338,
+          "test_size": 105,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6761904761904762,
+          "auc": 0.8743645606390705,
+          "f1": 0.7424242424242423,
+          "sensitivity": 0.4074074074074074,
+          "specificity": 0.9607843137254902
+        },
+        {
+          "test_group": "YALE",
+          "test_sites": [
+            "YALE"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "tangent",
+          "train_size": 1401,
+          "test_size": 42,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.8571428571428571,
+          "auc": 0.9454545454545454,
+          "f1": 0.8695652173913043,
+          "sensitivity": 0.8,
+          "specificity": 0.9090909090909091
+        }
+      ],
+      "fisherz": [
+        {
+          "test_group": "ABIDEII-BNI_1",
+          "test_sites": [
+            "ABIDEII-BNI_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6521739130434783,
+          "auc": 0.6893939393939394,
+          "f1": 0.7142857142857143,
+          "sensitivity": 0.4166666666666667,
+          "specificity": 0.9090909090909091
+        },
+        {
+          "test_group": "ABIDEII-EMC_1",
+          "test_sites": [
+            "ABIDEII-EMC_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7307692307692307,
+          "auc": 0.7023809523809523,
+          "f1": 0.7199999999999999,
+          "sensitivity": 0.7142857142857143,
+          "specificity": 0.75
+        },
+        {
+          "test_group": "ABIDEII-GU_1",
+          "test_sites": [
+            "ABIDEII-GU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1404,
+          "test_size": 39,
+          "alpha": 100000.0,
+          "accuracy": 0.7435897435897436,
+          "auc": 0.76,
+          "f1": 0.8076923076923077,
+          "sensitivity": 0.5714285714285714,
+          "specificity": 0.84
+        },
+        {
+          "test_group": "ABIDEII-IP_1",
+          "test_sites": [
+            "ABIDEII-IP_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1398,
+          "test_size": 45,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6444444444444445,
+          "auc": 0.7352941176470589,
+          "f1": 0.68,
+          "sensitivity": 0.7058823529411765,
+          "specificity": 0.6071428571428571
+        },
+        {
+          "test_group": "ABIDEII-IU_1",
+          "test_sites": [
+            "ABIDEII-IU_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1412,
+          "test_size": 31,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5806451612903226,
+          "auc": 0.6625,
+          "f1": 0.6285714285714286,
+          "sensitivity": 0.4666666666666667,
+          "specificity": 0.6875
+        },
+        {
+          "test_group": "ABIDEII-UCD_1",
+          "test_sites": [
+            "ABIDEII-UCD_1"
+          ],
+          "dataset": "abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6086956521739131,
+          "auc": 0.7384615384615385,
+          "f1": 0.6666666666666667,
+          "sensitivity": 0.38461538461538464,
+          "specificity": 0.9
+        },
+        {
+          "test_group": "CALTECH",
+          "test_sites": [
+            "CALTECH"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1417,
+          "test_size": 26,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5,
+          "auc": 0.5515151515151515,
+          "f1": 0.48,
+          "sensitivity": 0.6363636363636364,
+          "specificity": 0.4
+        },
+        {
+          "test_group": "CMU",
+          "test_sites": [
+            "CMU"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.4444444444444444,
+          "auc": 0.55,
+          "f1": 0.5454545454545454,
+          "sensitivity": 0.25,
+          "specificity": 0.6
+        },
+        {
+          "test_group": "KKI",
+          "test_sites": [
+            "ABIDEII-KKI_1",
+            "KKI"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1285,
+          "test_size": 158,
+          "alpha": 100000.0,
+          "accuracy": 0.5759493670886076,
+          "auc": 0.7132352941176471,
+          "f1": 0.6598984771573604,
+          "sensitivity": 0.7647058823529411,
+          "specificity": 0.5241935483870968
+        },
+        {
+          "test_group": "LEUVEN",
+          "test_sites": [
+            "ABIDEII-KUL_3",
+            "LEUVEN_1",
+            "LEUVEN_2"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1370,
+          "test_size": 73,
+          "alpha": 100000.0,
+          "accuracy": 0.4794520547945205,
+          "auc": 0.7142857142857143,
+          "f1": 0.5581395348837209,
+          "sensitivity": 0.22448979591836735,
+          "specificity": 1.0
+        },
+        {
+          "test_group": "MAX_MUN",
+          "test_sites": [
+            "MAX_MUN"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1397,
+          "test_size": 46,
+          "alpha": 100000.0,
+          "accuracy": 0.6739130434782609,
+          "auc": 0.7329434697855751,
+          "f1": 0.7540983606557378,
+          "sensitivity": 0.42105263157894735,
+          "specificity": 0.8518518518518519
+        },
+        {
+          "test_group": "NYU",
+          "test_sites": [
+            "ABIDEII-NYU_1",
+            "ABIDEII-NYU_2",
+            "NYU"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1204,
+          "test_size": 239,
+          "alpha": 100000.0,
+          "accuracy": 0.6820083682008368,
+          "auc": 0.7552893372565503,
+          "f1": 0.7185185185185186,
+          "sensitivity": 0.5641025641025641,
+          "specificity": 0.7950819672131147
+        },
+        {
+          "test_group": "OHSU",
+          "test_sites": [
+            "ABIDEII-OHSU_1",
+            "OHSU"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1324,
+          "test_size": 119,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7647058823529411,
+          "auc": 0.7935860058309038,
+          "f1": 0.8082191780821917,
+          "sensitivity": 0.6530612244897959,
+          "specificity": 0.8428571428571429
+        },
+        {
+          "test_group": "OLIN",
+          "test_sites": [
+            "ABIDEII-ONRC_2",
+            "OLIN"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1385,
+          "test_size": 58,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5689655172413793,
+          "auc": 0.6124223602484472,
+          "f1": 0.6376811594202899,
+          "sensitivity": 0.4782608695652174,
+          "specificity": 0.6285714285714286
+        },
+        {
+          "test_group": "PITT",
+          "test_sites": [
+            "PITT"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1420,
+          "test_size": 23,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6956521739130435,
+          "auc": 0.7142857142857143,
+          "f1": 0.7586206896551724,
+          "sensitivity": 0.5555555555555556,
+          "specificity": 0.7857142857142857
+        },
+        {
+          "test_group": "SBL",
+          "test_sites": [
+            "SBL"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1434,
+          "test_size": 9,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.5555555555555556,
+          "auc": 0.8,
+          "f1": 0.6,
+          "sensitivity": 0.5,
+          "specificity": 0.6
+        },
+        {
+          "test_group": "SDSU",
+          "test_sites": [
+            "ABIDEII-SDSU_1",
+            "SDSU"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1366,
+          "test_size": 77,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6623376623376623,
+          "auc": 0.8033783783783784,
+          "f1": 0.675,
+          "sensitivity": 0.6,
+          "specificity": 0.7297297297297297
+        },
+        {
+          "test_group": "STANFORD",
+          "test_sites": [
+            "STANFORD"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1411,
+          "test_size": 32,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.71875,
+          "auc": 0.7460317460317462,
+          "f1": 0.7096774193548387,
+          "sensitivity": 0.8571428571428571,
+          "specificity": 0.6111111111111112
+        },
+        {
+          "test_group": "TRINITY",
+          "test_sites": [
+            "ABIDEII-TCD_1",
+            "TRINITY"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1382,
+          "test_size": 61,
+          "alpha": 100000.0,
+          "accuracy": 0.6721311475409836,
+          "auc": 0.7072072072072073,
+          "f1": 0.75,
+          "sensitivity": 0.4583333333333333,
+          "specificity": 0.8108108108108109
+        },
+        {
+          "test_group": "UCLA",
+          "test_sites": [
+            "UCLA_1",
+            "UCLA_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1374,
+          "test_size": 69,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.6666666666666666,
+          "auc": 0.7525337837837838,
+          "f1": 0.7160493827160493,
+          "sensitivity": 0.53125,
+          "specificity": 0.7837837837837838
+        },
+        {
+          "test_group": "UM",
+          "test_sites": [
+            "UM_1",
+            "UM_2"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1333,
+          "test_size": 110,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.7454545454545455,
+          "auc": 0.805623047552933,
+          "f1": 0.787878787878788,
+          "sensitivity": 0.6976744186046512,
+          "specificity": 0.7761194029850746
+        },
+        {
+          "test_group": "USM",
+          "test_sites": [
+            "ABIDEII-USM_1",
+            "USM"
+          ],
+          "dataset": "abide1+abide2",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1338,
+          "test_size": 105,
+          "alpha": 100000.0,
+          "accuracy": 0.7714285714285715,
+          "auc": 0.9023238925199709,
+          "f1": 0.7931034482758621,
+          "sensitivity": 0.6481481481481481,
+          "specificity": 0.9019607843137255
+        },
+        {
+          "test_group": "YALE",
+          "test_sites": [
+            "YALE"
+          ],
+          "dataset": "abide1",
+          "run": "full",
+          "feature": "fisherz",
+          "train_size": 1401,
+          "test_size": 42,
+          "alpha": 31622.776601683792,
+          "accuracy": 0.8809523809523809,
+          "auc": 0.9204545454545455,
+          "f1": 0.8936170212765958,
+          "sensitivity": 0.8,
+          "specificity": 0.9545454545454546
+        }
+      ]
+    }
+  }
+}

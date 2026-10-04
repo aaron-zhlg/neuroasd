@@ -6,6 +6,7 @@ Each experiment gets a **folder** here with frozen config and results (safe to c
 |--------|-------------|---------|
 | `baseline_gcn_v1/` | 2-layer GCN, random 80/20 split | `baseline-gcn-v1` |
 | `loso_cv_gcn_v1/` | Leave-one-site-out CV (20 sites) | — |
+| `linear_baseline_dcan_v1/` | Tangent / Fisher-z ridge on DCAN ABIDE I + II (1,443 subjects); leave-one-site-out and leave-one-institution-out. **Reference for the ABIDE I + II dataset.** | `linear-baseline-dcan-v1` |
 
 ## Convention
 

@@ -1,0 +1,45 @@
+{
+  "name": "linear_baseline_dcan_v1",
+  "validation": {
+    "site": "leave-one-site-out over every site with both classes; single-class sites are training-only",
+    "institution": "leave-one-institution-out: all cohorts of an institution (ABIDE I and II, numbered sub-sites) are held out together; see INSTITUTIONS in neuroasd/linear_baseline.py",
+    "run": [
+      "site",
+      "institution"
+    ]
+  },
+  "model_selection": "ridge strength by inner CV grouped like the outer split (AUC); no test-fold selection",
+  "data": {
+    "data_dir": "data/abide_dcan",
+    "num_subjects": 1443,
+    "num_rois": 352,
+    "num_sites": 35
+  },
+  "features": [
+    "tangent",
+    "fisherz"
+  ],
+  "hyperparameters": {
+    "tangent_shrinkage": 0.1,
+    "tangent_reference": "log-Euclidean mean of training subjects",
+    "ridge_alphas": [
+      0.1,
+      0.31622776601683794,
+      1.0,
+      3.1622776601683795,
+      10.0,
+      31.622776601683793,
+      100.0,
+      316.22776601683796,
+      1000.0,
+      3162.2776601683795,
+      10000.0,
+      31622.776601683792,
+      100000.0
+    ],
+    "inner_cv": "GroupKFold(5) by the outer grouping",
+    "repeats": 5,
+    "subsample_fraction": 0.9
+  },
+  "reproduce": "uv run python -m neuroasd.linear_baseline --data-dir data/abide_dcan --repeats 5"
+}
