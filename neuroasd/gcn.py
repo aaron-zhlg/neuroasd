@@ -7,6 +7,21 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+FISHER_CLIP = 0.999
+
+
+def fisher_z_transform(fc_values: torch.Tensor) -> torch.Tensor:
+    """Fisher z (arctanh) of FC correlation values, clipped so the result is finite.
+
+    Raw correlations are compressed near 0 and stretched near +/-1; arctanh makes
+    the sampling variance of r roughly constant, so the near-+/-1 tail where
+    scanner/site effects concentrate no longer dominates the raw feature scale.
+    Correlations are clipped to +/-FISHER_CLIP first so atanh stays finite
+    (< atanh(0.999) ~ 3.8) and no NaN/inf can enter the forward pass.
+    """
+    return torch.atanh(fc_values.clamp(-FISHER_CLIP, FISHER_CLIP))
+
+
 def normalize_adjacency(adjacency: torch.Tensor) -> torch.Tensor:
     """Symmetric normalization with self-loops. Input shape: (B, N, N)."""
     adj = adjacency.clone()
@@ -23,11 +38,23 @@ class GraphConvLayer(nn.Module):
     def __init__(self, in_features: int, out_features: int) -> None:
         super().__init__()
         self.linear = nn.Linear(in_features, out_features, bias=False)
+        # Skip path only needs a parameterised 1x1 projection when dims differ.
+        self.skip = (
+            nn.Linear(in_features, out_features, bias=False)
+            if in_features != out_features
+            else None
+        )
+        if self.skip is not None:
+            # Starting the dim-changing skip at an exact zero map removes the
+            # free random linear pathway, so any learned skip is a deviation
+            # from "no skip" rather than plus-capacity at init.
+            nn.init.zeros_(self.skip.weight)
 
     def forward(self, node_features: torch.Tensor, adjacency: torch.Tensor) -> torch.Tensor:
         # node_features: (B, N, F), adjacency: (B, N, N)
         support = self.linear(node_features)
-        return torch.bmm(adjacency, support)
+        residual = node_features if self.skip is None else self.skip(node_features)
+        return residual + torch.bmm(adjacency, support)
 
 
 class SimpleGCN(nn.Module):
@@ -47,6 +74,11 @@ class SimpleGCN(nn.Module):
         self.dropout = dropout
 
     def forward(self, node_features: torch.Tensor, adjacency: torch.Tensor) -> torch.Tensor:
+        # Fisher z on the raw FC correlation values before they are treated as
+        # node features (single feature-distribution change; nothing rescaled or
+        # harmonized per site).
+        node_features = fisher_z_transform(node_features)
+
         adj_norm = normalize_adjacency(adjacency)
 
         x = self.conv1(node_features, adj_norm)
