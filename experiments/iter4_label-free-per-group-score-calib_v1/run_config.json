@@ -1,0 +1,12 @@
+{
+  "name": "iter4_label-free-per-group-score-calib_v1",
+  "validation": "loso-institution",
+  "model_selection": "final fit (no selection on the evaluation set)",
+  "data": {
+    "dataset": "DCAN ABIDE I + II (Gordon / optional HCP, Power, Markov)",
+    "num_subjects": 1443,
+    "source": "data/abide_dcan"
+  },
+  "hyperparameters": {},
+  "reproduce": "uv run python -m autoresearch.trial --name iter4_label-free-per-group-score-calib --stage loso-institution"
+}
