@@ -1,0 +1,21 @@
+{
+  "name": "iter34_train-fold-only-worst-site-group_v1",
+  "validation": "loso-full",
+  "model_selection": "final epoch (no selection on the evaluation set)",
+  "data": {
+    "dataset": "ABIDE Preprocessed rois_ho",
+    "num_subjects": 884,
+    "num_rois": 111,
+    "fc_method": "Pearson correlation",
+    "num_sites": 20
+  },
+  "hyperparameters": {
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 0.001,
+    "hidden_dim": 64,
+    "dropout": 0.5,
+    "weight_decay": 0.0001
+  },
+  "reproduce": "uv run python -m autoresearch.trial --name iter34_train-fold-only-worst-site-group --stage loso-full"
+}
