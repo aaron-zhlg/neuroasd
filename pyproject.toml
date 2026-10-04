@@ -31,6 +31,7 @@ train-gcn = "neuroasd.train:main"
 eval-gcn = "neuroasd.eval:main"
 loso-cv-gcn = "neuroasd.loso_cv:main"
 explain-gcn = "neuroasd.explain:main"
+linear-baseline = "neuroasd.linear_baseline:main"
 # Multi-agent medical research system (medresearch package)
 med-research = "medresearch.orchestrator:main"
 med-litsearch = "medresearch.literature:main"

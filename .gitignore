@@ -10,3 +10,10 @@ outputs/
 # Optional: large 4D fMRI downloads (~220 GB) — not tracked
 # data/abide/func/
 /medresearch/tests/
+
+# DCAN-derived ABIDE I+II FC (rebuild with data/abide_dcan/scripts/build_dcan_dataset.py)
+data/abide_dcan*/raw
+data/abide_dcan*/processed
+
+# Local handoff notes
+TODO.md

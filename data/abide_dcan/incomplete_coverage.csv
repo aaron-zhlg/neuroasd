@@ -1,0 +1,17 @@
+FILE_ID,SITE_ID,label,zero_variance_parcels_by_atlas
+abide1_0050643,CMU,0,Gordon:5 HCP:2
+abide1_0050644,CMU,0,HCP:1
+abide1_0050648,CMU,0,Gordon:1 HCP:1
+abide1_0050651,CMU,0,Gordon:2 HCP:2
+abide1_0050652,CMU,0,Gordon:2 HCP:2
+abide1_0050653,CMU,0,Gordon:5 HCP:2
+abide1_0050658,CMU,1,HCP:1
+abide1_0050661,CMU,1,Gordon:1
+abide1_0050669,CMU,1,Gordon:1 HCP:1
+abide1_0050736,LEUVEN_2,1,Gordon:5 HCP:1
+abide1_0050818,KKI,1,Gordon:1 HCP:1
+abide2_29152,ABIDEII-NYU_2,0,Gordon:5 HCP:1 Markov:1
+abide2_29153,ABIDEII-NYU_2,0,Gordon:1
+abide2_29156,ABIDEII-NYU_2,0,Gordon:21 HCP:14 Power:3 Markov:11
+abide2_29167,ABIDEII-NYU_2,0,Gordon:3 HCP:1
+abide2_29740,ABIDEII-UCLA_1,0,Gordon:18 HCP:12 Power:9 Markov:9

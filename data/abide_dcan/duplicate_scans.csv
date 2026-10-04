@@ -1,0 +1,12 @@
+kept,dropped,evidence
+abide1_0050509,abide2_29506,"FC r=0.94 (Gordon); same sex and diagnosis; age 16.73 vs 16.26"
+abide1_0050775,abide2_29345,"identical motion trace; FC r=0.56; same sex and diagnosis; age 11.00 vs 11.03"
+abide1_0050778,abide2_29351,"identical motion trace; FC r=0.97; same age, sex and diagnosis"
+abide1_0050779,abide2_29352,"identical motion trace; FC r=0.94; same age, sex and diagnosis"
+abide1_0050780,abide2_29353,"identical motion trace; FC r=0.98; same age, sex and diagnosis"
+abide1_0050781,abide2_29354,"identical motion trace; FC r=0.54; same age, sex, diagnosis and FIQ"
+abide1_0050783,abide2_29358,"identical motion trace; FC r=0.98; same age, sex and diagnosis"
+abide1_0050785,abide2_29360,"identical motion trace; FC r=0.85; same age, sex and diagnosis"
+abide1_0050790,abide2_29364,"FC r=0.82; same age, sex and diagnosis"
+abide1_0050810,abide2_29355,"identical motion trace; FC r=0.98; same age and diagnosis; sex differs between releases"
+abide1_0050811,abide2_29357,"identical motion trace; FC r=0.98; same age, sex and diagnosis"
