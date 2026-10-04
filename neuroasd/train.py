@@ -15,7 +15,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from torch.utils.data import DataLoader, Subset
 
 from neuroasd.fc_dataset import AbideFCDataset, collate_graphs
-from neuroasd.gcn import SimpleGCN
+from neuroasd.gcn import SITE_ALIGN_LAMBDA, SimpleGCN, site_coral_loss
 
 DEFAULT_DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "abide"
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parents[1] / "outputs" / "gcn_baseline"
@@ -102,6 +102,7 @@ def train_one_epoch(
     optimizer: torch.optim.Optimizer,
     criterion: nn.Module,
     device: torch.device,
+    site_align_lambda: float = SITE_ALIGN_LAMBDA,
 ) -> float:
     model.train()
     total_loss = 0.0
@@ -112,8 +113,14 @@ def train_one_epoch(
         labels = batch["label"].to(device)
 
         optimizer.zero_grad()
-        logits = model(node_features, adjacency)
+        embedding = model.embed(node_features, adjacency)
+        logits = model.classifier(embedding)
         loss = criterion(logits, labels)
+        if site_align_lambda > 0.0:
+            # Second-order alignment of the batch's per-site embeddings. The
+            # loader only ever contains training-fold subjects, so the held-out
+            # site contributes no statistics here.
+            loss = loss + site_align_lambda * site_coral_loss(embedding, batch["site_id"])
         loss.backward()
         optimizer.step()
 
