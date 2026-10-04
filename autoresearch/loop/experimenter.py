@@ -199,13 +199,24 @@ class ExperimenterTools:
             "--note",
             hypothesis,
         ]
+        env = os.environ.copy()
+        env.setdefault("AUTORESEARCH_TRIAL_WORKERS", "2")
+        # One BLAS thread per fold worker so 2 folds do not oversubscribe an Air.
+        for key in (
+            "OMP_NUM_THREADS",
+            "OPENBLAS_NUM_THREADS",
+            "MKL_NUM_THREADS",
+            "VECLIB_MAXIMUM_THREADS",
+            "NUMEXPR_NUM_THREADS",
+        ):
+            env.setdefault(key, "1")
         ran = subprocess.run(
             command,
             cwd=REPO_ROOT,
             capture_output=True,
             text=True,
             timeout=STAGE_TIMEOUT[stage],
-            env=os.environ.copy(),
+            env=env,
             check=False,
         )
         result_path = trials_dir() / f"{stage}__{name}" / "result.json"

@@ -313,7 +313,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--name", required=True, help="Short trial identifier")
     parser.add_argument("--stage", choices=STAGES, default="screen")
     parser.add_argument("--note", default="", help="One-line hypothesis being tested")
-    parser.add_argument("--workers", type=int, default=int(os.environ.get("AUTORESEARCH_TRIAL_WORKERS", "4")))
+    parser.add_argument("--workers", type=int, default=int(os.environ.get("AUTORESEARCH_TRIAL_WORKERS", "2")))
     parser.add_argument("--quiet", action="store_true", help="Suppress per-fold logs")
     return parser.parse_args()
 
