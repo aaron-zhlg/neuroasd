@@ -298,4 +298,7 @@ def rel(path: Path) -> str:
     resolved = path.resolve()
     if extra and resolved.is_relative_to(extra):
         return str(resolved)
+    if not resolved.is_relative_to(REPO_ROOT):
+        # e.g. a trials dir redirected by AUTORESEARCH_LOOP_TRIALS_DIR
+        return str(resolved)
     return str(resolved.relative_to(REPO_ROOT))
