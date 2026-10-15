@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import signal
 import subprocess
 import sys
 from typing import Any
@@ -18,10 +19,15 @@ from autoresearch.loop.workspace import (
     coder_finished_cleanly,
     lint_passed,
     load_workspace,
+    record_interrupted_trial,
     record_unmeasured_trial,
     required_stage,
     save_insight,
 )
+
+# SIGKILL is left out on purpose: on a laptop it is usually the OOM killer, and
+# rerunning the same patch would die again.
+INTERRUPT_EXIT_CODES = {-signal.SIGINT, -signal.SIGTERM}
 
 INSTRUCTIONS = """\
 You measure a code change and explain what the number means. You do not edit \
@@ -220,6 +226,12 @@ class ExperimenterTools:
             check=False,
         )
         result_path = trials_dir() / f"{stage}__{name}" / "result.json"
+        if not result_path.is_file() and ran.returncode in INTERRUPT_EXIT_CODES:
+            record_interrupted_trial()
+            raise KeyboardInterrupt(
+                f"{stage} trial was interrupted (exit {ran.returncode}); "
+                "diff kept, rerun the loop without --fresh"
+            )
         if not result_path.is_file():
             stdout_tail = ran.stdout[-2000:]
             stderr_tail = ran.stderr[-2000:]

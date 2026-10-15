@@ -341,6 +341,14 @@ def record_unmeasured_trial(
     return load_workspace()
 
 
+def record_interrupted_trial() -> dict[str, Any]:
+    """Operator stopped the trial. Keep the diff and status so the same stage reruns."""
+    data = load_workspace()
+    data["pending_stage"] = None
+    save_workspace(data)
+    return data
+
+
 def ensure_stage_recorded() -> dict[str, Any]:
     """If this experimenter returned without scoring its stage, fail closed.
 

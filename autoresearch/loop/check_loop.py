@@ -462,6 +462,42 @@ def test_experimenter_runs_one_stage() -> None:
     )
 
 
+def test_operator_interrupt_keeps_trial() -> None:
+    print("operator interrupt keeps the trial")
+    import subprocess as sp
+
+    from autoresearch.loop import experimenter as exp_mod
+    from autoresearch.loop.workspace import default_workspace, save_workspace
+
+    save_workspace(default_workspace())
+    writer = CodeTools()
+    writer.read_last_insight()
+    writer.record_hypothesis("interrupted mechanism")
+    _write_scratch(writer, "interrupted.py", "value = 4\n")
+    mark_coder_outcome(True)
+    record_lint({"passed": True, "errors": []})
+    mark_pending_stage()
+    before = load_workspace()
+
+    real_run = exp_mod.subprocess.run
+    exp_mod.subprocess.run = lambda *a, **k: sp.CompletedProcess(a[0], -15, "", "")
+    interrupted = False
+    try:
+        ExperimenterTools(promote_on_pass=False, push=False).run_trial()
+    except KeyboardInterrupt:
+        interrupted = True
+    finally:
+        exp_mod.subprocess.run = real_run
+
+    after = load_workspace()
+    _check("SIGTERM stops the loop", interrupted)
+    _check("status unchanged", after["status"] == before["status"], after["status"])
+    _check("edit kept", (_TMP / "interrupted.py").exists())
+    _check("no ruled_out", not after.get("ruled_out"), str(after.get("ruled_out")))
+    _check("pending cleared", after.get("pending_stage") is None)
+    _check("experimenter runs next", next_role() == "experimenter", str(next_role()))
+
+
 def test_either_split_gate() -> None:
     print("either-split gate")
     from autoresearch.trial import either_split_improves
@@ -500,6 +536,7 @@ def main() -> None:
         test_promote_requires_training_source,
         test_crash_or_skip_does_not_respin_experimenter,
         test_experimenter_runs_one_stage,
+        test_operator_interrupt_keeps_trial,
         test_either_split_gate,
         test_coder_cannot_write_gates,
     ]
