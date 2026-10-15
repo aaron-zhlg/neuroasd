@@ -21,6 +21,7 @@ import csv
 import json
 import os
 import random
+import signal
 import subprocess
 import threading
 import time
@@ -176,8 +177,17 @@ def run_folds(source, stage: str, workers: int, log=print) -> list[dict]:
             f"acc={record['accuracy']:.3f} auc={record['auc']:.3f}")
         return record
 
-    with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+    pool = ThreadPoolExecutor(max_workers=max(1, workers))
+    try:
         folds = list(pool.map(lambda args: one(*args), enumerate(held_out)))
+    except KeyboardInterrupt:
+        # Leaving a `with` block would wait for every queued fold. Die by SIGINT
+        # so the experimenter sees exit -2 (operator stop), not a crash.
+        pool.shutdown(wait=False, cancel_futures=True)
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        os.kill(os.getpid(), signal.SIGINT)
+        raise
+    pool.shutdown()
     return folds
 
 
