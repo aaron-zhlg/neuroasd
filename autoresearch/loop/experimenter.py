@@ -65,9 +65,9 @@ def measurement_coverage(files_changed: list[str] | None) -> list[str]:
 
 
 STAGE_TIMEOUT = {
-    "screen": 20 * 60,
-    "loso-site": 90 * 60,
-    "loso-institution": 90 * 60,
+    "screen": 40 * 60,
+    "loso-site": 120 * 60,
+    "loso-institution": 120 * 60,
 }
 
 

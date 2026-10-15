@@ -10,16 +10,18 @@ completely before making any change.
 Improve ASD vs control classification on the DCAN ABIDE I + II dataset
 (`data/abide_dcan`, 1,443 subjects, Gordon + HCP / Power / Markov atlases).
 
-**Starting point:** the formal linear baseline, not the old GCN PRs.
+**Starting point:** the tagged iter10 recipe in `neuroasd.model.fit_predict`
+(`iter10-loso-institution-v1`, PR #18), not the old GCN PRs and not the
+original Gordon-only ridge baseline.
 
-| Split | Features | Accuracy | Balanced accuracy | AUC | ASD recall |
+| Split | Model | Accuracy | Balanced accuracy | AUC | ASD recall |
 |---|---|---|---|---|---|
-| Leave-one-site-out (33 folds) | tangent + ridge | 68.6% | 67.35% | 0.775 | 54.3% |
-| Leave-one-institution-out (23 folds) | tangent + ridge | 67.0% | 67.47% | 0.770 | 55.1% |
+| Leave-one-site-out (33) | iter10 (incumbent) | 71.9% | 72.82% | 0.797 | 74.5% |
+| Leave-one-institution-out (23) | iter10 (incumbent) | 70.1% | 70.84% | 0.779 | 70.8% |
+| Site / institution | Gordon tangent + ridge (historical) | 68.6% / 67.0% | 67.35% / 67.47% | 0.775 / 0.770 | 54.3% / 55.1% |
 
-Source: `experiments/linear_baseline_dcan_v1/`, tag `linear-baseline-dcan-v1`.
-The scored function is `neuroasd.model.fit_predict`. It currently implements
-that tangent + ridge model on the Gordon atlas.
+A trial is a win only if it **beats iter10**, not if it beats the 2026-10-03
+ridge baseline. The original baseline stays at tag `linear-baseline-dcan-v1`.
 
 **Primary metric:** fold-mean balanced accuracy
 `(ASD recall + control recall) / 2`. Accuracy and AUC are always reported so
@@ -56,9 +58,9 @@ Trials are cheap-to-expensive. Do not skip ahead.
 
 | Stage | What it runs | Gate |
 |-------|--------------|------|
-| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | balanced accuracy ≥ 0.64 |
-| `loso-site` | Leave-one-site-out on all 33 sites with both classes | balanced accuracy ≥ 0.65 |
-| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | either split ≥ +1 pp vs the linear baseline, and the other drops by at most 0.5 pp |
+| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | balanced accuracy ≥ 0.70 |
+| `loso-site` | Leave-one-site-out on all 33 sites with both classes | balanced accuracy ≥ 0.71 |
+| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | either split ≥ +1 pp vs **iter10** (site 0.7282 / institution 0.7084), and the other drops by at most 0.5 pp |
 
 Thresholds live in `autoresearch/gates.json`. `trial.py` exits `0` on PASS and `3` on
 FAIL.
@@ -92,24 +94,34 @@ The harness owns data and metrics. You only edit `fit_predict` (and helpers).
 `train` / `test` expose: `fc(atlas)` for `gordon`, `hcp`, `power`, `markov`;
 `age`; `sex`; `groups`; `sites`; and `train.y`. Test labels are hidden.
 
-Ideas worth testing, roughly in order of expected value:
+The incumbent already has: a training-only balanced-accuracy threshold,
+label-free per-group score z-scoring, age/sex columns, Gordon+HCP
+**concatenation**, and L2 logistic at C=1e-2. Do not retry those.
 
-1. **Class weights or a training-only decision threshold.** Baseline ASD recall
-   is ~54%. Rebalance so the model does not default to "control". Fit any
-   threshold on training folds only (grouped inner CV).
-2. **Site / institution score calibration.** Under leave-one-institution-out,
-   KKI and Leuven lose 17–27 points of accuracy while AUC stays at 0.72–0.80.
-   The ranking survives; the threshold does not.
-3. **Multi-atlas stacking.** Fit one linear model per atlas (Gordon, HCP, Power,
-   Markov) and combine with a logistic meta-learner trained on out-of-fold
-   predictions inside the training sites.
-4. **Age and sex** as extra features (complete for every subject).
-5. **Ensembles** of linear models across atlases and feature types. A strongly
-   regularized GNN is allowed only as one ensemble member — the GCN on this
-   dataset overfits.
+**Concatenation is not stacking.** Concatenation = one classifier on columns
+glued together (iter6). Stacking = one classifier per atlas (or feature type),
+then a logistic meta-learner on grouped **out-of-fold** member scores inside
+the training fold (`neuroasd.ensemble.stack_scores`). Score averaging
+(`average_scores`) is a third, label-free rule.
+
+Helpers: `neuroasd.ensemble` (`member_scores`, `stack_scores`, `average_scores`,
+`GCNMember` / `gnn_member_scores`). Keep the incumbent threshold and
+calibration unless that is the one mechanism you are replacing.
+
+Ideas worth testing, in order:
+
+1. **True stacking.** One linear member per atlas (start with Gordon+HCP, then
+   add Power or Markov as its own member). Combine with `stack_scores`. Do not
+   concatenate the new atlas onto the existing feature block.
+2. **Score averaging** of the same members. Different mechanism from stacking.
+3. **A Fisher-z member** alongside tangent members, combined by stacking or
+   averaging — not by concatenating Fisher-z columns onto tangent columns in
+   the same trial.
+4. **Optional GNN member** (`GCNMember`, Power atlas) as one extra score
+   column. Do not drop the linear members. Do not train a GCN as the only model.
 
 Do not start from the old GCN trial PRs (#2–#13). Those were fit on C-PAC
-ABIDE I (884 subjects, 111 ROIs) and are below this linear baseline.
+ABIDE I (884 subjects, 111 ROIs) and are below this incumbent.
 
 ---
 

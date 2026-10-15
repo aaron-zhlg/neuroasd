@@ -18,16 +18,20 @@ You are a FRESH instance each turn. You cannot see the experimenter conversation
 If a previous trial exists, you MUST call read_last_insight (and read_workspace) \
 before any edit, then implement ONE new change that follows that insight.
 
-Starting point: `neuroasd/model.py` is the formal linear baseline \
-(Gordon tangent + kernel ridge, experiments/linear_baseline_dcan_v1). \
-Do not start from the old GCN PRs. The scored function is `fit_predict(train, test)`.
+Starting point: `neuroasd/model.py` is the tagged iter10 incumbent \
+(Gordon+HCP tangent concat, age/sex, L2 logistic C=1e-2, training-only \
+threshold, label-free per-group calibration; tag iter10-loso-institution-v1). \
+Do not start from the old GCN PRs. The scored function is `fit_predict(train, test)`. \
+A win must beat iter10 (gates.json), not the 2026-10-03 ridge baseline.
 
 Rules:
 - Interpret the insight and the workspace ``ruled_out`` list: what was tried, \
 what the next_code_change says, what not to repeat. Do not retry a ruled-out \
 mechanism. The working tree is the last loso-institution winner or HEAD — failed \
 diffs are archived under ``ruled_out[].patch``, not left on disk.
-- Change ONE thing per turn (one mechanism). Keep the first edit tiny.
+- Change ONE thing per turn (one mechanism). Stacking may use \
+`neuroasd.ensemble` and can be more than a few lines. Concatenating another \
+atlas onto the existing feature block is NOT stacking.
 - Failed edits revert to the last loso-institution winner (or HEAD if none). \
 After a loso-institution PASS, add the next mechanism on top of the winning code.
 - The experimenter scores `autoresearch/trial.py`, which calls \
@@ -37,14 +41,14 @@ not measure it. Prefer editing `neuroasd/model.py`. You may also edit other \
 - Inputs you may use: `train.fc(atlas)` for atlas in gordon/hcp/power/markov, \
 plus age, sex, groups, sites, and train.y. Do NOT use FIQ or head motion as \
 predictive features (they differ by diagnosis and inflate results).
+- The incumbent already has the threshold, per-group calibration, age/sex, \
+Gordon+HCP concatenation, and logistic C=1e-2. Do not retry those.
 - Preferred directions, in order:
-  1. Class weights or a decision threshold chosen on training folds only \
-     (ASD recall of the baseline is ~54%).
-  2. Site / institution score calibration (KKI and Leuven lose accuracy under \
-     leave-one-institution-out while AUC stays high).
-  3. Multi-atlas stacking (HCP, Power, Markov are already aligned).
-  4. Age and sex as extra features.
-  5. Ensembles of linear models; a strongly regularized GNN only as one member.
+  1. True stacking via neuroasd.ensemble.member_scores + stack_scores \
+     (one linear model per atlas, OOF logistic meta-learner). Not concat.
+  2. Score averaging of the same members (average_scores), a different mechanism.
+  3. A Fisher-z member stacked/averaged with tangent members.
+  4. Optional GCNMember on Power as one extra score column; keep linear members.
 - Primary metric is fold-mean balanced accuracy. Always think about ASD recall \
 and control recall, not accuracy alone.
 - You MAY edit files under neuroasd/ and autoresearch/trial.py. You may NOT edit \

@@ -1,51 +1,51 @@
 {
-  "updated_at": "2026-10-04",
+  "updated_at": "2026-10-15",
   "primary_metric": "balanced_accuracy_mean",
   "reference": {
-    "name": "linear_baseline_dcan_v1",
-    "tag": "linear-baseline-dcan-v1",
-    "source": "experiments/linear_baseline_dcan_v1/results.json",
-    "features": "Gordon tangent space + kernel ridge",
-    "note": "The loop starts from this model (neuroasd/model.py), not from the old GCN PRs. A trial wins only if it beats these numbers under the rule below.",
+    "name": "iter10_estimator-swap-replace-the-singl_v1",
+    "tag": "iter10-loso-institution-v1",
+    "source": "experiments/iter10_estimator-swap-replace-the-singl_v1/results.json",
+    "features": "Gordon+HCP tangent concat + age/sex + L2 logistic (C=1e-2) + training-only threshold + label-free per-group calibration",
+    "note": "The loop starts from this model (neuroasd/model.py), tag iter10-loso-institution-v1 / PR #18. A trial wins only if it beats these numbers. Concatenation is not stacking. The original Gordon-only ridge baseline remains at tag linear-baseline-dcan-v1.",
     "loso-site": {
-      "balanced_accuracy_mean": 0.6735,
-      "accuracy_mean": 0.6856,
-      "auc_mean": 0.775,
-      "sensitivity_mean": 0.5433,
-      "specificity_mean": 0.8036
+      "balanced_accuracy_mean": 0.7282,
+      "accuracy_mean": 0.7187,
+      "auc_mean": 0.7969,
+      "sensitivity_mean": 0.745,
+      "specificity_mean": 0.7115
     },
     "loso-institution": {
-      "balanced_accuracy_mean": 0.6747,
-      "accuracy_mean": 0.67,
-      "auc_mean": 0.77,
-      "sensitivity_mean": 0.551,
-      "specificity_mean": 0.798
+      "balanced_accuracy_mean": 0.7084,
+      "accuracy_mean": 0.7009,
+      "auc_mean": 0.7786,
+      "sensitivity_mean": 0.7076,
+      "specificity_mean": 0.7092
     },
     "screen": {
       "sites": ["NYU", "UM_1", "USM", "ABIDEII-OHSU_1", "ABIDEII-NYU_1", "ABIDEII-SDSU_1"],
-      "balanced_accuracy_mean": 0.6774
+      "balanced_accuracy_mean": 0.731
     }
   },
   "rule": {
     "improve_margin": 0.01,
     "regress_tolerance": 0.005,
-    "note": "PASS if either split's fold-mean balanced accuracy is at least 1pp above the reference and the other split drops by at most 0.5pp."
+    "note": "PASS if either split's fold-mean balanced accuracy is at least 1pp above iter10-loso-institution-v1 and the other split drops by at most 0.5pp."
   },
   "gates": {
     "screen": {
       "metric": "balanced_accuracy_mean",
-      "threshold": 0.64,
-      "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The tangent baseline scores 0.677 here. 0.64 is above chance and below the reference, so class-weight and threshold trials are not killed by fold noise."
+      "threshold": 0.70,
+      "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The iter10 incumbent scores 0.731 here. 0.70 kills large regressions without requiring a new record on six sites."
     },
     "loso-site": {
       "metric": "balanced_accuracy_mean",
-      "threshold": 0.65,
-      "rationale": "Must stay near the linear site-LOSO reference (0.674) before paying for the institution sweep. 0.65 is a filter, not the destination."
+      "threshold": 0.71,
+      "rationale": "Must stay near the iter10 site-LOSO reference (0.728) before paying for the institution sweep. 0.71 is a filter, not the destination."
     },
     "loso-institution": {
       "metric": "balanced_accuracy_mean",
       "rule": "either_split_improves",
-      "rationale": "Open a PR if site or institution balanced accuracy gains >= 0.01 vs linear_baseline_dcan_v1 and the other split drops by at most 0.005. Always report accuracy, AUC, ASD recall, and control recall so the number can be compared with the literature."
+      "rationale": "Open a PR if site or institution balanced accuracy gains >= 0.01 vs iter10-loso-institution-v1 (site 0.7282 / institution 0.7084) and the other split drops by at most 0.005. Reproducing the tagged recipe is not a win. Always report accuracy, AUC, ASD recall, and control recall."
     }
   }
 }

@@ -24,10 +24,12 @@ from autoresearch.loop.workspace import (
 
 DEFAULT_GOAL = (
     "Improve ASD vs control classification on DCAN ABIDE I + II toward 80% "
-    "accuracy, starting from the linear tangent baseline in neuroasd/model.py. "
-    "Optimize fold-mean balanced accuracy. Measure each change with the "
-    "screen → loso-site → loso-institution gates. Change one mechanism at a "
-    "time. A loso-institution PASS is a new baseline, not a stop."
+    "accuracy, starting from the tagged iter10 recipe in neuroasd/model.py "
+    "(iter10-loso-institution-v1). A win must beat that tag under gates.json "
+    "(+1pp balanced accuracy on site or institution, other split drops "
+    "<= 0.5pp). Concatenation is not stacking; next mechanisms live in "
+    "neuroasd.ensemble. Change one mechanism at a time. A loso-institution "
+    "PASS is a new baseline, not a stop."
 )
 
 MISSION = """\
@@ -35,8 +37,8 @@ You coordinate a research loop whose only job is a better, honest classifier. \
 Sequence is write code → lint → run a trial → write an insight → write the next change. \
 Never train until lint PASS. Never run coder and experimenter in the same round. \
 Never treat a screen PASS as a better model. Never use best-epoch scores \
-(that leak once inflated LOSO by ~0.07 AUC). Start from the linear baseline, \
-not from the old GCN PRs.
+(that leak once inflated LOSO by ~0.07 AUC). Start from the iter10 incumbent, \
+not from the old GCN PRs. Concatenating atlas columns is not stacking.
 """
 
 PLANNER_INSTRUCTIONS = """\
@@ -48,9 +50,11 @@ The loop is sequential. First assignment this round must be a SINGLE subagent:
 - If lint passed and a stage is waiting, dispatch experimenter.
 Never dispatch more than one.
 
-When briefing the coder, demand ONE tiny mechanism (a few lines). Do not ask \
-for DANN, multi-file rewrites, or new training flags on the first turn. The \
-scored path is neuroasd/model.py (called by autoresearch/trial.py).
+When briefing the coder, demand ONE mechanism. Stacking via neuroasd.ensemble \
+is allowed to be more than a few lines. Concatenating another atlas onto the \
+existing feature block is NOT stacking. Do not ask for DANN, or for retrying \
+the threshold / calibration / age-sex / Gordon+HCP concat / logistic C=1e-2 \
+already in the incumbent. The scored path is neuroasd/model.py.
 
 Available subagent types:
 {roster}

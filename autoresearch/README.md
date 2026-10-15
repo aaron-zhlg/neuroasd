@@ -8,9 +8,9 @@ iterating. Built on [orchestra](https://github.com/aaron-zhlg/orchestra).
 
 `program.md` is written for the agent. This file is written for you.
 
-The loop starts from the formal linear baseline
-(`experiments/linear_baseline_dcan_v1/`, `neuroasd/model.py`), not from the
-old GCN PRs on C-PAC ABIDE I.
+The loop starts from the tagged iter10 recipe
+(`iter10-loso-institution-v1`, `neuroasd/model.py`), not from the old GCN
+PRs on C-PAC ABIDE I. A review PR opens only if a trial beats that tag.
 
 ---
 
@@ -36,7 +36,7 @@ framework makes four things mechanical:
 ```text
 autoresearch/
 ├── program.md      instructions the agent reads before each trial
-├── gates.json      pass thresholds; reference = linear_baseline_dcan_v1
+├── gates.json      pass thresholds; reference = iter10-loso-institution-v1
 ├── trial.py        harness: data, folds, metrics; calls neuroasd.model.fit_predict
 ├── run_trial.sh    branch lifecycle: create, run, push or delete
 ├── results/        result.json of trials that passed (committed on trial branches)
@@ -50,7 +50,8 @@ autoresearch/
     ├── promote.py         review branch + score-first PR
     └── check_loop.py      no-LLM checks of the state machine
 
-neuroasd/model.py              the scored model (starts as the linear baseline)
+neuroasd/model.py              the scored model (iter10 incumbent)
+neuroasd/ensemble.py           stacking / averaging / optional GCN member helpers
 
 outputs/autoresearch/          local only, gitignored
 ├── ledger.jsonl               append-only record of every trial in this reset
@@ -67,9 +68,9 @@ outputs/autoresearch/          local only, gitignored
 
 | Stage | Evaluation | Gate |
 |-------|------------|------|
-| `screen` | LOSO on 6 mixed ABIDE I / II sites | balanced accuracy ≥ 0.64 |
-| `loso-site` | LOSO on all 33 two-class sites | balanced accuracy ≥ 0.65 |
-| `loso-institution` | Leave-one-institution-out, 23 institutions | either split +1 pp vs the linear baseline, other ≤ 0.5 pp drop |
+| `screen` | LOSO on 6 mixed ABIDE I / II sites | balanced accuracy ≥ 0.70 |
+| `loso-site` | LOSO on all 33 two-class sites | balanced accuracy ≥ 0.71 |
+| `loso-institution` | Leave-one-institution-out, 23 institutions | either split +1 pp vs **iter10**, other ≤ 0.5 pp drop |
 
 Primary metric: fold-mean balanced accuracy. Every result also reports
 accuracy, AUC, ASD recall, and control recall.
@@ -151,5 +152,5 @@ Old review PRs #2–#13 stay open; they are not the starting point.
 
 ## Adjusting the gates
 
-Edit `autoresearch/gates.json`. The reference is `linear_baseline_dcan_v1`.
+Edit `autoresearch/gates.json`. The reference is `iter10-loso-institution-v1`.
 Raise a threshold only after a better configuration has been merged to main.
