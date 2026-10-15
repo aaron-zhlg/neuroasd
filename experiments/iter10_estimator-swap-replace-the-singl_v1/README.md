@@ -2,6 +2,11 @@
 
 Frozen after a `loso-institution` PASS. Metrics are one fit per fold.
 
+Paper-oriented comparison (baseline, literature, what moved AUC vs the
+operating point, how to reproduce this tag):
+[`doc/paper_notes_iter10.md`](../../doc/paper_notes_iter10.md).
+Git tag: `iter10-loso-institution-v1`.
+
 > **Evaluated:** 2026-10-04
 > **Hypothesis:** Estimator swap: replace the single linear-kernel KernelRidgeClassifier with a strongly L2-regularized logistic regression at one fixed pre-registered strength (C=1e-2, no CV / no test-fold selection) fitted on the byte-identical training-fold-standardized Gordon+HCP tangent block, which may move within-group ranking that ridge has plateaued on.
 > **Files changed:** neuroasd/model.py
