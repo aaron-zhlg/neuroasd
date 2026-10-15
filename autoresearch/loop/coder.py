@@ -10,13 +10,19 @@ from autoresearch.loop.paths import NEUROASD_DIR, TRIAL_PY, is_writable, rel, re
 from autoresearch.loop.protocol import leak_reasons_in_source
 from autoresearch.loop.workspace import load_workspace, note_code_change, required_stage
 
+# Statuses where the next edit opens a new trial. lint_failed / coder_failed
+# reopen the same idea, so they keep its hypothesis.
+NEW_TRIAL_STATUSES = frozenset({"idle", "awaiting_new_code", "promoted"})
+
 INSTRUCTIONS = """\
 You write code that might improve ASD vs control classification on ABIDE I + II. \
 You do not run training and you do not judge scores.
 
 You are a FRESH instance each turn. You cannot see the experimenter conversation. \
 If a previous trial exists, you MUST call read_last_insight (and read_workspace) \
-before any edit, then implement ONE new change that follows that insight.
+before any edit, then implement ONE new change that follows that insight. \
+Call record_hypothesis with one sentence naming the mechanism before your first \
+edit; writes are refused until you do.
 
 Starting point: `neuroasd/model.py` is the tagged iter10 incumbent \
 (Gordon+HCP tangent concat, age/sex, L2 logistic C=1e-2, training-only \
@@ -45,12 +51,14 @@ plus age, sex, groups, sites, and train.y. Do NOT use FIQ or head motion as \
 predictive features (they differ by diagnosis and inflate results).
 - The incumbent already has the threshold, per-group calibration, age/sex, \
 Gordon+HCP concatenation, and logistic C=1e-2. Do not retry those.
-- Preferred directions, in order:
-  1. True stacking via neuroasd.ensemble.member_scores + stack_scores \
-     (one linear model per atlas, OOF logistic meta-learner). Not concat.
-  2. Score averaging of the same members (average_scores), a different mechanism.
-  3. A Fisher-z member stacked/averaged with tangent members.
-  4. Optional GCNMember on Power as one extra score column; keep linear members.
+- Already tested and below iter10 (see workspace ruled_out): atlas stacking, \
+score averaging, member banks, Fisher-z member, Power GCN member, per-site \
+feature standardization, graph-spectral features, Gordon+Power / Gordon+Markov, \
+L1 logistic. Do not resubmit them.
+- Untested directions (pick one; program.md section 5 has details): nested-CV \
+choice of C, training-only PCA / feature selection, FC shrinkage or a different \
+tangent reference, partial-correlation features, site-balanced sample weights, \
+a nonlinear classifier on a reduced tangent space.
 - Primary metric is fold-mean balanced accuracy. Always think about ASD recall \
 and control recall, not accuracy alone.
 - You MAY edit files under neuroasd/ and autoresearch/trial.py. You may NOT edit \
@@ -72,6 +80,7 @@ class CodeTools:
     def __init__(self) -> None:
         self.touched: list[str] = []
         self._read_insight = False
+        self._recorded_hypothesis = False
 
     def as_tools(self) -> list:
         return [
@@ -160,10 +169,13 @@ class CodeTools:
                 "error": "code is frozen until the current change finishes LOSO",
                 "workspace": workspace,
             }
+        if not hypothesis.strip():
+            return {"ok": False, "error": "hypothesis must be one non-empty sentence"}
         workspace["hypothesis"] = hypothesis.strip()
         from autoresearch.loop.workspace import save_workspace
 
         save_workspace(workspace)
+        self._recorded_hypothesis = True
         return {"ok": True, "hypothesis": hypothesis.strip()}
 
     def _guard_write(self, target, content: str) -> None:
@@ -188,6 +200,13 @@ class CodeTools:
             raise PermissionError(
                 "call read_last_insight before editing so the next change "
                 "follows the experimenter's write-up"
+            )
+        # A new trial is named after its hypothesis; without this the previous
+        # trial's hypothesis (or "code change") would label the new diff.
+        if workspace.get("status") in NEW_TRIAL_STATUSES and not self._recorded_hypothesis:
+            raise PermissionError(
+                "call record_hypothesis with one sentence naming the mechanism "
+                "before the first edit of a new trial"
             )
 
     def replace_in_file(self, path: str, old: str, new: str) -> dict[str, Any]:

@@ -112,17 +112,29 @@ Helpers: `neuroasd.ensemble` (`member_scores`, `stack_scores`, `average_scores`,
 `GCNMember` / `gnn_member_scores`). Keep the incumbent threshold and
 calibration unless that is the one mechanism you are replacing.
 
-Ideas worth testing, in order:
+Already tested on iter10 (2026-10-15, all below iter10 on full LOSO; see
+`workspace.ruled_out`): stacking Power+Markov members, Gordon/HCP score
+averaging, a four-atlas member bank, a Fisher-z member, a Power GCN member,
+per-site feature standardization, Power graph-spectral features, swapping HCP
+for Power or Markov, and L1 logistic (too slow: screen timed out). Do not
+resubmit these; a variant must change something those trials did not.
 
-1. **True stacking.** One linear member per atlas (start with Gordon+HCP, then
-   add Power or Markov as its own member). Combine with `stack_scores`. Do not
-   concatenate the new atlas onto the existing feature block.
-2. **Score averaging** of the same members. Different mechanism from stacking.
-3. **A Fisher-z member** alongside tangent members, combined by stacking or
-   averaging — not by concatenating Fisher-z columns onto tangent columns in
-   the same trial.
-4. **Optional GNN member** (`GCNMember`, Power atlas) as one extra score
-   column. Do not drop the linear members. Do not train a GCN as the only model.
+Untested directions (all use only FC + age/sex, fit inside the training fold):
+
+1. **Regularization chosen by nested CV.** Pick C by inner grouped CV on the
+   training fold instead of the fixed C=1e-2.
+2. **Dimensionality reduction** before the classifier: PCA or univariate
+   feature selection fit on training rows only.
+3. **Better FC estimates**: shrinkage (e.g. Ledoit-Wolf-style) on the FC
+   before the tangent map, or a different tangent reference mean.
+4. **Partial correlation** derived from FC as a new feature type.
+5. **Sample weighting**: e.g. site-balanced weights so large sites do not
+   dominate the fit.
+6. **A nonlinear classifier** on a reduced tangent space (kernel SVM, small
+   MLP). Keep the incumbent threshold and calibration.
+
+Accepted small steps can be refined: after an accept, tuning or extending the
+same mechanism is a valid next trial.
 
 Do not start from the old GCN trial PRs (#2–#13). Those were fit on C-PAC
 ABIDE I (884 subjects, 111 ROIs) and are below this incumbent.
