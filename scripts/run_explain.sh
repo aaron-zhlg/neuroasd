@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# Attribute a trained GCN and write figures into that experiment's folder.
+# Attribute the current model and write chord / ROI figures.
+#
+# Auto-detects GNN vs linear:
+#   a .pt checkpoint or --loso-folds-dir → GNN integrated gradients
+#   otherwise → linear coefficients from neuroasd.model
 #
 # Usage:
 #   ./scripts/run_explain.sh
+#   ./scripts/run_explain.sh --kind linear --output-dir outputs/explain_linear
 #   ./scripts/run_explain.sh --checkpoint outputs/gcn_baseline/final_model.pt \
 #       --output-dir experiments/baseline_gcn_v1/figures
-#   ./scripts/run_explain.sh --checkpoint outputs/loso_cv_gcn_v1/folds/NYU/final_model.pt \
-#       --output-dir experiments/loso_cv_gcn_v1/figures/NYU --site NYU
 #   ./scripts/run_explain.sh --loso-folds-dir outputs/loso_cv_gcn_v1/folds \
 #       --output-dir experiments/loso_cv_gcn_v1/figures
 #
@@ -23,13 +26,15 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-echo "==> Explaining GCN"
+echo "==> Explaining model (auto-detect GNN vs linear)"
 if ((${#PASSTHROUGH[@]} > 0)); then
   uv run python -m neuroasd.explain "${PASSTHROUGH[@]}"
-else
+elif [[ -f outputs/gcn_baseline/final_model.pt ]]; then
   uv run python -m neuroasd.explain \
     --checkpoint outputs/gcn_baseline/final_model.pt \
     --output-dir experiments/baseline_gcn_v1/figures
+else
+  uv run python -m neuroasd.explain --kind linear
 fi
 
 echo "==> Done"

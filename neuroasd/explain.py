@@ -1,13 +1,19 @@
-"""Attribute a trained GCN and write figures next to that experiment.
+"""Attribute the current model and write chord / ROI figures.
 
-Any branch that trains a `SimpleGCN` can point this at its checkpoint:
+Auto-detects the model kind:
+
+* a ``.pt`` checkpoint or ``--loso-folds-dir`` → GNN integrated gradients
+* otherwise → linear coefficients from ``neuroasd.model.fit_predict``
+
+GNN::
 
     uv run python -m neuroasd.explain \\
         --checkpoint outputs/gcn_baseline/final_model.pt \\
         --output-dir experiments/baseline_gcn_v1/figures
 
-The model is reconstructed from the checkpoint's `args` / `state_dict`. If a branch
-changes the architecture, run this module *on that branch* so `gcn.py` matches.
+Linear (Gordon / HCP chords under ``outputs/explain_linear/``)::
+
+    uv run python -m neuroasd.explain --kind linear
 """
 
 from __future__ import annotations
@@ -35,6 +41,12 @@ ASD_CLASS = 0
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--kind",
+        choices=("auto", "gnn", "linear"),
+        default="auto",
+        help="Model family. auto: GNN if a checkpoint / LOSO fold dir is given, else linear.",
+    )
     parser.add_argument(
         "--checkpoint",
         type=Path,
@@ -84,7 +96,38 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--top-rois", type=int, default=20)
     parser.add_argument("--top-edges", type=int, default=80)
     parser.add_argument("--cpu", action="store_true")
+    parser.add_argument(
+        "--group-by",
+        choices=("all", "site", "institution"),
+        default="all",
+        help="Linear only: one fit on all subjects, or mean coefficients over LOSO folds.",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=2,
+        help="Linear only: parallel folds when --group-by is site or institution.",
+    )
     return parser.parse_args()
+
+
+def is_gnn_path(path: Path | None) -> bool:
+    if path is None:
+        return False
+    candidate = Path(path)
+    if candidate.suffix == ".pt":
+        return True
+    if candidate.is_dir():
+        return (candidate / "final_model.pt").exists() or (candidate / "best_model.pt").exists()
+    return False
+
+
+def resolve_kind(kind: str, checkpoint: Path | None, loso_folds_dir: Path | None) -> str:
+    if kind != "auto":
+        return kind
+    if loso_folds_dir is not None or is_gnn_path(checkpoint):
+        return "gnn"
+    return "linear"
 
 
 def resolve_checkpoint(path: Path | None) -> Path:
@@ -246,7 +289,9 @@ def write_top_edges(
 ) -> None:
     n = edge_scores.shape[0]
     abs_u = np.abs(np.triu(edge_scores, k=1))
-    idx = np.argpartition(abs_u.ravel(), -top_k)[-top_k:]
+    n_off = int((abs_u > 0).sum()) or n * (n - 1) // 2
+    keep = min(top_k, n_off)
+    idx = np.argpartition(abs_u.ravel(), -keep)[-keep:]
     pairs = []
     for flat in idx:
         i, j = divmod(int(flat), n)
@@ -279,13 +324,16 @@ def write_attribution_outputs(
     top_rois: int,
     top_edges: int,
     extra_summary: dict,
+    xlabel: str = "Attribution (ASD direction)",
 ) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
     np.save(out_dir / "node_attribution.npy", node_scores)
     np.save(out_dir / "edge_attribution.npy", edge_scores)
     write_node_table(out_dir / "node_attribution.csv", table, node_scores)
     write_top_edges(out_dir / "top_edges.csv", table, edge_scores, top_edges)
-    plot_top_rois(node_scores, table, out_dir / "top_rois.png", top_k=top_rois, title=title)
+    plot_top_rois(
+        node_scores, table, out_dir / "top_rois.png", top_k=top_rois, title=title, xlabel=xlabel
+    )
     plot_chord(edge_scores, table, out_dir / "chord.png", top_k=top_edges, title=title)
 
     ranked = np.argsort(-np.abs(node_scores))
@@ -369,6 +417,7 @@ def explain_checkpoint(
         title=f"GNN-attributed connections ({checkpoint_path.parent.name})",
         top_rois=top_rois,
         top_edges=top_edges,
+        xlabel="Integrated-gradients attribution (ASD logit)",
         extra_summary={
             "checkpoint": str(checkpoint_path),
             "target": target,
@@ -441,6 +490,7 @@ def explain_loso_folds(
         title="GNN-attributed connections (LOSO-CV, site-weighted mean)",
         top_rois=top_rois,
         top_edges=top_edges,
+        xlabel="Integrated-gradients attribution (ASD logit)",
         extra_summary={
             "target": target,
             "split": "held-out site per fold, then subject-weighted mean",
@@ -454,6 +504,21 @@ def explain_loso_folds(
 
 def main() -> None:
     args = parse_args()
+    kind = resolve_kind(args.kind, args.checkpoint, args.loso_folds_dir)
+    if kind == "linear":
+        from neuroasd.linear_explain import explain_linear
+
+        summary = explain_linear(
+            output_dir=args.output_dir,
+            group_by=args.group_by,
+            top_rois=args.top_rois,
+            top_edges=args.top_edges,
+            workers=args.workers,
+        )
+        print(f"Wrote figures to {summary['output_dir']} ({kind})")
+        for atlas, paths in summary.get("figures", {}).items():
+            print(f"  {atlas}: {summary['output_dir']}/{paths['chord']}")
+        return
     if args.loso_folds_dir is not None:
         if args.output_dir is None:
             raise SystemExit("--output-dir is required with --loso-folds-dir")

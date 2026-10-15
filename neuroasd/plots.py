@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import FancyBboxPatch, Wedge
 
-from neuroasd.roi_atlas import NETWORK_ABBR, NETWORK_COLORS, sort_order
+from neuroasd.dcan_atlas import NETWORK_ABBR, NETWORK_COLORS, sort_order
 
 
 def plot_top_rois(
@@ -17,6 +17,7 @@ def plot_top_rois(
     output_path: Path,
     top_k: int = 20,
     title: str = "Top ROIs by |attribution|",
+    xlabel: str = "Attribution (ASD direction)",
 ) -> None:
     order = np.argsort(-np.abs(node_scores))[:top_k]
     names = [f"{table[i]['abbr']}  {table[i]['short']}" for i in order][::-1]
@@ -28,7 +29,7 @@ def plot_top_rois(
     ax.barh(range(top_k), values, color=colors, edgecolor="white", linewidth=0.4)
     ax.set_yticks(range(top_k), labels=names, fontsize=8)
     ax.axvline(0.0, color="#333", linewidth=0.8)
-    ax.set_xlabel("Integrated-gradients attribution (ASD logit)")
+    ax.set_xlabel(xlabel)
     ax.set_title(title)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -70,10 +71,17 @@ def plot_chord(
     table: list[dict],
     output_path: Path,
     top_k: int = 80,
-    title: str = "GNN-attributed connections",
+    title: str = "Attributed connections",
+    label_rois: bool | None = None,
 ) -> None:
-    """Draw attributed edges with a two-level ring: ROI ticks + network band."""
+    """Draw attributed edges with a two-level ring: ROI ticks + network band.
+
+    Per-ROI names are omitted when the atlas is large (Gordon / HCP); the
+    network band stays. Pass ``label_rois`` to override.
+    """
     n = edge_scores.shape[0]
+    if label_rois is None:
+        label_rois = n <= 120
     order = sort_order(table)
     inv = np.empty(n, dtype=int)
     inv[order] = np.arange(n)
@@ -110,6 +118,7 @@ def plot_chord(
     roi_width = 0.07
     theta = 360.0 / n
     roi_outer = radius + roi_width
+    wedge_lw = 0.08 if n > 120 else 0.18
 
     for ring_pos, roi_index in enumerate(order):
         color = NETWORK_COLORS.get(str(table[roi_index]["network"]), "#888")
@@ -123,7 +132,7 @@ def plot_chord(
                 width=roi_width,
                 facecolor=color,
                 edgecolor="white",
-                linewidth=0.18,
+                linewidth=wedge_lw,
             )
         )
 
@@ -147,13 +156,14 @@ def plot_chord(
             rotation_mode="anchor",
         )
 
-    # Inside → outside: ROI ring, ROI names, network names (text only, no network ring).
-    roi_label_r = roi_outer + 0.035
-    for ring_pos, roi_index in enumerate(order):
-        label = str(table[roi_index]["abbr"]).removeprefix("L.").removeprefix("R.")
-        _radial_text(centers[ring_pos], roi_label_r, label, 4.3, "#222")
+    # Inside → outside: ROI ring, optional ROI names, network names.
+    if label_rois:
+        roi_label_r = roi_outer + 0.035
+        for ring_pos, roi_index in enumerate(order):
+            label = str(table[roi_index]["abbr"]).removeprefix("L.").removeprefix("R.")
+            _radial_text(centers[ring_pos], roi_label_r, label, 4.3, "#222")
 
-    net_label_r = roi_outer + 0.28
+    net_label_r = roi_outer + (0.12 if not label_rois else 0.28)
     for first, last, network in _network_spans(order, table):
         mid = 0.5 * (centers[first] + centers[last])
         _radial_text(
@@ -165,17 +175,17 @@ def plot_chord(
             weight="bold",
         )
 
+    present = [name for name in NETWORK_COLORS if name != "Unknown" and any(row["network"] == name for row in table)]
     handles = [
-        FancyBboxPatch((0, 0), 0.01, 0.01, boxstyle="square,pad=0.4", facecolor=color)
-        for name, color in NETWORK_COLORS.items()
-        if name != "Unknown"
+        FancyBboxPatch((0, 0), 0.01, 0.01, boxstyle="square,pad=0.4", facecolor=NETWORK_COLORS[name])
+        for name in present
     ]
     ax.legend(
         handles,
-        [f"{NETWORK_ABBR[name]}  {name}" for name in NETWORK_COLORS if name != "Unknown"],
+        [f"{NETWORK_ABBR.get(name, '?')}  {name}" for name in present],
         loc="lower center",
         bbox_to_anchor=(0.5, -0.07),
-        ncol=5,
+        ncol=min(5, max(1, len(present))),
         fontsize=7,
         frameon=False,
     )
