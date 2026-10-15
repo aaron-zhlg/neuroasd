@@ -2,7 +2,8 @@
 
 Commits only this trial's training/evaluation files plus its frozen experiment
 folder, on a branch cut from main. Never merges to main and never edits
-gates.json. The PR body leads with scores.
+gates.json. The PR body leads with scores. The winner's scores become this
+session's reference, so the next PR must beat it rather than gates.json.
 """
 
 from __future__ import annotations
@@ -16,8 +17,38 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from autoresearch.loop.paths import EXPERIMENTS_DIR, REPO_ROOT, rel, results_dir
+from autoresearch.loop.paths import (
+    EXPERIMENTS_DIR,
+    REPO_ROOT,
+    rel,
+    results_dir,
+    session_reference_path,
+)
 from autoresearch.loop.workspace import load_workspace
+
+REFERENCE_METRICS = (
+    "balanced_accuracy_mean",
+    "accuracy_mean",
+    "auc_mean",
+    "sensitivity_mean",
+    "specificity_mean",
+)
+
+
+def ratchet_reference(result: dict[str, Any], branch: str) -> dict[str, Any]:
+    """Make this loso-institution winner the bar for the rest of the session."""
+    summary = result["summary"]
+    reference = {
+        "name": str(result["name"]),
+        "branch": branch,
+        "note": "Session winner. The next trial must beat these numbers. Cleared by --fresh.",
+        "loso-site": {key: summary["site_" + key] for key in REFERENCE_METRICS},
+        "loso-institution": {key: summary[key] for key in REFERENCE_METRICS},
+    }
+    path = session_reference_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(reference, indent=2) + "\n", encoding="utf-8")
+    return reference
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:
@@ -401,6 +432,7 @@ def promote(result: dict[str, Any], *, push: bool) -> dict[str, Any]:
             shutil.copy2(REPO_ROOT / rel_path, dest)
         _git("add", "--", *sorted(to_add), cwd=worktree)
         _git("commit", "-m", f"Trial {name} ({stage}): {note}", cwd=worktree)
+        reference = ratchet_reference(result, branch)
         remotes = _git("remote")
         if push and "origin" in remotes.split():
             try:
@@ -430,7 +462,11 @@ def promote(result: dict[str, Any], *, push: bool) -> dict[str, Any]:
         "pr_error": pr_error,
         "merged_to_main": False,
         "gates_updated": False,
-        "note": "Human review required before merging to main or raising gates.",
+        "session_reference": reference,
+        "note": (
+            "Human review required before merging to main. gates.json is unchanged; "
+            "the next trial must beat session_reference."
+        ),
     }
 
 

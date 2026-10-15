@@ -31,7 +31,7 @@ from pathlib import Path
 import numpy as np
 from sklearn.metrics import roc_auc_score
 
-from autoresearch.loop.paths import trials_dir
+from autoresearch.loop.paths import load_session_reference, trials_dir
 from neuroasd.linear_baseline import GROUPINGS, clean_fc
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -195,7 +195,12 @@ def summarize(folds: list[dict]) -> dict[str, float]:
 
 
 def load_gates() -> dict:
-    return json.loads(GATES_PATH.read_text(encoding="utf-8"))
+    """gates.json, with the reference raised to this session's last winner if any."""
+    gates = json.loads(GATES_PATH.read_text(encoding="utf-8"))
+    winner = load_session_reference()
+    if winner:
+        gates["reference"] = {**gates["reference"], **winner}
+    return gates
 
 
 def either_split_improves(site: float, inst: float, ref_site: float, ref_inst: float, rule: dict) -> dict:
@@ -246,6 +251,9 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
         "stage": stage,
         "metric": PRIMARY_METRIC,
         "rule": "either split improves; the other does not regress",
+        "reference": reference["name"],
+        "reference_site": reference["loso-site"][PRIMARY_METRIC],
+        "reference_institution": reference["loso-institution"][PRIMARY_METRIC],
         "observed": round(observed, 4),
         "observed_site": round(site, 4),
         **rule,

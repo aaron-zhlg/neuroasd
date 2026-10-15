@@ -11,7 +11,14 @@ from typing import Any
 
 from orchestra import SubAgent
 
-from autoresearch.loop.paths import GATES_PATH, LEDGER_PATH, PROGRAM_PATH, REPO_ROOT, trials_dir
+from autoresearch.loop.paths import (
+    GATES_PATH,
+    LEDGER_PATH,
+    PROGRAM_PATH,
+    REPO_ROOT,
+    load_session_reference,
+    trials_dir,
+)
 from autoresearch.loop.promote import promote
 from autoresearch.loop.protocol import protocol_notes, protocol_ok
 from autoresearch.loop.workspace import (
@@ -105,8 +112,12 @@ class ExperimenterTools:
         return load_workspace()
 
     def read_gates(self) -> dict[str, Any]:
-        """Return the pass thresholds and measured baselines."""
-        return json.loads(GATES_PATH.read_text(encoding="utf-8"))
+        """Return the pass thresholds and the reference a win must beat."""
+        gates = json.loads(GATES_PATH.read_text(encoding="utf-8"))
+        winner = load_session_reference()
+        if winner:
+            gates["reference"] = {**gates["reference"], **winner}
+        return gates
 
     def read_program(self) -> str:
         """Return the autoresearch agent rules (search space, no-leak protocol)."""

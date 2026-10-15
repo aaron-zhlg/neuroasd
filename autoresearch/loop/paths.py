@@ -114,10 +114,23 @@ def clear_graveyard() -> None:
         shutil.rmtree(path)
 
 
+def session_reference_path() -> Path:
+    """Scores of the last loso-institution winner this session. Overrides gates.json."""
+    return workspace_path().parent / "reference.json"
+
+
+def load_session_reference() -> dict | None:
+    path = session_reference_path()
+    if not path.is_file():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def clear_session_dirs() -> None:
-    """Wipe baseline snapshots and archived failed diffs. Workspace is separate."""
+    """Wipe baseline snapshots, archived failed diffs, and the ratcheted reference."""
     clear_baseline()
     clear_graveyard()
+    session_reference_path().unlink(missing_ok=True)
 
 
 def _slug(text: str) -> str:

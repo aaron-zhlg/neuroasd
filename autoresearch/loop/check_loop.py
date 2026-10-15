@@ -7,6 +7,7 @@ the historical best-epoch leak guard.
 
 from __future__ import annotations
 
+import json
 import os
 import tempfile
 import traceback
@@ -22,6 +23,7 @@ os.environ["AUTORESEARCH_LOOP_WRITE_DIR"] = str(_TMP)
 from autoresearch.loop.coder import CodeTools  # noqa: E402
 from autoresearch.loop.experimenter import ExperimenterTools, measurement_coverage  # noqa: E402
 from autoresearch.loop.linter import lint_paths  # noqa: E402
+from autoresearch.loop.paths import GATES_PATH  # noqa: E402
 from autoresearch.loop.orchestrator import _forced_assignment  # noqa: E402
 from autoresearch.loop.promote import pr_body, pr_title  # noqa: E402
 from autoresearch.loop.protocol import leak_reasons_in_source, protocol_ok  # noqa: E402
@@ -511,6 +513,42 @@ def test_either_split_gate() -> None:
     _check("both splits +1.5pp PASSes", both["passed"])
 
 
+def test_winner_raises_the_bar() -> None:
+    print("loso-institution winner raises the reference")
+    from autoresearch.loop.paths import clear_session_dirs, session_reference_path
+    from autoresearch.loop.promote import ratchet_reference
+    from autoresearch.trial import apply_gate, load_gates
+
+    clear_session_dirs()
+    iter10 = load_gates()["reference"]
+    site0 = iter10["loso-site"]["balanced_accuracy_mean"]
+    inst0 = iter10["loso-institution"]["balanced_accuracy_mean"]
+    metrics = ("balanced_accuracy_mean", "accuracy_mean", "auc_mean",
+               "sensitivity_mean", "specificity_mean")
+
+    def summary(site: float, inst: float) -> dict[str, float]:
+        out = {key: inst for key in metrics}
+        out.update({"site_" + key: site for key in metrics})
+        return out
+
+    first = summary(site0 + 0.015, inst0 + 0.001)
+    _check("first win beats iter10", apply_gate("loso-institution", "a", first)["passed"])
+    ratchet_reference({"name": "a", "summary": first}, "experiment/trial-a")
+    _check("reference file written", session_reference_path().is_file())
+
+    same = apply_gate("loso-institution", "b", summary(site0 + 0.016, inst0 + 0.001))
+    _check("matching the winner is not a win", not same["passed"], str(same))
+    _check("verdict names the winner", same.get("reference") == "a", str(same.get("reference")))
+    better = apply_gate("loso-institution", "c", summary(site0 + 0.026, inst0 + 0.001))
+    _check("+1pp over the winner is a win", better["passed"], str(better))
+    on_disk = json.loads(GATES_PATH.read_text(encoding="utf-8"))
+    _check("gates.json untouched", on_disk["reference"]["name"] == iter10["name"])
+
+    clear_session_dirs()
+    _check("--fresh clears the ratchet", not session_reference_path().exists())
+    _check("back to iter10", load_gates()["reference"]["name"] == iter10["name"])
+
+
 def test_coder_cannot_write_gates() -> None:
     print("path guards")
     tools = CodeTools()
@@ -538,6 +576,7 @@ def main() -> None:
         test_experimenter_runs_one_stage,
         test_operator_interrupt_keeps_trial,
         test_either_split_gate,
+        test_winner_raises_the_bar,
         test_coder_cannot_write_gates,
     ]
     for test in tests:
