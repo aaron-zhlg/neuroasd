@@ -5,6 +5,18 @@ triangle, including the diagonal) and optional age/sex columns. This module
 refits that estimator, reads its coefficients, and reshapes each atlas block
 into a symmetric matrix. Positive values are flipped to the ASD direction so
 the colors match the GNN integrated-gradients figures (red = ASD).
+
+``group_by`` decides which fit the figure comes from:
+
+* ``all`` (default, ~1 min): one fit on every subject. Draft figure only.
+  This is not the model used for the leave-one-institution-out scores.
+* ``institution``: mean coefficients over the 23 institution-out training
+  folds — the same outer split as the reported institution-out metrics.
+  About 20 minutes.
+* ``site``: same idea for the 33 site-out folds.
+
+    uv run python -m neuroasd.explain --kind linear --group-by institution \\
+        --output-dir outputs/explain_linear_institution
 """
 
 from __future__ import annotations
@@ -123,7 +135,12 @@ def average_coefficients(
     group_by: str,
     workers: int,
 ) -> tuple[np.ndarray, list[str]]:
-    """Mean coefficient vector over training folds, or one fit on all subjects."""
+    """Mean coefficient vector over training folds, or one fit on all subjects.
+
+    ``all`` is a visualization shortcut: one fit on every subject.
+    ``institution`` / ``site`` average the training-fold coefficients of the
+    same outer split used when scoring those held-out groups.
+    """
     from concurrent.futures import ThreadPoolExecutor
 
     from autoresearch.trial import test_groups
@@ -152,7 +169,11 @@ def explain_linear(
     workers: int = 2,
     atlases: list[str] | None = None,
 ) -> dict:
-    """Fit the current scored linear model and write a chord plot per atlas."""
+    """Fit the current scored linear model and write a chord plot per atlas.
+
+    Default ``group_by="all"`` is a cheap draft. Pass ``group_by="institution"``
+    if the figure should use the same training folds as leave-one-institution-out.
+    """
     from autoresearch.trial import Source
 
     if group_by not in {"all", "site", "institution"}:

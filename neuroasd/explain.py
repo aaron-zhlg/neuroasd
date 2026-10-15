@@ -14,6 +14,9 @@ GNN::
 Linear (Gordon / HCP chords under ``outputs/explain_linear/``)::
 
     uv run python -m neuroasd.explain --kind linear
+    # Same outer split as the institution-out scores (not a single all-subject fit):
+    uv run python -m neuroasd.explain --kind linear --group-by institution \\
+        --output-dir outputs/explain_linear_institution
 """
 
 from __future__ import annotations
@@ -100,7 +103,9 @@ def parse_args() -> argparse.Namespace:
         "--group-by",
         choices=("all", "site", "institution"),
         default="all",
-        help="Linear only: one fit on all subjects, or mean coefficients over LOSO folds.",
+        help="Linear only. all = one fit on every subject (draft figure). "
+        "institution = mean coefficients over the 23 institution-out training "
+        "folds (same split as those scores). site = the 33 site-out folds.",
     )
     parser.add_argument(
         "--workers",

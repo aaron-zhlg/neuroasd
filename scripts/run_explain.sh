@@ -8,6 +8,9 @@
 # Usage:
 #   ./scripts/run_explain.sh
 #   ./scripts/run_explain.sh --kind linear --output-dir outputs/explain_linear
+#   # Same folds as leave-one-institution-out scoring (not an all-subject fit)
+#   ./scripts/run_explain.sh --kind linear --group-by institution \
+#       --output-dir outputs/explain_linear_institution
 #   ./scripts/run_explain.sh --checkpoint outputs/gcn_baseline/final_model.pt \
 #       --output-dir experiments/baseline_gcn_v1/figures
 #   ./scripts/run_explain.sh --loso-folds-dir outputs/loso_cv_gcn_v1/folds \
