@@ -544,8 +544,16 @@ def test_winner_raises_the_bar() -> None:
     on_disk = json.loads(GATES_PATH.read_text(encoding="utf-8"))
     _check("gates.json untouched", on_disk["reference"]["name"] == iter10["name"])
 
+    site_floor = first["site_balanced_accuracy_mean"] - 0.005
+    doomed = apply_gate("loso-site", "d", {"balanced_accuracy_mean": site_floor - 0.001})
+    _check("site below winner - tolerance fails early", not doomed["passed"], str(doomed))
+    ok_site = apply_gate("loso-site", "e", {"balanced_accuracy_mean": site_floor + 0.001})
+    _check("site within tolerance goes on", ok_site["passed"], str(ok_site))
+
     clear_session_dirs()
     _check("--fresh clears the ratchet", not session_reference_path().exists())
+    early = apply_gate("loso-site", "f", {"balanced_accuracy_mean": site0 - 0.006})
+    _check("site 0.6pp under iter10 fails early", not early["passed"], str(early))
     _check("back to iter10", load_gates()["reference"]["name"] == iter10["name"])
 
 

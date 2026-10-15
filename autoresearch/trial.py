@@ -231,6 +231,16 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
     observed = summary[PRIMARY_METRIC]
     if stage != FINAL_STAGE:
         threshold = float(gate["threshold"])
+        rationale = gate["rationale"]
+        if stage == "loso-site":
+            # Below this the either-split rule cannot pass, so skip the institution sweep.
+            floor = gates["reference"]["loso-site"][PRIMARY_METRIC] - float(gates["rule"]["regress_tolerance"])
+            if floor > threshold:
+                threshold = round(floor, 4)
+                rationale += (
+                    f" Raised to {threshold} = reference site minus regress_tolerance: "
+                    "a lower site score cannot win at loso-institution."
+                )
         return {
             "stage": stage,
             "metric": PRIMARY_METRIC,
@@ -238,7 +248,7 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
             "observed": round(observed, 4),
             "margin": round(observed - threshold, 4),
             "passed": observed >= threshold,
-            "rationale": gate["rationale"],
+            "rationale": rationale,
         }
     reference = gates["reference"]
     site = summary["site_" + PRIMARY_METRIC]
