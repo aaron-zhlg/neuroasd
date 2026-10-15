@@ -84,6 +84,12 @@ STAGE_TIMEOUT = {
 }
 
 
+def _tail(output: str | bytes | None) -> str:
+    if isinstance(output, bytes):
+        output = output.decode("utf-8", errors="replace")
+    return (output or "")[-2000:]
+
+
 class ExperimenterTools:
     """Run autoresearch.trial and interpret the gate, not the prose."""
 
@@ -227,15 +233,33 @@ class ExperimenterTools:
             "NUMEXPR_NUM_THREADS",
         ):
             env.setdefault(key, "1")
-        ran = subprocess.run(
-            command,
-            cwd=REPO_ROOT,
-            capture_output=True,
-            text=True,
-            timeout=STAGE_TIMEOUT[stage],
-            env=env,
-            check=False,
-        )
+        try:
+            ran = subprocess.run(
+                command,
+                cwd=REPO_ROOT,
+                capture_output=True,
+                text=True,
+                timeout=STAGE_TIMEOUT[stage],
+                env=env,
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exc:
+            minutes = STAGE_TIMEOUT[stage] // 60
+            error = (
+                f"{stage} timed out after {minutes} min; the change is too slow. "
+                "Make it cheaper or pick a different mechanism"
+            )
+            workspace = record_unmeasured_trial(
+                error,
+                stdout_tail=_tail(exc.stdout),
+                stderr_tail=_tail(exc.stderr),
+            )
+            self.touched.append(f"timeout:{stage}")
+            return {
+                "ok": False,
+                "error": error,
+                "workspace_status": workspace.get("status"),
+            }
         result_path = trials_dir() / f"{stage}__{name}" / "result.json"
         if not result_path.is_file() and ran.returncode in INTERRUPT_EXIT_CODES:
             record_interrupted_trial()

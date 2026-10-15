@@ -500,6 +500,40 @@ def test_operator_interrupt_keeps_trial() -> None:
     _check("experimenter runs next", next_role() == "experimenter", str(next_role()))
 
 
+def test_timeout_is_recorded_as_timeout() -> None:
+    print("trial timeout names the cause")
+    import subprocess as sp
+
+    from autoresearch.loop import experimenter as exp_mod
+    from autoresearch.loop.workspace import default_workspace, save_workspace
+
+    save_workspace(default_workspace())
+    writer = CodeTools()
+    writer.read_last_insight()
+    writer.record_hypothesis("slow solver")
+    _write_scratch(writer, "slow.py", "value = 5\n")
+    mark_coder_outcome(True)
+    record_lint({"passed": True, "errors": []})
+    mark_pending_stage()
+
+    def too_slow(*args, **kwargs):
+        raise sp.TimeoutExpired(args[0], kwargs.get("timeout"), output=b"partial")
+
+    real_run = exp_mod.subprocess.run
+    exp_mod.subprocess.run = too_slow
+    try:
+        out = ExperimenterTools(promote_on_pass=False, push=False).run_trial()
+    finally:
+        exp_mod.subprocess.run = real_run
+
+    after = load_workspace()
+    _check("timeout returns an error, not an exception", out.get("ok") is False, str(out))
+    _check("error says timed out", "timed out" in str(out.get("error")), str(out.get("error")))
+    _check("timeout reverts and goes to coder", after["status"] == "awaiting_new_code")
+    narrative = str((after.get("last_insight") or {}).get("narrative", ""))
+    _check("insight names the timeout", "timed out" in narrative, narrative[:200])
+
+
 def test_either_split_gate() -> None:
     print("either-split gate")
     from autoresearch.trial import either_split_improves
@@ -583,6 +617,7 @@ def main() -> None:
         test_crash_or_skip_does_not_respin_experimenter,
         test_experimenter_runs_one_stage,
         test_operator_interrupt_keeps_trial,
+        test_timeout_is_recorded_as_timeout,
         test_either_split_gate,
         test_winner_raises_the_bar,
         test_coder_cannot_write_gates,
