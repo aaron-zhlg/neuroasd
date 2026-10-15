@@ -199,13 +199,8 @@ def apply_trial_outcome(
     bacc = summary.get("balanced_accuracy_mean")
     auc = summary.get("auc_mean")
     acc = summary.get("accuracy_mean")
-    last_win = data.get("last_win")
-    improved = True
-    if gate_passed and stage == "loso-institution" and isinstance(last_win, dict):
-        prev = last_win.get("balanced_accuracy_mean")
-        if prev is not None and bacc is not None and float(bacc) <= float(prev):
-            improved = False
-    won = gate_passed and improved
+    # The loso-institution verdict is already judged against the current base.
+    won = gate_passed
     data.setdefault("last_results", {})[stage] = {
         "name": name,
         "passed": won,
@@ -214,7 +209,7 @@ def apply_trial_outcome(
         "accuracy_mean": acc,
         "margin": verdict.get("margin"),
         "protocol_failed": protocol_failed,
-        "did_not_beat_last_win": gate_passed and not improved,
+        "open_pr": bool(verdict.get("open_pr")),
     }
     if not won:
         files = list(data.get("files_changed") or [])

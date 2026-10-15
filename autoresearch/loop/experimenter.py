@@ -16,10 +16,12 @@ from autoresearch.loop.paths import (
     LEDGER_PATH,
     PROGRAM_PATH,
     REPO_ROOT,
+    load_pr_reference,
     load_session_reference,
+    rel,
     trials_dir,
 )
-from autoresearch.loop.promote import promote
+from autoresearch.loop.promote import promote, ratchet_reference
 from autoresearch.loop.protocol import protocol_notes, protocol_ok
 from autoresearch.loop.workspace import (
     apply_trial_outcome,
@@ -118,11 +120,12 @@ class ExperimenterTools:
         return load_workspace()
 
     def read_gates(self) -> dict[str, Any]:
-        """Return the pass thresholds and the reference a win must beat."""
+        """Return the thresholds, the current base (``reference``), and the last PR (``pr_reference``)."""
         gates = json.loads(GATES_PATH.read_text(encoding="utf-8"))
-        winner = load_session_reference()
-        if winner:
-            gates["reference"] = {**gates["reference"], **winner}
+        tagged = gates["reference"]
+        base, last_pr = load_session_reference(), load_pr_reference()
+        gates["reference"] = {**tagged, **base} if base else tagged
+        gates["pr_reference"] = {**tagged, **last_pr} if last_pr else tagged
         return gates
 
     def read_program(self) -> str:
@@ -287,7 +290,7 @@ class ExperimenterTools:
             }
 
         result = json.loads(result_path.read_text(encoding="utf-8"))
-        self.touched.append(str(result_path.relative_to(REPO_ROOT)))
+        self.touched.append(rel(result_path))
         notes = protocol_notes(result)
         failed_protocol = not protocol_ok(result)
         if failed_protocol:
@@ -308,12 +311,10 @@ class ExperimenterTools:
 
         promotion = None
         last = (workspace.get("last_results") or {}).get(stage) or {}
-        if (
-            self.promote_on_pass
-            and stage == "loso-institution"
-            and last.get("passed")
-            and not failed_protocol
-        ):
+        accepted = stage == "loso-institution" and last.get("passed") and not failed_protocol
+        if accepted:
+            ratchet_reference(result)
+        if accepted and self.promote_on_pass and result["verdict"].get("open_pr"):
             promotion = promote(result, push=self.push)
 
         summary = result.get("summary") or {}
@@ -412,12 +413,6 @@ def _insight_hint(
             "Still not a published improvement."
         )
     last = (workspace.get("last_results") or {}).get(stage) or {}
-    if last.get("did_not_beat_last_win"):
-        return (
-            "loso-institution met the gate but did not beat the last win's "
-            "balanced accuracy. Reverted to the winning snapshot. Next: coder, "
-            "one new mechanism."
-        )
     last_win = workspace.get("last_win") or {}
     acc = last_win.get("accuracy_mean")
     if workspace.get("status") == "target_reached":
@@ -425,11 +420,16 @@ def _insight_hint(
             "loso-institution PASS and accuracy target reached. A review PR may be open. "
             "Loop stops. Do not raise gates.json."
         )
+    pr_note = (
+        "It is also +1pp over the last PR, so a review PR was opened; do not wait for merge."
+        if last.get("open_pr")
+        else "Not yet +1pp over the last PR, so no PR; keep stacking small steps."
+    )
     return (
-        "loso-institution PASS. Keep this code as the new baseline and add ONE new "
-        f"mechanism. Last win balanced acc {last_win.get('balanced_accuracy_mean')} "
-        f"accuracy {acc}. A review PR may be open; do not wait for merge. "
-        "Do not raise gates.json."
+        "loso-institution ACCEPTED (+0.3pp step over the base). This code is the new base: "
+        "add ONE new mechanism on top of it, or refine this direction. "
+        f"Base balanced acc {last_win.get('balanced_accuracy_mean')} accuracy {acc}. "
+        f"{pr_note} Do not raise gates.json."
     )
 
 

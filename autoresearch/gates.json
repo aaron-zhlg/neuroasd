@@ -27,9 +27,10 @@
     }
   },
   "rule": {
+    "accept_margin": 0.003,
     "improve_margin": 0.01,
     "regress_tolerance": 0.005,
-    "note": "PASS if either split's fold-mean balanced accuracy is at least 1pp above iter10-loso-institution-v1 and the other split drops by at most 0.5pp."
+    "note": "Two bars, both either-split (one split gains the margin, the other drops at most regress_tolerance). ACCEPT: +0.3pp vs the current base (iter10, then the last accepted trial); the code becomes the new base. OPEN PR: an accepted trial that is also +1pp vs the last PR'd model (iter10 until the first PR), so small steps add up to a PR."
   },
   "gates": {
     "screen": {
@@ -45,7 +46,7 @@
     "loso-institution": {
       "metric": "balanced_accuracy_mean",
       "rule": "either_split_improves",
-      "rationale": "Open a PR if site or institution balanced accuracy gains >= 0.01 vs iter10-loso-institution-v1 (site 0.7282 / institution 0.7084) and the other split drops by at most 0.005. Reproducing the tagged recipe is not a win. Always report accuracy, AUC, ASD recall, and control recall."
+      "rationale": "Accept as the new base if site or institution balanced accuracy gains >= 0.003 vs the current base and the other split drops by at most 0.005. Open a PR only when the accepted trial is also >= 0.01 above the last PR'd model (iter10-loso-institution-v1: site 0.7282 / institution 0.7084). Reproducing the base is not a win. Always report accuracy, AUC, ASD recall, and control recall."
     }
   }
 }

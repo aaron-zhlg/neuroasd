@@ -22,8 +22,9 @@ Starting point: `neuroasd/model.py` is the tagged iter10 incumbent \
 (Gordon+HCP tangent concat, age/sex, L2 logistic C=1e-2, training-only \
 threshold, label-free per-group calibration; tag iter10-loso-institution-v1). \
 Do not start from the old GCN PRs. The scored function is `fit_predict(train, test)`. \
-A win must beat the current reference: iter10 (gates.json) until this session \
-has a loso-institution winner, then that winner. Not the 2026-10-03 ridge baseline.
+A trial is accepted as the new base at +0.3pp over the current base (iter10 \
+until something is accepted); a PR opens once accepted steps reach +1pp over the \
+last PR. Small, real gains count. Not the 2026-10-03 ridge baseline.
 
 Rules:
 - Interpret the insight and the workspace ``ruled_out`` list: what was tried, \

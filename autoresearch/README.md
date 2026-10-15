@@ -10,7 +10,9 @@ iterating. Built on [orchestra](https://github.com/aaron-zhlg/orchestra).
 
 The loop starts from the tagged iter10 recipe
 (`iter10-loso-institution-v1`, `neuroasd/model.py`), not from the old GCN
-PRs on C-PAC ABIDE I. A review PR opens only if a trial beats that tag.
+PRs on C-PAC ABIDE I. A trial that gains ≥ 0.3 pp over the current base is
+accepted and becomes the new base. A review PR opens only once accepted steps
+add up to ≥ 1 pp over the last PR (iter10 until the first PR).
 
 ---
 
@@ -69,8 +71,8 @@ outputs/autoresearch/          local only, gitignored
 | Stage | Evaluation | Gate |
 |-------|------------|------|
 | `screen` | LOSO on 6 mixed ABIDE I / II sites | balanced accuracy ≥ 0.70 |
-| `loso-site` | LOSO on all 33 two-class sites | balanced accuracy ≥ 0.71 |
-| `loso-institution` | Leave-one-institution-out, 23 institutions | either split +1 pp vs **iter10**, other ≤ 0.5 pp drop |
+| `loso-site` | LOSO on all 33 two-class sites | balanced accuracy ≥ 0.71 and ≥ base site − 0.5 pp |
+| `loso-institution` | Leave-one-institution-out, 23 institutions | accept: either split +0.3 pp vs the base, other ≤ 0.5 pp drop. PR: also +1 pp vs the last PR |
 
 Primary metric: fold-mean balanced accuracy. Every result also reports
 accuracy, AUC, ASD recall, and control recall.

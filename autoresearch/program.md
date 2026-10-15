@@ -20,8 +20,12 @@ original Gordon-only ridge baseline.
 | Leave-one-institution-out (23) | iter10 (incumbent) | 70.1% | 70.84% | 0.779 | 70.8% |
 | Site / institution | Gordon tangent + ridge (historical) | 68.6% / 67.0% | 67.35% / 67.47% | 0.775 / 0.770 | 54.3% / 55.1% |
 
-A trial is a win only if it **beats iter10**, not if it beats the 2026-10-03
-ridge baseline. The original baseline stays at tag `linear-baseline-dcan-v1`.
+Progress is by small steps on top of the current **base** (iter10 at first).
+A trial is **accepted** if one split gains ≥ 0.3 pp balanced accuracy over the
+base and the other drops by at most 0.5 pp; its code becomes the new base. A
+review PR opens only when an accepted trial is also ≥ +1 pp over the last PR'd
+model (iter10 until the first PR). Beating the 2026-10-03 ridge baseline does
+not count. The original baseline stays at tag `linear-baseline-dcan-v1`.
 
 **Primary metric:** fold-mean balanced accuracy
 `(ASD recall + control recall) / 2`. Accuracy and AUC are always reported so
@@ -43,8 +47,8 @@ Loop stop: leave-one-institution-out accuracy_mean ≥ 80%.
 5. **Gate on one fit per fold.** `autoresearch/trial.py` reports these by design;
    do not add best-epoch or test-fold selection.
 6. **Do not stack a new idea on a failed diff.** After a FAIL the loop archives
-   the diff and restores coder-writable files to the last loso-institution winner
-   (or HEAD if there is none). The rejected mechanism stays in `workspace.ruled_out`.
+   the diff and restores coder-writable files to the current base, the last
+   accepted loso-institution trial (or HEAD if there is none). The rejected mechanism stays in `workspace.ruled_out`.
 7. **Do not tune against `loso-institution`.** It is the confirmation stage, not a
    search signal.
 8. **Do not use FIQ or head motion as predictive features.** They differ by
@@ -59,8 +63,8 @@ Trials are cheap-to-expensive. Do not skip ahead.
 | Stage | What it runs | Gate |
 |-------|--------------|------|
 | `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | balanced accuracy ≥ 0.70 |
-| `loso-site` | Leave-one-site-out on all 33 sites with both classes | balanced accuracy ≥ 0.71 |
-| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | either split ≥ +1 pp vs **iter10** (site 0.7282 / institution 0.7084), and the other drops by at most 0.5 pp |
+| `loso-site` | Leave-one-site-out on all 33 sites with both classes | balanced accuracy ≥ 0.71 and ≥ base site − 0.5 pp (below that the final stage cannot pass) |
+| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp. PR: also ≥ +1 pp vs the last PR (iter10: site 0.7282 / institution 0.7084) |
 
 Thresholds live in `autoresearch/gates.json`. `trial.py` exits `0` on PASS and `3` on
 FAIL.

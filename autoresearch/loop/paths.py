@@ -115,22 +115,35 @@ def clear_graveyard() -> None:
 
 
 def session_reference_path() -> Path:
-    """Scores of the last loso-institution winner this session. Overrides gates.json."""
+    """Scores of the current base (last accepted trial). Overrides gates.json."""
     return workspace_path().parent / "reference.json"
 
 
-def load_session_reference() -> dict | None:
-    path = session_reference_path()
+def pr_reference_path() -> Path:
+    """Scores of the last trial that opened a PR. Overrides gates.json for the PR bar."""
+    return workspace_path().parent / "pr_reference.json"
+
+
+def _load_json(path: Path) -> dict | None:
     if not path.is_file():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_session_reference() -> dict | None:
+    return _load_json(session_reference_path())
+
+
+def load_pr_reference() -> dict | None:
+    return _load_json(pr_reference_path())
+
+
 def clear_session_dirs() -> None:
-    """Wipe baseline snapshots, archived failed diffs, and the ratcheted reference."""
+    """Wipe baseline snapshots, archived failed diffs, and both session references."""
     clear_baseline()
     clear_graveyard()
     session_reference_path().unlink(missing_ok=True)
+    pr_reference_path().unlink(missing_ok=True)
 
 
 def _slug(text: str) -> str:

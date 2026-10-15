@@ -32,7 +32,7 @@ from pathlib import Path
 import numpy as np
 from sklearn.metrics import roc_auc_score
 
-from autoresearch.loop.paths import load_session_reference, trials_dir
+from autoresearch.loop.paths import load_pr_reference, load_session_reference, trials_dir
 from neuroasd.linear_baseline import GROUPINGS, clean_fc
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -205,17 +205,24 @@ def summarize(folds: list[dict]) -> dict[str, float]:
 
 
 def load_gates() -> dict:
-    """gates.json, with the reference raised to this session's last winner if any."""
+    """gates.json with this session's references.
+
+    ``reference`` is the current base (last accepted trial, else gates.json) and
+    ``pr_reference`` is the last PR'd trial (else gates.json).
+    """
     gates = json.loads(GATES_PATH.read_text(encoding="utf-8"))
-    winner = load_session_reference()
-    if winner:
-        gates["reference"] = {**gates["reference"], **winner}
+    tagged = gates["reference"]
+    base, last_pr = load_session_reference(), load_pr_reference()
+    gates["reference"] = {**tagged, **base} if base else tagged
+    gates["pr_reference"] = {**tagged, **last_pr} if last_pr else tagged
     return gates
 
 
-def either_split_improves(site: float, inst: float, ref_site: float, ref_inst: float, rule: dict) -> dict:
-    """PASS if one split gains >= improve_margin and the other drops <= regress_tolerance."""
-    margin, tolerance = float(rule["improve_margin"]), float(rule["regress_tolerance"])
+def either_split_improves(
+    site: float, inst: float, ref_site: float, ref_inst: float, rule: dict, margin_key: str = "improve_margin"
+) -> dict:
+    """PASS if one split gains >= rule[margin_key] and the other drops <= regress_tolerance."""
+    margin, tolerance = float(rule[margin_key]), float(rule["regress_tolerance"])
     d_site, d_inst = site - ref_site, inst - ref_inst
     site_wins = d_site >= margin and d_inst >= -tolerance
     inst_wins = d_inst >= margin and d_site >= -tolerance
@@ -260,23 +267,33 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
             "passed": observed >= threshold,
             "rationale": rationale,
         }
-    reference = gates["reference"]
+    base, last_pr = gates["reference"], gates["pr_reference"]
     site = summary["site_" + PRIMARY_METRIC]
-    rule = either_split_improves(
-        site, observed,
-        reference["loso-site"][PRIMARY_METRIC], reference["loso-institution"][PRIMARY_METRIC],
-        gates["rule"],
-    )
+
+    def against(ref: dict, margin_key: str) -> dict:
+        return either_split_improves(
+            site, observed,
+            ref["loso-site"][PRIMARY_METRIC], ref["loso-institution"][PRIMARY_METRIC],
+            gates["rule"], margin_key,
+        )
+
+    accept = against(base, "accept_margin")
+    pr = against(last_pr, "improve_margin")
     return {
         "stage": stage,
         "metric": PRIMARY_METRIC,
         "rule": "either split improves; the other does not regress",
-        "reference": reference["name"],
-        "reference_site": reference["loso-site"][PRIMARY_METRIC],
-        "reference_institution": reference["loso-institution"][PRIMARY_METRIC],
+        "reference": base["name"],
+        "reference_site": base["loso-site"][PRIMARY_METRIC],
+        "reference_institution": base["loso-institution"][PRIMARY_METRIC],
         "observed": round(observed, 4),
         "observed_site": round(site, 4),
-        **rule,
+        **accept,
+        "open_pr": bool(accept["passed"] and pr["passed"]),
+        "pr_reference": last_pr["name"],
+        "pr_delta_site": pr["delta_site"],
+        "pr_delta_institution": pr["delta_institution"],
+        "pr_margin": pr["margin"],
         "rationale": gate["rationale"],
     }
 

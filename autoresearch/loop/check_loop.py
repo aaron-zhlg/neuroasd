@@ -548,8 +548,12 @@ def test_either_split_gate() -> None:
 
 
 def test_winner_raises_the_bar() -> None:
-    print("loso-institution winner raises the reference")
-    from autoresearch.loop.paths import clear_session_dirs, session_reference_path
+    print("small steps move the base; +1pp over the last PR opens a PR")
+    from autoresearch.loop.paths import (
+        clear_session_dirs,
+        pr_reference_path,
+        session_reference_path,
+    )
     from autoresearch.loop.promote import ratchet_reference
     from autoresearch.trial import apply_gate, load_gates
 
@@ -565,30 +569,107 @@ def test_winner_raises_the_bar() -> None:
         out.update({"site_" + key: site for key in metrics})
         return out
 
-    first = summary(site0 + 0.015, inst0 + 0.001)
-    _check("first win beats iter10", apply_gate("loso-institution", "a", first)["passed"])
-    ratchet_reference({"name": "a", "summary": first}, "experiment/trial-a")
-    _check("reference file written", session_reference_path().is_file())
+    a = summary(site0 + 0.004, inst0 + 0.001)
+    first = apply_gate("loso-institution", "a", a)
+    _check("+0.4pp over iter10 is accepted", first["passed"], str(first))
+    _check("+0.4pp over iter10 opens no PR", not first["open_pr"], str(first))
+    ratchet_reference({"name": "a", "summary": a})
+    _check("base file written", session_reference_path().is_file())
 
-    same = apply_gate("loso-institution", "b", summary(site0 + 0.016, inst0 + 0.001))
-    _check("matching the winner is not a win", not same["passed"], str(same))
-    _check("verdict names the winner", same.get("reference") == "a", str(same.get("reference")))
-    better = apply_gate("loso-institution", "c", summary(site0 + 0.026, inst0 + 0.001))
-    _check("+1pp over the winner is a win", better["passed"], str(better))
+    tiny = apply_gate("loso-institution", "b", summary(site0 + 0.006, inst0 + 0.001))
+    _check("+0.2pp over the base is not accepted", not tiny["passed"], str(tiny))
+    _check("verdict names the base", tiny.get("reference") == "a", str(tiny.get("reference")))
+
+    c = summary(site0 + 0.011, inst0 + 0.001)
+    third = apply_gate("loso-institution", "c", c)
+    _check("small step that sums to +1.1pp is accepted", third["passed"], str(third))
+    _check("cumulative +1pp over the last PR opens a PR", third["open_pr"], str(third))
+    _check("PR bar is still iter10", third.get("pr_reference") == iter10["name"])
+    ratchet_reference({"name": "c", "summary": c})
+    ratchet_reference({"name": "c", "summary": c}, path=pr_reference_path())
+
+    d = apply_gate("loso-institution", "d", summary(site0 + 0.016, inst0 + 0.001))
+    _check("next step accepted over the new base", d["passed"], str(d))
+    _check("next step +0.5pp over the PR opens no PR", not d["open_pr"], str(d))
+    _check("PR bar moved to the PR'd trial", d.get("pr_reference") == "c")
     on_disk = json.loads(GATES_PATH.read_text(encoding="utf-8"))
     _check("gates.json untouched", on_disk["reference"]["name"] == iter10["name"])
 
-    site_floor = first["site_balanced_accuracy_mean"] - 0.005
-    doomed = apply_gate("loso-site", "d", {"balanced_accuracy_mean": site_floor - 0.001})
-    _check("site below winner - tolerance fails early", not doomed["passed"], str(doomed))
-    ok_site = apply_gate("loso-site", "e", {"balanced_accuracy_mean": site_floor + 0.001})
+    site_floor = c["site_balanced_accuracy_mean"] - 0.005
+    doomed = apply_gate("loso-site", "e", {"balanced_accuracy_mean": site_floor - 0.001})
+    _check("site below base - tolerance fails early", not doomed["passed"], str(doomed))
+    ok_site = apply_gate("loso-site", "f", {"balanced_accuracy_mean": site_floor + 0.001})
     _check("site within tolerance goes on", ok_site["passed"], str(ok_site))
 
     clear_session_dirs()
-    _check("--fresh clears the ratchet", not session_reference_path().exists())
+    _check("--fresh clears the base", not session_reference_path().exists())
+    _check("--fresh clears the PR bar", not pr_reference_path().exists())
     early = apply_gate("loso-site", "f", {"balanced_accuracy_mean": site0 - 0.006})
     _check("site 0.6pp under iter10 fails early", not early["passed"], str(early))
     _check("back to iter10", load_gates()["reference"]["name"] == iter10["name"])
+
+
+def test_experimenter_accepts_without_pr() -> None:
+    print("experimenter: accept moves the base, PR only on open_pr")
+    import subprocess as sp
+
+    from autoresearch.loop import experimenter as exp_mod
+    from autoresearch.loop.paths import clear_session_dirs, load_session_reference, trials_dir
+    from autoresearch.loop.workspace import default_workspace, save_workspace
+
+    metrics = ("balanced_accuracy_mean", "accuracy_mean", "auc_mean",
+               "sensitivity_mean", "specificity_mean")
+
+    def institution_trial(name: str, open_pr: bool) -> list:
+        save_workspace(default_workspace())
+        writer = CodeTools()
+        writer.read_last_insight()
+        writer.record_hypothesis(name)
+        _write_scratch(writer, f"{name}.py", "value = 6\n")
+        mark_coder_outcome(True)
+        record_lint({"passed": True, "errors": []})
+        trial = load_workspace()["current_name"]
+        for stage in ("screen", "loso-site"):
+            apply_trial_outcome(stage, trial, _fake_verdict(stage, True, 0.73), {"auc_mean": 0.8}, False)
+        mark_pending_stage()
+        summary = {key: 0.72 for key in metrics}
+        summary.update({"site_" + key: 0.735 for key in metrics})
+        result = {
+            "name": trial,
+            "stage": "loso-institution",
+            "model_selection": "final fit (no selection on the evaluation set)",
+            "summary": summary,
+            "verdict": {"stage": "loso-institution", "metric": "balanced_accuracy_mean",
+                        "passed": True, "open_pr": open_pr, "margin": 0.002},
+        }
+
+        def fake_run(*args, **kwargs):
+            out = trials_dir() / f"loso-institution__{trial}" / "result.json"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps(result), encoding="utf-8")
+            return sp.CompletedProcess(args[0], 0, "", "")
+
+        promoted: list = []
+        real_run, real_promote = exp_mod.subprocess.run, exp_mod.promote
+        exp_mod.subprocess.run = fake_run
+        exp_mod.promote = lambda res, push: promoted.append(res["name"]) or {"pr": None}
+        try:
+            ExperimenterTools(promote_on_pass=True, push=False).run_trial()
+        finally:
+            exp_mod.subprocess.run, exp_mod.promote = real_run, real_promote
+        return promoted
+
+    clear_session_dirs()
+    promoted = institution_trial("small-step", open_pr=False)
+    after = load_workspace()
+    _check("accepted step is not ruled out", not after.get("ruled_out"), str(after.get("ruled_out")))
+    _check("accepted step becomes last_win", (after.get("last_win") or {}).get("name") == after["current_name"])
+    _check("accepted step moves the base", (load_session_reference() or {}).get("name") == after["current_name"])
+    _check("no PR without open_pr", promoted == [], str(promoted))
+
+    promoted = institution_trial("big-step", open_pr=True)
+    _check("PR when open_pr", promoted == [load_workspace()["current_name"]], str(promoted))
+    clear_session_dirs()
 
 
 def test_coder_cannot_write_gates() -> None:
@@ -620,6 +701,7 @@ def main() -> None:
         test_timeout_is_recorded_as_timeout,
         test_either_split_gate,
         test_winner_raises_the_bar,
+        test_experimenter_accepts_without_pr,
         test_coder_cannot_write_gates,
     ]
     for test in tests:

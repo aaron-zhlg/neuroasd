@@ -2,8 +2,8 @@
 
 Commits only this trial's training/evaluation files plus its frozen experiment
 folder, on a branch cut from main. Never merges to main and never edits
-gates.json. The PR body leads with scores. The winner's scores become this
-session's reference, so the next PR must beat it rather than gates.json.
+gates.json. The PR body leads with scores. The PR'd scores become this
+session's PR reference, so the next PR must be +1pp over them.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from typing import Any
 from autoresearch.loop.paths import (
     EXPERIMENTS_DIR,
     REPO_ROOT,
+    pr_reference_path,
     rel,
     results_dir,
     session_reference_path,
@@ -35,17 +36,19 @@ REFERENCE_METRICS = (
 )
 
 
-def ratchet_reference(result: dict[str, Any], branch: str) -> dict[str, Any]:
-    """Make this loso-institution winner the bar for the rest of the session."""
+def ratchet_reference(
+    result: dict[str, Any], *, path: Path | None = None, branch: str | None = None
+) -> dict[str, Any]:
+    """Make this loso-institution result a session bar (the base by default)."""
     summary = result["summary"]
     reference = {
         "name": str(result["name"]),
         "branch": branch,
-        "note": "Session winner. The next trial must beat these numbers. Cleared by --fresh.",
+        "note": "Session reference. Later trials are judged against these numbers. Cleared by --fresh.",
         "loso-site": {key: summary["site_" + key] for key in REFERENCE_METRICS},
         "loso-institution": {key: summary[key] for key in REFERENCE_METRICS},
     }
-    path = session_reference_path()
+    path = path or session_reference_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(reference, indent=2) + "\n", encoding="utf-8")
     return reference
@@ -207,8 +210,12 @@ def pr_body(result: dict[str, Any], *, prior: dict[str, Any] | None = None) -> s
             f"**Gate:** `{verdict.get('metric', 'balanced_accuracy_mean')}` "
             f"{_fmt(verdict.get('observed'), 4)} "
             + (
+                f"vs base `{verdict.get('reference', 'n/a')}`: "
                 f"site {verdict.get('delta_site', 'n/a')} / "
-                f"institution {verdict.get('delta_institution', 'n/a')} "
+                f"institution {verdict.get('delta_institution', 'n/a')}; "
+                f"vs last PR `{verdict.get('pr_reference', 'n/a')}`: "
+                f"site {verdict.get('pr_delta_site', 'n/a')} / "
+                f"institution {verdict.get('pr_delta_institution', 'n/a')} "
                 if verdict.get("delta_site") is not None
                 else f"vs {_fmt(verdict.get('threshold'), 4)} (margin **{margin_s}**) "
             )
@@ -432,7 +439,7 @@ def promote(result: dict[str, Any], *, push: bool) -> dict[str, Any]:
             shutil.copy2(REPO_ROOT / rel_path, dest)
         _git("add", "--", *sorted(to_add), cwd=worktree)
         _git("commit", "-m", f"Trial {name} ({stage}): {note}", cwd=worktree)
-        reference = ratchet_reference(result, branch)
+        reference = ratchet_reference(result, path=pr_reference_path(), branch=branch)
         remotes = _git("remote")
         if push and "origin" in remotes.split():
             try:
@@ -462,10 +469,10 @@ def promote(result: dict[str, Any], *, push: bool) -> dict[str, Any]:
         "pr_error": pr_error,
         "merged_to_main": False,
         "gates_updated": False,
-        "session_reference": reference,
+        "pr_reference": reference,
         "note": (
             "Human review required before merging to main. gates.json is unchanged; "
-            "the next trial must beat session_reference."
+            "the next PR must be +1pp over pr_reference."
         ),
     }
 

@@ -25,12 +25,13 @@ from autoresearch.loop.workspace import (
 DEFAULT_GOAL = (
     "Improve ASD vs control classification on DCAN ABIDE I + II toward 80% "
     "accuracy, starting from the tagged iter10 recipe in neuroasd/model.py "
-    "(iter10-loso-institution-v1). A win must beat the current reference "
-    "(+1pp balanced accuracy on site or institution, other split drops "
-    "<= 0.5pp): iter10 at first, then each loso-institution winner of this "
-    "session. Concatenation is not stacking; next mechanisms live in "
-    "neuroasd.ensemble. Change one mechanism at a time. A loso-institution "
-    "PASS is a new baseline and raises the bar, not a stop."
+    "(iter10-loso-institution-v1). Progress is by small steps: a trial is "
+    "ACCEPTED as the new base if it gains >= 0.3pp balanced accuracy on site "
+    "or institution over the current base and the other split drops <= 0.5pp. "
+    "A review PR opens only once accepted steps add up to +1pp over the last "
+    "PR (iter10 at first). Build on the base; refining a just-accepted "
+    "direction is a valid next step. Concatenation is not stacking; ensemble "
+    "helpers live in neuroasd.ensemble. Change one mechanism at a time."
 )
 
 MISSION = """\
