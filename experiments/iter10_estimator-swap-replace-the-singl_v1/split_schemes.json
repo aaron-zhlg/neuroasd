@@ -1,0 +1,287 @@
+{
+  "model": "iter10 (Gordon+HCP tangent + age/sex, L2 logistic C=1e-2)",
+  "subjects": 1443,
+  "evaluated_at": "2026-10-21",
+  "results": {
+    "loso-institution__per-group": {
+      "scheme": "loso-institution",
+      "scoring": "per-group",
+      "n_splits": null,
+      "repeats": 1,
+      "summary": {
+        "balanced_accuracy_mean": 0.7084,
+        "balanced_accuracy_std": 0.0806,
+        "accuracy_mean": 0.7009,
+        "accuracy_std": 0.0852,
+        "auc_mean": 0.7786,
+        "auc_std": 0.0873,
+        "sensitivity_mean": 0.7076,
+        "sensitivity_std": 0.1184,
+        "specificity_mean": 0.7092,
+        "specificity_std": 0.0934,
+        "f1_mean": 0.7208,
+        "f1_std": 0.0732,
+        "accuracy_pooled": 0.7041,
+        "folds": 23,
+        "balanced_accuracy_pooled": 0.7069
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.7084152633013823,
+          "accuracy": 0.7009257904788242,
+          "auc": 0.7785928245038671
+        }
+      }
+    },
+    "loso-institution__per-subject": {
+      "scheme": "loso-institution",
+      "scoring": "per-subject",
+      "n_splits": null,
+      "repeats": 1,
+      "summary": {
+        "balanced_accuracy_mean": 0.677,
+        "balanced_accuracy_std": 0.0943,
+        "accuracy_mean": 0.674,
+        "accuracy_std": 0.1071,
+        "auc_mean": 0.7786,
+        "auc_std": 0.0873,
+        "sensitivity_mean": 0.5504,
+        "sensitivity_std": 0.2112,
+        "specificity_mean": 0.8035,
+        "specificity_std": 0.1588,
+        "f1_mean": 0.7231,
+        "f1_std": 0.1008,
+        "accuracy_pooled": 0.6736,
+        "folds": 23,
+        "balanced_accuracy_pooled": 0.6589
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.6769821310880285,
+          "accuracy": 0.6739967892744706,
+          "auc": 0.7785928245038671
+        }
+      }
+    },
+    "loso-site__per-group": {
+      "scheme": "loso-site",
+      "scoring": "per-group",
+      "n_splits": null,
+      "repeats": 1,
+      "summary": {
+        "balanced_accuracy_mean": 0.7282,
+        "balanced_accuracy_std": 0.094,
+        "accuracy_mean": 0.7187,
+        "accuracy_std": 0.096,
+        "auc_mean": 0.7969,
+        "auc_std": 0.098,
+        "sensitivity_mean": 0.745,
+        "sensitivity_std": 0.1156,
+        "specificity_mean": 0.7115,
+        "specificity_std": 0.1171,
+        "f1_mean": 0.7355,
+        "f1_std": 0.093,
+        "accuracy_pooled": 0.7116,
+        "folds": 33,
+        "balanced_accuracy_pooled": 0.7165
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.7282270478026998,
+          "accuracy": 0.7186804535276468,
+          "auc": 0.7969061453647881
+        }
+      }
+    },
+    "loso-site__per-subject": {
+      "scheme": "loso-site",
+      "scoring": "per-subject",
+      "n_splits": null,
+      "repeats": 1,
+      "summary": {
+        "balanced_accuracy_mean": 0.6826,
+        "balanced_accuracy_std": 0.1014,
+        "accuracy_mean": 0.6943,
+        "accuracy_std": 0.0963,
+        "auc_mean": 0.7969,
+        "auc_std": 0.098,
+        "sensitivity_mean": 0.5466,
+        "sensitivity_std": 0.2169,
+        "specificity_mean": 0.8185,
+        "specificity_std": 0.1434,
+        "f1_mean": 0.7442,
+        "f1_std": 0.0895,
+        "accuracy_pooled": 0.7009,
+        "folds": 33,
+        "balanced_accuracy_pooled": 0.6816
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.6825906697871117,
+          "accuracy": 0.6942987801309872,
+          "auc": 0.7969061453647881
+        }
+      }
+    },
+    "random-kfold__per-group": {
+      "scheme": "random-kfold",
+      "scoring": "per-group",
+      "n_splits": 10,
+      "repeats": 3,
+      "summary": {
+        "balanced_accuracy_mean": 0.6705,
+        "balanced_accuracy_std": 0.0403,
+        "accuracy_mean": 0.6701,
+        "accuracy_std": 0.0391,
+        "auc_mean": 0.7361,
+        "auc_std": 0.0399,
+        "sensitivity_mean": 0.674,
+        "sensitivity_std": 0.0789,
+        "specificity_mean": 0.667,
+        "specificity_std": 0.0612,
+        "f1_mean": 0.6938,
+        "f1_std": 0.0401,
+        "accuracy_pooled": 0.6701,
+        "folds": 30,
+        "balanced_accuracy_pooled": 0.6706
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.6571895029466167,
+          "accuracy": 0.6568678160919541,
+          "auc": 0.7262630886064152
+        },
+        "1": {
+          "balanced_accuracy": 0.6787141217146299,
+          "accuracy": 0.6763793103448276,
+          "auc": 0.736063109845715
+        },
+        "2": {
+          "balanced_accuracy": 0.6757074165483719,
+          "accuracy": 0.677073754789272,
+          "auc": 0.7459181112975151
+        }
+      }
+    },
+    "random-kfold__per-subject": {
+      "scheme": "random-kfold",
+      "scoring": "per-subject",
+      "n_splits": 10,
+      "repeats": 3,
+      "summary": {
+        "balanced_accuracy_mean": 0.6935,
+        "balanced_accuracy_std": 0.0371,
+        "accuracy_mean": 0.7133,
+        "accuracy_std": 0.0363,
+        "auc_mean": 0.801,
+        "auc_std": 0.0323,
+        "sensitivity_mean": 0.5357,
+        "sensitivity_std": 0.0548,
+        "specificity_mean": 0.8513,
+        "specificity_std": 0.0414,
+        "f1_mean": 0.7696,
+        "f1_std": 0.0299,
+        "accuracy_pooled": 0.7133,
+        "folds": 30,
+        "balanced_accuracy_pooled": 0.6935
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.6856825275842044,
+          "accuracy": 0.7061063218390805,
+          "auc": 0.7978595057665744
+        },
+        "1": {
+          "balanced_accuracy": 0.6957558031681507,
+          "accuracy": 0.7159099616858238,
+          "auc": 0.8003203146284109
+        },
+        "2": {
+          "balanced_accuracy": 0.6991058322041555,
+          "accuracy": 0.7179693486590039,
+          "auc": 0.8049537753975425
+        }
+      }
+    },
+    "site-kfold__per-group": {
+      "scheme": "site-kfold",
+      "scoring": "per-group",
+      "n_splits": 10,
+      "repeats": 3,
+      "summary": {
+        "balanced_accuracy_mean": 0.7129,
+        "balanced_accuracy_std": 0.0388,
+        "accuracy_mean": 0.7096,
+        "accuracy_std": 0.0382,
+        "auc_mean": 0.7839,
+        "auc_std": 0.0405,
+        "sensitivity_mean": 0.7386,
+        "sensitivity_std": 0.0582,
+        "specificity_mean": 0.6873,
+        "specificity_std": 0.0491,
+        "f1_mean": 0.7266,
+        "f1_std": 0.0377,
+        "accuracy_pooled": 0.7096,
+        "folds": 30,
+        "balanced_accuracy_pooled": 0.7129
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.7132643485788275,
+          "accuracy": 0.7110249042145593,
+          "auc": 0.7855503818897224
+        },
+        "1": {
+          "balanced_accuracy": 0.7028884303665439,
+          "accuracy": 0.6985919540229885,
+          "auc": 0.7820823132922784
+        },
+        "2": {
+          "balanced_accuracy": 0.7226603110685234,
+          "accuracy": 0.7192720306513409,
+          "auc": 0.784201813496311
+        }
+      }
+    },
+    "site-kfold__per-subject": {
+      "scheme": "site-kfold",
+      "scoring": "per-subject",
+      "n_splits": 10,
+      "repeats": 3,
+      "summary": {
+        "balanced_accuracy_mean": 0.7028,
+        "balanced_accuracy_std": 0.0351,
+        "accuracy_mean": 0.7223,
+        "accuracy_std": 0.0338,
+        "auc_mean": 0.8092,
+        "auc_std": 0.0345,
+        "sensitivity_mean": 0.5463,
+        "sensitivity_std": 0.0594,
+        "specificity_mean": 0.8593,
+        "specificity_std": 0.04,
+        "f1_mean": 0.7768,
+        "f1_std": 0.0272,
+        "accuracy_pooled": 0.7223,
+        "folds": 30,
+        "balanced_accuracy_pooled": 0.7027
+      },
+      "per_repeat": {
+        "0": {
+          "balanced_accuracy": 0.7010735645587275,
+          "accuracy": 0.721374521072797,
+          "auc": 0.8075181132880832
+        },
+        "1": {
+          "balanced_accuracy": 0.7042660869950715,
+          "accuracy": 0.7228065134099617,
+          "auc": 0.8098823835064243
+        },
+        "2": {
+          "balanced_accuracy": 0.7030761926903931,
+          "accuracy": 0.7227681992337164,
+          "auc": 0.8101641392924476
+        }
+      }
+    }
+  }
+}
