@@ -125,13 +125,22 @@ def shrink(fcs: np.ndarray, shrinkage: float = SHRINKAGE) -> np.ndarray:
 
 def tangent_features(fcs: np.ndarray, train_idx: np.ndarray, block: int = 64) -> np.ndarray:
     """Tangent-space embedding at the log-Euclidean mean of the training subjects."""
-    n, p = fcs.shape[0], fcs.shape[1]
+    return tangent_project(fcs, tangent_whitener(fcs, train_idx, block), block)
+
+
+def tangent_whitener(fcs: np.ndarray, train_idx: np.ndarray, block: int = 64) -> np.ndarray:
+    """Inverse square root of the log-Euclidean mean of `fcs[train_idx]`."""
+    p = fcs.shape[1]
     log_sum = np.zeros((p, p))
     for start in range(0, len(train_idx), block):
         log_sum += _apply_eig(shrink(fcs[train_idx[start : start + block]]), np.log).sum(axis=0)
     reference = _apply_eig((log_sum / len(train_idx))[None], np.exp)[0]
-    whiten = _apply_eig(reference[None], lambda v: 1.0 / np.sqrt(v))[0]
+    return _apply_eig(reference[None], lambda v: 1.0 / np.sqrt(v))[0]
 
+
+def tangent_project(fcs: np.ndarray, whiten: np.ndarray, block: int = 64) -> np.ndarray:
+    """Upper-triangle tangent vectors of `fcs` at the reference whose whitener is `whiten`."""
+    n = fcs.shape[0]
     iu = _upper(fcs, 0)
     weight = np.where(iu[0] == iu[1], 1.0, np.sqrt(2.0))
     feats = np.empty((n, len(iu[0])), dtype=np.float32)
