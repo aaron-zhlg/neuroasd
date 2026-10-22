@@ -243,7 +243,8 @@ Write these as contributions only if the paper still uses this protocol.
   may call it transductive calibration. If that objection matters, run an
   ablation that applies only the training-derived threshold with no
   test-group scaling, and report AUC (which this step cannot change)
-  alongside accuracy.
+  alongside accuracy. Done for release `iter10-model-v1` (per-subject scoring,
+  cut at 0): see [`report_iter10.md`](report_iter10.md).
 - No external cohort (EU-AIMS LEAP, etc.).
 - No paired Wilcoxon versus the linear baseline in this snapshot.
 - `main` does not contain this model. Reproduce from the tag, not from
