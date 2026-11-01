@@ -129,6 +129,24 @@ must score a batch of subjects from one site together; a single new subject cann
 To support a stronger claim: freeze iter10, evaluate once on held-back institutions or an
 external cohort, and run paired tests against the same-data baseline.
 
+## External cohorts
+
+The scores above are inside ABIDE. Cohorts that can score this model on people it has not
+seen are listed in [`doc/external_asd_test_datasets.md`](external_asd_test_datasets.md).
+
+- **EU-AIMS LEAP** is the external ASD test. IMPAC reported AUC 0.72 there. Access is by
+  application; the current share is processed data.
+- **Healthy Brain Network** is the more open pediatric set (ASD and ADHD). Imaging releases
+  are posted for download; phenotypes need a data-use agreement.
+- **ABCD** is the HCP-style longitudinal cohort that also has BMI. Current moderate or severe
+  ASD was an enrollment exclusion, and the released ASD item is parent-report KSADS, so it
+  answers an ASD-and-obesity question rather than standing in for ABIDE.
+- The 14 Connectomes Related to Human Disease projects and HCP-Development document the
+  HCP-style protocol. They are not ASD case-control sets.
+
+The released model still expects Gordon and HCP2016 connectivity in the `abide_dcan` layout,
+plus age and sex. Per-subject scoring is the one to use when each person is scored alone.
+
 ## Reproduce
 
 Data: DCAN ABIDE I+II FC matrices (`data/abide_dcan`, `data/abide_dcan_hcp`; build with
