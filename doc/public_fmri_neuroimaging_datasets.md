@@ -109,6 +109,8 @@ Because ABIDE combines data from multiple sites, scanner and acquisition differe
 
 ABIDE data are publicly available through the International Neuroimaging Data-sharing Initiative (INDI) ecosystem.
 
+Cohorts that can score a model already trained on ABIDE, including EU-AIMS LEAP, the Healthy Brain Network, and ABCD, are listed in [External test sets](external_asd_test_datasets.md).
+
 ### AI research value
 
 **Excellent for:** supervised disease classification, brain graph learning, and multi-site robustness.
