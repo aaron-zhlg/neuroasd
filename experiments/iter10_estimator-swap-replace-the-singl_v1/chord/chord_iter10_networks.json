@@ -1,0 +1,960 @@
+{
+  "method": "Haufe activation pattern: Pearson r between each standardized tangent feature and the decision score; sign flipped so positive = ASD direction. Full-data fit, per-subject model.",
+  "subjects": 1443,
+  "weight_norm_share": {
+    "gordon": 0.4602,
+    "hcp": 0.5396,
+    "age_sex": 0.0001
+  },
+  "top_percent": 1.0,
+  "top_edges": 618,
+  "all_gordon_edges": 61776,
+  "pattern_abs_max": 0.1436,
+  "network_pairs": [
+    {
+      "a": "Default",
+      "b": "Default",
+      "top": 56,
+      "asd_up": 9,
+      "asd_down": 47,
+      "possible": 820,
+      "enrichment": 6.83
+    },
+    {
+      "a": "Default",
+      "b": "VentralAttn",
+      "top": 23,
+      "asd_up": 11,
+      "asd_down": 12,
+      "possible": 943,
+      "enrichment": 2.44
+    },
+    {
+      "a": "Default",
+      "b": "None",
+      "top": 23,
+      "asd_up": 4,
+      "asd_down": 19,
+      "possible": 1927,
+      "enrichment": 1.19
+    },
+    {
+      "a": "SMhand",
+      "b": "SMhand",
+      "top": 23,
+      "asd_up": 2,
+      "asd_down": 21,
+      "possible": 703,
+      "enrichment": 3.27
+    },
+    {
+      "a": "Visual",
+      "b": "Visual",
+      "top": 20,
+      "asd_up": 2,
+      "asd_down": 18,
+      "possible": 741,
+      "enrichment": 2.7
+    },
+    {
+      "a": "Default",
+      "b": "Visual",
+      "top": 18,
+      "asd_up": 12,
+      "asd_down": 6,
+      "possible": 1599,
+      "enrichment": 1.13
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "DorsalAttn",
+      "top": 18,
+      "asd_up": 4,
+      "asd_down": 14,
+      "possible": 1280,
+      "enrichment": 1.41
+    },
+    {
+      "a": "Default",
+      "b": "FrontoParietal",
+      "top": 17,
+      "asd_up": 9,
+      "asd_down": 8,
+      "possible": 984,
+      "enrichment": 1.73
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "CinguloOperc",
+      "top": 17,
+      "asd_up": 2,
+      "asd_down": 15,
+      "possible": 780,
+      "enrichment": 2.18
+    },
+    {
+      "a": "Default",
+      "b": "DorsalAttn",
+      "top": 15,
+      "asd_up": 10,
+      "asd_down": 5,
+      "possible": 1312,
+      "enrichment": 1.14
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "None",
+      "top": 14,
+      "asd_up": 5,
+      "asd_down": 9,
+      "possible": 1880,
+      "enrichment": 0.74
+    },
+    {
+      "a": "VentralAttn",
+      "b": "Auditory",
+      "top": 14,
+      "asd_up": 1,
+      "asd_down": 13,
+      "possible": 552,
+      "enrichment": 2.54
+    },
+    {
+      "a": "SMmouth",
+      "b": "SMhand",
+      "top": 14,
+      "asd_up": 1,
+      "asd_down": 13,
+      "possible": 304,
+      "enrichment": 4.6
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "DorsalAttn",
+      "top": 13,
+      "asd_up": 2,
+      "asd_down": 11,
+      "possible": 496,
+      "enrichment": 2.62
+    },
+    {
+      "a": "Default",
+      "b": "CinguloOperc",
+      "top": 12,
+      "asd_up": 8,
+      "asd_down": 4,
+      "possible": 1640,
+      "enrichment": 0.73
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "DorsalAttn",
+      "top": 12,
+      "asd_up": 4,
+      "asd_down": 8,
+      "possible": 768,
+      "enrichment": 1.56
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "VentralAttn",
+      "top": 11,
+      "asd_up": 1,
+      "asd_down": 10,
+      "possible": 920,
+      "enrichment": 1.2
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "SMhand",
+      "top": 11,
+      "asd_up": 10,
+      "asd_down": 1,
+      "possible": 1520,
+      "enrichment": 0.72
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "Visual",
+      "top": 11,
+      "asd_up": 6,
+      "asd_down": 5,
+      "possible": 1248,
+      "enrichment": 0.88
+    },
+    {
+      "a": "Default",
+      "b": "RetrosplenialTemporal",
+      "top": 10,
+      "asd_up": 5,
+      "asd_down": 5,
+      "possible": 328,
+      "enrichment": 3.05
+    },
+    {
+      "a": "Default",
+      "b": "Subcortical",
+      "top": 10,
+      "asd_up": 8,
+      "asd_down": 2,
+      "possible": 779,
+      "enrichment": 1.28
+    },
+    {
+      "a": "Auditory",
+      "b": "SMhand",
+      "top": 10,
+      "asd_up": 0,
+      "asd_down": 10,
+      "possible": 912,
+      "enrichment": 1.1
+    },
+    {
+      "a": "Auditory",
+      "b": "Subcortical",
+      "top": 10,
+      "asd_up": 9,
+      "asd_down": 1,
+      "possible": 456,
+      "enrichment": 2.19
+    },
+    {
+      "a": "VentralAttn",
+      "b": "VentralAttn",
+      "top": 9,
+      "asd_up": 3,
+      "asd_down": 6,
+      "possible": 253,
+      "enrichment": 3.56
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "None",
+      "top": 9,
+      "asd_up": 4,
+      "asd_down": 5,
+      "possible": 1504,
+      "enrichment": 0.6
+    },
+    {
+      "a": "Visual",
+      "b": "Subcortical",
+      "top": 9,
+      "asd_up": 8,
+      "asd_down": 1,
+      "possible": 741,
+      "enrichment": 1.21
+    },
+    {
+      "a": "None",
+      "b": "None",
+      "top": 9,
+      "asd_up": 1,
+      "asd_down": 8,
+      "possible": 1081,
+      "enrichment": 0.83
+    },
+    {
+      "a": "SMhand",
+      "b": "Visual",
+      "top": 8,
+      "asd_up": 2,
+      "asd_down": 6,
+      "possible": 1482,
+      "enrichment": 0.54
+    },
+    {
+      "a": "None",
+      "b": "Subcortical",
+      "top": 8,
+      "asd_up": 5,
+      "asd_down": 3,
+      "possible": 893,
+      "enrichment": 0.9
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "VentralAttn",
+      "top": 7,
+      "asd_up": 1,
+      "asd_down": 6,
+      "possible": 552,
+      "enrichment": 1.27
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "None",
+      "top": 7,
+      "asd_up": 5,
+      "asd_down": 2,
+      "possible": 1128,
+      "enrichment": 0.62
+    },
+    {
+      "a": "VentralAttn",
+      "b": "DorsalAttn",
+      "top": 7,
+      "asd_up": 4,
+      "asd_down": 3,
+      "possible": 736,
+      "enrichment": 0.95
+    },
+    {
+      "a": "VentralAttn",
+      "b": "None",
+      "top": 7,
+      "asd_up": 2,
+      "asd_down": 5,
+      "possible": 1081,
+      "enrichment": 0.65
+    },
+    {
+      "a": "VentralAttn",
+      "b": "Subcortical",
+      "top": 7,
+      "asd_up": 6,
+      "asd_down": 1,
+      "possible": 437,
+      "enrichment": 1.6
+    },
+    {
+      "a": "Auditory",
+      "b": "None",
+      "top": 7,
+      "asd_up": 2,
+      "asd_down": 5,
+      "possible": 1128,
+      "enrichment": 0.62
+    },
+    {
+      "a": "SMhand",
+      "b": "Subcortical",
+      "top": 7,
+      "asd_up": 7,
+      "asd_down": 0,
+      "possible": 722,
+      "enrichment": 0.97
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "Visual",
+      "top": 6,
+      "asd_up": 3,
+      "asd_down": 3,
+      "possible": 1560,
+      "enrichment": 0.38
+    },
+    {
+      "a": "VentralAttn",
+      "b": "Visual",
+      "top": 6,
+      "asd_up": 3,
+      "asd_down": 3,
+      "possible": 897,
+      "enrichment": 0.67
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "SMhand",
+      "top": 6,
+      "asd_up": 0,
+      "asd_down": 6,
+      "possible": 1216,
+      "enrichment": 0.49
+    },
+    {
+      "a": "SMhand",
+      "b": "None",
+      "top": 6,
+      "asd_up": 4,
+      "asd_down": 2,
+      "possible": 1786,
+      "enrichment": 0.34
+    },
+    {
+      "a": "Default",
+      "b": "SMhand",
+      "top": 5,
+      "asd_up": 3,
+      "asd_down": 2,
+      "possible": 1558,
+      "enrichment": 0.32
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "RetrosplenialTemporal",
+      "top": 5,
+      "asd_up": 3,
+      "asd_down": 2,
+      "possible": 320,
+      "enrichment": 1.56
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "Auditory",
+      "top": 5,
+      "asd_up": 2,
+      "asd_down": 3,
+      "possible": 768,
+      "enrichment": 0.65
+    },
+    {
+      "a": "Subcortical",
+      "b": "Subcortical",
+      "top": 5,
+      "asd_up": 0,
+      "asd_down": 5,
+      "possible": 171,
+      "enrichment": 2.92
+    },
+    {
+      "a": "Default",
+      "b": "CinguloParietal",
+      "top": 4,
+      "asd_up": 1,
+      "asd_down": 3,
+      "possible": 205,
+      "enrichment": 1.95
+    },
+    {
+      "a": "Default",
+      "b": "SMmouth",
+      "top": 4,
+      "asd_up": 2,
+      "asd_down": 2,
+      "possible": 328,
+      "enrichment": 1.22
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "CinguloOperc",
+      "top": 4,
+      "asd_up": 1,
+      "asd_down": 3,
+      "possible": 960,
+      "enrichment": 0.42
+    },
+    {
+      "a": "SMmouth",
+      "b": "Subcortical",
+      "top": 4,
+      "asd_up": 4,
+      "asd_down": 0,
+      "possible": 152,
+      "enrichment": 2.63
+    },
+    {
+      "a": "Visual",
+      "b": "None",
+      "top": 4,
+      "asd_up": 3,
+      "asd_down": 1,
+      "possible": 1833,
+      "enrichment": 0.22
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "SMhand",
+      "top": 3,
+      "asd_up": 1,
+      "asd_down": 2,
+      "possible": 912,
+      "enrichment": 0.33
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "CinguloParietal",
+      "top": 3,
+      "asd_up": 1,
+      "asd_down": 2,
+      "possible": 200,
+      "enrichment": 1.5
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "SMmouth",
+      "top": 3,
+      "asd_up": 0,
+      "asd_down": 3,
+      "possible": 320,
+      "enrichment": 0.94
+    },
+    {
+      "a": "VentralAttn",
+      "b": "SMhand",
+      "top": 3,
+      "asd_up": 0,
+      "asd_down": 3,
+      "possible": 874,
+      "enrichment": 0.34
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "Auditory",
+      "top": 3,
+      "asd_up": 3,
+      "asd_down": 0,
+      "possible": 120,
+      "enrichment": 2.5
+    },
+    {
+      "a": "RetrosplenialTemporal",
+      "b": "SMhand",
+      "top": 3,
+      "asd_up": 3,
+      "asd_down": 0,
+      "possible": 304,
+      "enrichment": 0.99
+    },
+    {
+      "a": "RetrosplenialTemporal",
+      "b": "Subcortical",
+      "top": 3,
+      "asd_up": 2,
+      "asd_down": 1,
+      "possible": 152,
+      "enrichment": 1.97
+    },
+    {
+      "a": "Auditory",
+      "b": "Auditory",
+      "top": 3,
+      "asd_up": 0,
+      "asd_down": 3,
+      "possible": 276,
+      "enrichment": 1.09
+    },
+    {
+      "a": "Default",
+      "b": "Auditory",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 984,
+      "enrichment": 0.2
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "FrontoParietal",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 276,
+      "enrichment": 0.72
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "RetrosplenialTemporal",
+      "top": 2,
+      "asd_up": 1,
+      "asd_down": 1,
+      "possible": 192,
+      "enrichment": 1.04
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "Auditory",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 576,
+      "enrichment": 0.35
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "Visual",
+      "top": 2,
+      "asd_up": 2,
+      "asd_down": 0,
+      "possible": 936,
+      "enrichment": 0.21
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "Subcortical",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 456,
+      "enrichment": 0.44
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "Subcortical",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 760,
+      "enrichment": 0.26
+    },
+    {
+      "a": "Salience",
+      "b": "None",
+      "top": 2,
+      "asd_up": 1,
+      "asd_down": 1,
+      "possible": 188,
+      "enrichment": 1.06
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "CinguloParietal",
+      "top": 2,
+      "asd_up": 2,
+      "asd_down": 0,
+      "possible": 160,
+      "enrichment": 1.25
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "RetrosplenialTemporal",
+      "top": 2,
+      "asd_up": 1,
+      "asd_down": 1,
+      "possible": 256,
+      "enrichment": 0.78
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "Subcortical",
+      "top": 2,
+      "asd_up": 1,
+      "asd_down": 1,
+      "possible": 608,
+      "enrichment": 0.33
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "RetrosplenialTemporal",
+      "top": 2,
+      "asd_up": 2,
+      "asd_down": 0,
+      "possible": 40,
+      "enrichment": 5.0
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "SMhand",
+      "top": 2,
+      "asd_up": 2,
+      "asd_down": 0,
+      "possible": 190,
+      "enrichment": 1.05
+    },
+    {
+      "a": "RetrosplenialTemporal",
+      "b": "Visual",
+      "top": 2,
+      "asd_up": 2,
+      "asd_down": 0,
+      "possible": 312,
+      "enrichment": 0.64
+    },
+    {
+      "a": "RetrosplenialTemporal",
+      "b": "None",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 376,
+      "enrichment": 0.53
+    },
+    {
+      "a": "Auditory",
+      "b": "Visual",
+      "top": 2,
+      "asd_up": 1,
+      "asd_down": 1,
+      "possible": 936,
+      "enrichment": 0.21
+    },
+    {
+      "a": "SMmouth",
+      "b": "None",
+      "top": 2,
+      "asd_up": 2,
+      "asd_down": 0,
+      "possible": 376,
+      "enrichment": 0.53
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "SMmouth",
+      "top": 1,
+      "asd_up": 1,
+      "asd_down": 0,
+      "possible": 192,
+      "enrichment": 0.52
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "Auditory",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 960,
+      "enrichment": 0.1
+    },
+    {
+      "a": "Salience",
+      "b": "VentralAttn",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 92,
+      "enrichment": 1.09
+    },
+    {
+      "a": "Salience",
+      "b": "SMhand",
+      "top": 1,
+      "asd_up": 1,
+      "asd_down": 0,
+      "possible": 152,
+      "enrichment": 0.66
+    },
+    {
+      "a": "VentralAttn",
+      "b": "SMmouth",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 184,
+      "enrichment": 0.54
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "CinguloParietal",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 10,
+      "enrichment": 10.0
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "Visual",
+      "top": 1,
+      "asd_up": 1,
+      "asd_down": 0,
+      "possible": 195,
+      "enrichment": 0.51
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "None",
+      "top": 1,
+      "asd_up": 1,
+      "asd_down": 0,
+      "possible": 235,
+      "enrichment": 0.43
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "Subcortical",
+      "top": 1,
+      "asd_up": 1,
+      "asd_down": 0,
+      "possible": 95,
+      "enrichment": 1.05
+    },
+    {
+      "a": "RetrosplenialTemporal",
+      "b": "RetrosplenialTemporal",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 28,
+      "enrichment": 3.57
+    },
+    {
+      "a": "Auditory",
+      "b": "SMmouth",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 192,
+      "enrichment": 0.52
+    },
+    {
+      "a": "SMmouth",
+      "b": "SMmouth",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 28,
+      "enrichment": 3.57
+    },
+    {
+      "a": "SMmouth",
+      "b": "Visual",
+      "top": 1,
+      "asd_up": 1,
+      "asd_down": 0,
+      "possible": 312,
+      "enrichment": 0.32
+    },
+    {
+      "a": "Default",
+      "b": "Salience",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 164,
+      "enrichment": 0.0
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "Salience",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 96,
+      "enrichment": 0.0
+    },
+    {
+      "a": "FrontoParietal",
+      "b": "CinguloParietal",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 120,
+      "enrichment": 0.0
+    },
+    {
+      "a": "CinguloOperc",
+      "b": "Salience",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 160,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "Salience",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 6,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "DorsalAttn",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 128,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "CinguloParietal",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 20,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "RetrosplenialTemporal",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 32,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "Auditory",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 96,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "SMmouth",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 32,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "Visual",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 156,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Salience",
+      "b": "Subcortical",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 76,
+      "enrichment": 0.0
+    },
+    {
+      "a": "VentralAttn",
+      "b": "CinguloParietal",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 115,
+      "enrichment": 0.0
+    },
+    {
+      "a": "VentralAttn",
+      "b": "RetrosplenialTemporal",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 184,
+      "enrichment": 0.0
+    },
+    {
+      "a": "DorsalAttn",
+      "b": "SMmouth",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 256,
+      "enrichment": 0.0
+    },
+    {
+      "a": "CinguloParietal",
+      "b": "SMmouth",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 40,
+      "enrichment": 0.0
+    },
+    {
+      "a": "RetrosplenialTemporal",
+      "b": "Auditory",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 192,
+      "enrichment": 0.0
+    },
+    {
+      "a": "RetrosplenialTemporal",
+      "b": "SMmouth",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 64,
+      "enrichment": 0.0
+    }
+  ]
+}

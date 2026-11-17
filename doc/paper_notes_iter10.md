@@ -156,7 +156,7 @@ literature inflates.
 | Nielsen 2013 | ABIDE I | 964 | Leave-one-subject-out | Weighted connections | 60.0% | – |
 | Abraham 2017 | ABIDE I | 871 | LOSO | MSDL + tangent + L2 linear | 66.8% | – |
 | Heinsfeld 2018 | ABIDE I | 1,035 | LOSO | Autoencoder + MLP | 65% | – |
-| Harmonization 2023 | ABIDE I+II, 9 large sites | – | LOSO | ComBat/CovBat + DL | 60.7–62.7% | – |
+| El-Gazzar 2023 (harmonization) | ABIDE I+II, 9 large sites | – | LOSO | ComBat/CovBat + DL | 66.1–67.2% | – |
 | Traut 2022 (IMPAC) | ABIDE I+II+RDB | 2,117 | One unseen site (RDB) / EU-AIMS | Tangent + linear ensemble | – | **0.81 / 0.72** |
 | **This snapshot** | ABIDE I+II, DCAN | 1,443 | **Leave-one-institution-out (23)** | Tangent, 2-atlas concat, L2 logistic | **70.1%** | **0.779** |
 | **This snapshot** | same | 1,443 | **Leave-one-site-out (33)** | same | **71.9%** | **0.797** |
@@ -168,7 +168,7 @@ How to talk about this in a paper:
   preprocessing or atlas. Do not call it a reproduction.
 - Versus Heinsfeld LOSO 65%: same caveat, plus Heinsfeld’s per-site band is
   unusually tight; cite carefully.
-- Versus Harmonization 2023 (60.7–62.7% LOSO on large ABIDE I+II sites): we
+- Versus El-Gazzar 2023 (66.1–67.2% LOSO on large ABIDE I+II sites, static FC): we
   are higher, with a linear model, which matches that paper’s finding that
   harmonization barely helps once the baseline already ignores site.
 - Versus IMPAC: **do not claim we beat IMPAC.** IMPAC’s 0.80 overall AUC is

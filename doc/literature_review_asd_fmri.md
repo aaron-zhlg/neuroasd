@@ -4,7 +4,7 @@ Compiled October 2026. Purpose: give the neuroasd project a reference point — 
 
 ## Key takeaways
 
-- **When tested on truly unseen sites, the credible state of the art is about 65–67% accuracy and 0.72–0.81 AUC.** The strict leave-one-site-out accuracies are Abraham 2017 (66.8%), Heinsfeld 2018 (65%), and a 2023 ABIDE I+II harmonization study (60.7–62.7%). For AUC, IMPAC reached 0.81 on a single unseen site and 0.72 on the external EU-AIMS cohort.
+- **When tested on truly unseen sites, the credible state of the art is about 65–67% accuracy and 0.72–0.81 AUC.** The strict leave-one-site-out accuracies are Abraham 2017 (66.8%), Heinsfeld 2018 (65%), and a 2023 ABIDE I+II harmonization study (66.1–67.2%). For AUC, IMPAC reached 0.81 on a single unseen site and 0.72 on the external EU-AIMS cohort.
 - **The frequently cited "~70% accuracy" numbers are not cross-site.** Parisot 2018 (70.4%), BrainNetTF (71.0%), BrainMass (72.8%), Dong 2025 (72.2%) and Heinsfeld's 70% all come from random or site-stratified splits where every test site is also seen in training. Papers reporting 80%+ go further: random splits plus test-set epoch selection or feature-selection leakage.
 - **More data helps, and there is direct evidence for it.** Abraham 2017 and the IMPAC challenge (Traut 2022) both show learning curves that have not saturated at ~2,000 subjects.
 - **For cross-site generalization, simple models often beat deep ones.** Of 146 IMPAC submissions, the ones that generalized best combined tangent-space connectivity with linear models (logistic regression / linear SVM). Deep learning and graph-convolutional submissions scored high on the public set and dropped sharply on the private set.
@@ -173,7 +173,7 @@ Two other common ways scores get inflated:
 - Validation: leave-one-site-out and site-stratified k-fold.
 - Results:
   - ComBat, CovBat and similar methods pushed site-classification accuracy to near chance;
-  - but they **barely changed disorder classification**: LOSO accuracy was 62.7% for the baseline, 60.7% with ComBat, 62.2% with CovBat;
+  - but they **barely changed disorder classification**: ABIDE LOSO accuracy with static FC was 66.5% for the baseline, 66.1% with ComBat, 67.2% with CovBat (their Table 4; the 60.7–62.7% figures in their Table 2 are for the depression dataset Rest-meta-MDD, not ABIDE);
   - the baseline model had already learned site-invariant features.
 - Takeaway: consistent with the limited gains we saw from site-alignment tricks (CORAL, adversarial training).
 
@@ -234,7 +234,7 @@ Two other common ways scores get inflated:
 | Dong 2025 (HBM) | ABIDE I | 871 | 5-fold (leakage-free) | 5 models + voting | 58–72% | 0.64–0.78 |
 | Traut 2022 (IMPAC) | ABIDE I+II+RDB | 2,117 | Blind private set (mostly seen sites) + **unseen site** + **external cohort** | Tangent + linear ensemble | – | 0.80 overall; **0.81 unseen site; 0.72 EU-AIMS** |
 | Ingalhalikar 2021 | ABIDE | 988 | **LOSO** (ComBat fitting scope unclear) | ComBat + ANN | – | ~0.80 (possibly optimistic) |
-| Harmonization 2023 | ABIDE I+II (9 sites) | – | **LOSO** | ComBat/CovBat + DL | 60.7–62.7% | – |
+| El-Gazzar 2023 (harmonization) | ABIDE I+II (9 sites) | – | **LOSO** | ComBat/CovBat + DL | 66.1–67.2% | – |
 | BrainMass 2024 | ABIDE I | ~1,084 | Site-stratified random split | Pretrained Transformer | 72.8% | – |
 | Brain Harmony 2025 | ABIDE I / II | – | Site-stratified random split | Pretrained multimodal | 63.1% / 66.7% | – |
 | **neuroasd (current)** | ABIDE I (C-PAC) | 884 | **LOSO, final epoch** | GCN + improvements | 64.4% | 0.72 |
