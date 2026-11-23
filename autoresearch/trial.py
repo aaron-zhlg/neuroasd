@@ -10,8 +10,11 @@ Stages, cheap to expensive (see `autoresearch/program.md`):
     loso-site         leave-one-site-out on all 33 sites with both classes
     loso-institution  leave-one-institution-out on 23 institutions (final)
 
-Primary metric: fold-mean balanced accuracy. Every metric comes from one fit
-per fold; nothing is selected on a test fold.
+Primary metric: fold-mean ASD recall (sensitivity), scored per subject: each
+test subject's label may depend only on the training split and its own data.
+Control recall (specificity) must stay at or above the floor in gates.json, so
+calling everyone ASD cannot win. Every metric comes from one fit per fold;
+nothing is selected on a test fold.
 """
 
 from __future__ import annotations
@@ -51,7 +54,8 @@ SCREEN_SITES = ("NYU", "UM_1", "USM", "ABIDEII-OHSU_1", "ABIDEII-NYU_1", "ABIDEI
 STAGES = ("screen", "loso-site", "loso-institution")
 STAGE_GROUPING = {"screen": "site", "loso-site": "site", "loso-institution": "institution"}
 FINAL_STAGE = "loso-institution"
-PRIMARY_METRIC = "balanced_accuracy_mean"
+PRIMARY_METRIC = "sensitivity_mean"
+FLOOR_METRIC = "specificity_mean"
 MODEL_SELECTION = "final fit (no selection on the evaluation set)"
 ASD_LABEL = 0
 
@@ -173,8 +177,8 @@ def run_folds(source, stage: str, workers: int, log=print) -> list[dict]:
             "seconds": round(time.time() - started, 1),
             **fold_metrics(source.y[test_idx], score, pred),
         }
-        log(f"  {group:<16} n={len(test_idx):<4} bacc={record['balanced_accuracy']:.3f} "
-            f"acc={record['accuracy']:.3f} auc={record['auc']:.3f}")
+        log(f"  {group:<16} n={len(test_idx):<4} asd_rec={record['sensitivity']:.3f} "
+            f"ctl_rec={record['specificity']:.3f} bacc={record['balanced_accuracy']:.3f} auc={record['auc']:.3f}")
         return record
 
     pool = ThreadPoolExecutor(max_workers=max(1, workers))
@@ -242,6 +246,15 @@ def site_stage_summary(name: str) -> dict[str, float]:
     return json.loads(path.read_text(encoding="utf-8"))["summary"]
 
 
+def floor_check(gates: dict, values: dict[str, float]) -> dict:
+    """Control recall must be >= the floor on every listed split."""
+    floor = float(gates["floor"]["min"])
+    low = {split: round(v, 4) for split, v in values.items() if v < floor}
+    return {"floor_metric": FLOOR_METRIC, "floor": floor,
+            "floor_observed": {split: round(v, 4) for split, v in values.items()},
+            "floor_passed": not low, "floor_failed_on": sorted(low)}
+
+
 def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
     gates = load_gates()
     gate = gates["gates"][stage]
@@ -258,17 +271,20 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
                     f" Raised to {threshold} = reference site minus regress_tolerance: "
                     "a lower site score cannot win at loso-institution."
                 )
+        control = floor_check(gates, {stage: summary[FLOOR_METRIC]})
         return {
             "stage": stage,
             "metric": PRIMARY_METRIC,
             "threshold": threshold,
             "observed": round(observed, 4),
             "margin": round(observed - threshold, 4),
-            "passed": observed >= threshold,
+            **control,
+            "passed": bool(observed >= threshold and control["floor_passed"]),
             "rationale": rationale,
         }
     base, last_pr = gates["reference"], gates["pr_reference"]
     site = summary["site_" + PRIMARY_METRIC]
+    control = floor_check(gates, {"loso-site": summary["site_" + FLOOR_METRIC], "loso-institution": summary[FLOOR_METRIC]})
 
     def against(ref: dict, margin_key: str) -> dict:
         return either_split_improves(
@@ -279,17 +295,20 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
 
     accept = against(base, "accept_margin")
     pr = against(last_pr, "improve_margin")
+    accepted = bool(accept["passed"] and control["floor_passed"])
     return {
         "stage": stage,
         "metric": PRIMARY_METRIC,
-        "rule": "either split improves; the other does not regress",
+        "rule": "either split improves; the other does not regress; control recall above the floor on both",
         "reference": base["name"],
         "reference_site": base["loso-site"][PRIMARY_METRIC],
         "reference_institution": base["loso-institution"][PRIMARY_METRIC],
         "observed": round(observed, 4),
         "observed_site": round(site, 4),
         **accept,
-        "open_pr": bool(accept["passed"] and pr["passed"]),
+        **control,
+        "passed": accepted,
+        "open_pr": bool(accepted and pr["passed"]),
         "pr_reference": last_pr["name"],
         "pr_delta_site": pr["delta_site"],
         "pr_delta_institution": pr["delta_institution"],
@@ -402,8 +421,8 @@ def main() -> None:
     append_ledger({key: result[key] for key in ("name", "stage", "note", "ran_at", "git", "model_selection", "summary", "verdict")})
 
     print("")
-    for key, label in (("balanced_accuracy", "bal. acc"), ("accuracy", "accuracy"), ("auc", "auc"),
-                       ("sensitivity", "ASD rec."), ("specificity", "ctl rec.")):
+    for key, label in (("sensitivity", "ASD rec."), ("specificity", "ctl rec."), ("balanced_accuracy", "bal. acc"),
+                       ("accuracy", "accuracy"), ("auc", "auc")):
         print(f"{label:9s}: {summary[key + '_mean']:.3f} ± {summary[key + '_std']:.3f}")
     print(f"runtime  : {elapsed / 60:.1f} min")
     if args.stage == FINAL_STAGE:
@@ -412,6 +431,8 @@ def main() -> None:
     else:
         print(f"gate     : {PRIMARY_METRIC} {verdict['observed']:.4f} vs threshold {verdict['threshold']:.4f} "
               f"(margin {verdict['margin']:+.4f})")
+    print(f"floor    : {FLOOR_METRIC} {verdict['floor_observed']} vs {verdict['floor']:.2f} "
+          f"({'ok' if verdict['floor_passed'] else 'BELOW on ' + ', '.join(verdict['floor_failed_on'])})")
     print(f"result   : {trial_dir / 'result.json'}")
     print(f"VERDICT: {'PASS' if verdict['passed'] else 'FAIL'}")
     raise SystemExit(PASS_EXIT_CODE if verdict["passed"] else FAIL_EXIT_CODE)
