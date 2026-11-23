@@ -316,6 +316,7 @@ class ExperimenterTools:
             ratchet_reference(result)
         if accepted and self.promote_on_pass and result["verdict"].get("open_pr"):
             promotion = promote(result, push=self.push)
+            _start_all_splits(promotion, name)
 
         summary = result.get("summary") or {}
         verdict = result.get("verdict") or {}
@@ -438,6 +439,20 @@ def _insight_hint(
         f"accuracy {acc}. "
         f"{pr_note} Do not raise gates.json."
     )
+
+
+def _start_all_splits(promotion: dict | None, name: str) -> None:
+    """Score the new PR branch under every split scheme in the background."""
+    if not promotion or not promotion.get("pushed"):
+        return
+    url = ((promotion.get("pr") or {}).get("url")) or ""
+    try:
+        subprocess.Popen(
+            [sys.executable, "-m", "autoresearch.loop.all_splits_pr", promotion["branch"], name, url],
+            cwd=REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True,
+        )
+    except OSError:
+        pass
 
 
 class ExperimenterAgent(SubAgent):
