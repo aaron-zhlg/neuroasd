@@ -75,6 +75,10 @@ neuroasd.ensemble) if one fold fits within the stage time limits \
 choice of C, training-only PCA / feature selection, FC shrinkage or a different \
 tangent reference, partial-correlation features, site-balanced sample weights, \
 a nonlinear classifier on a reduced tangent space.
+- HARD RULE: do NOT change how the decision cut is chosen, rescaled, shifted \
+or calibrated. Six trials this session showed the cut is exhausted at the \
+current AUC (it already sits at the 73% OOF floor). Every trial must aim to \
+raise AUC: new features, members, FC estimates or classifiers.
 - Primary metric is fold-mean ASD recall (sensitivity), with control recall \
 (specificity) >= 73% on every split. Also watch AUC: a gain that only moves \
 the cut will stop at the 73% floor.
