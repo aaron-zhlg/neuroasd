@@ -427,9 +427,9 @@ def _insight_hint(
             "Loop stops. Do not raise gates.json."
         )
     pr_note = (
-        "It is also +1pp over the last PR, so a review PR was opened; do not wait for merge."
+        "A review PR was opened for it; do not wait for merge."
         if last.get("open_pr")
-        else "Not yet +1pp over the last PR, so no PR; keep stacking small steps."
+        else "No PR was opened (promotion off or failed); keep stacking small steps."
     )
     return (
         "loso-institution ACCEPTED (+0.3pp step over the base). This code is the new base: "

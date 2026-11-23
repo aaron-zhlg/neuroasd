@@ -37,8 +37,7 @@ DEFAULT_GOAL = (
     "base, so ASD recall only goes up. Ideas ruled out in October were judged on "
     "balanced accuracy with per-group calibration; they may be retried for ASD "
     "recall. A training-fold-only cut is allowed (it is not calibration). "
-    "A review PR opens only once accepted steps add up to +1pp over the last "
-    "PR (the base at first). Build on the base; refining a just-accepted "
+    "Every accepted step opens a review PR. Build on the base; refining a just-accepted "
     "direction is a valid next step. Concatenation is not stacking; ensemble "
     "helpers live in neuroasd.ensemble. Change one mechanism at a time."
 )

@@ -601,7 +601,7 @@ def test_winner_raises_the_bar() -> None:
     a = summary(site0 + 0.004, inst0 + 0.001)
     first = apply_gate("loso-institution", "a", a)
     _check("+0.4pp over iter10 is accepted", first["passed"], str(first))
-    _check("+0.4pp over iter10 opens no PR", not first["open_pr"], str(first))
+    _check("+0.4pp over the base opens a PR (every accept is PR'd)", first["open_pr"], str(first))
     ratchet_reference({"name": "a", "summary": a})
     _check("base file written", session_reference_path().is_file())
 
@@ -619,7 +619,7 @@ def test_winner_raises_the_bar() -> None:
 
     d = apply_gate("loso-institution", "d", summary(site0 + 0.016, inst0 + 0.001))
     _check("next step accepted over the new base", d["passed"], str(d))
-    _check("next step +0.5pp over the PR opens no PR", not d["open_pr"], str(d))
+    _check("next accepted step opens a PR too", d["open_pr"], str(d))
     _check("PR bar moved to the PR'd trial", d.get("pr_reference") == "c")
     on_disk = json.loads(GATES_PATH.read_text(encoding="utf-8"))
     _check("gates.json untouched", on_disk["reference"]["name"] == iter10["name"])

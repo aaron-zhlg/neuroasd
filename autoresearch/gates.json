@@ -46,9 +46,9 @@
   },
   "rule": {
     "accept_margin": 0.003,
-    "improve_margin": 0.01,
+    "improve_margin": 0.003,
     "regress_tolerance": 0.005,
-    "note": "Two bars on ASD recall, both either-split (one split gains the margin, the other drops at most regress_tolerance), and control recall >= floor on both splits. ACCEPT: +0.3pp vs the current base; the code becomes the new base. OPEN PR: an accepted trial that is also +1pp vs the last PR'd model (iter10-per-subject until the first PR)."
+    "note": "ASD recall, either split (one split gains the margin, the other drops at most regress_tolerance), control recall >= floor on both. Every accepted step (+0.3pp vs the current base) becomes the new base AND opens a review PR, so every new best score can be reproduced from its own branch."
   },
   "gates": {
     "screen": {
@@ -64,7 +64,7 @@
     "loso-institution": {
       "metric": "sensitivity_mean",
       "rule": "either_split_improves",
-      "rationale": "Accept as the new base if site or institution ASD recall gains >= 0.003 vs the current base, the other split drops by at most 0.005, and control recall is >= the floor on both splits. Open a PR only when the accepted trial is also >= 0.01 above the last PR'd model. Always report balanced accuracy, accuracy, AUC and both recalls."
+      "rationale": "Accept as the new base, and open a review PR, if site or institution ASD recall gains >= 0.003 vs the current base, the other split drops by at most 0.005, and control recall is >= the floor on both splits. Always report balanced accuracy, accuracy, AUC and both recalls."
     }
   },
   "floor": {

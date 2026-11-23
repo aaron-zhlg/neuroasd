@@ -3,13 +3,14 @@
 Commits only this trial's training/evaluation files plus its frozen experiment
 folder, on a branch cut from main. Never merges to main and never edits
 gates.json. The PR body leads with scores. The PR'd scores become this
-session's PR reference, so the next PR must be +1pp over them.
+session's PR reference (with improve_margin = accept_margin, every accept opens a PR).
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -67,8 +68,13 @@ def _git(*args: str, cwd: Path | None = None) -> str:
     return ran.stdout.strip()
 
 
+# Review branches are cut from the branch that holds this loop's harness, so
+# every PR branch can rerun its own score; PRs target that branch too.
+PROMOTION_BRANCH = os.environ.get("AUTORESEARCH_PROMOTION_BRANCH", "autoresearch/recall-objective")
+
+
 def _promotion_base() -> str:
-    for ref in ("origin/main", "main"):
+    for ref in (f"origin/{PROMOTION_BRANCH}", PROMOTION_BRANCH, "origin/main", "main"):
         ran = subprocess.run(
             ["git", "rev-parse", "--verify", ref],
             cwd=REPO_ROOT,
@@ -450,7 +456,7 @@ def promote(result: dict[str, Any], *, push: bool) -> dict[str, Any]:
                 push_error = str(exc)
         if pushed:
             try:
-                pr = open_review_pr(branch, result)
+                pr = open_review_pr(branch, result, base=PROMOTION_BRANCH)
             except (RuntimeError, FileNotFoundError, OSError) as exc:
                 pr_error = str(exc)
     finally:

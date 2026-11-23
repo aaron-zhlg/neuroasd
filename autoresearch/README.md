@@ -77,7 +77,7 @@ outputs/autoresearch/          local only, gitignored
 |-------|------------|------|
 | `screen` | LOSO on 6 mixed ABIDE I / II sites | ASD recall ≥ 0.59, control recall ≥ 0.73 |
 | `loso-site` | LOSO on all 33 two-class sites | ASD recall ≥ base site − 0.5 pp, control recall ≥ 0.73 |
-| `loso-institution` | Leave-one-institution-out, 23 institutions | accept: ASD recall on either split +0.3 pp vs the base, other ≤ 0.5 pp drop, control recall ≥ 0.73 on both. PR: also +1 pp vs the last PR |
+| `loso-institution` | Leave-one-institution-out, 23 institutions | accept: ASD recall on either split +0.3 pp vs the base, other ≤ 0.5 pp drop, control recall ≥ 0.73 on both. Every accept opens a PR |
 
 Primary metric: fold-mean ASD recall. Floor: control recall ≥ 0.73. Every
 result also reports balanced accuracy, accuracy and AUC. The linter rejects

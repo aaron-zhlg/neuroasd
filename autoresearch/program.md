@@ -29,8 +29,9 @@ Base: iter10 recipe + a cut chosen on training-fold out-of-fold scores
 The base calls too few subjects ASD. Progress is by small steps on top of the
 current **base**. A trial is **accepted** if one split gains ≥ 0.3 pp ASD
 recall over the base, the other drops by at most 0.5 pp, **and control recall
-is ≥ 73% on both splits**; its code becomes the new base. A review PR opens
-only when an accepted trial is also ≥ +1 pp ASD recall over the last PR'd model.
+is ≥ 73% on both splits**; its code becomes the new base and opens a review PR
+cut from `autoresearch/recall-objective`, so every new best can be rerun from
+its own branch.
 
 **Goal: beat every paper on both recalls at once.** Best published ASD recall
 is 74.3% (BrainMass) and best control recall 72.3% (Abraham 2017), so the floor
@@ -98,7 +99,7 @@ Trials are cheap-to-expensive. Do not skip ahead.
 |-------|--------------|------|
 | `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | ASD recall ≥ 0.59, control recall ≥ 0.73 |
 | `loso-site` | Leave-one-site-out on all 33 sites with both classes | ASD recall ≥ base site − 0.5 pp (below that the final stage cannot pass), control recall ≥ 0.73 |
-| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: ASD recall on either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp, control recall ≥ 0.73 on both. PR: also ≥ +1 pp vs the last PR (base: site 0.6108 / institution 0.5922) |
+| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: ASD recall on either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp, control recall ≥ 0.73 on both. Every accept opens a PR (base: site 0.6108 / institution 0.5922) |
 
 Thresholds live in `autoresearch/gates.json`. `trial.py` exits `0` on PASS and `3` on
 FAIL.
