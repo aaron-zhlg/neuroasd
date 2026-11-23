@@ -191,6 +191,15 @@ final model, or pick the cut on a calibrated probability) is a valid
 mechanism, and retrying the Power stacking together with a better cut later is
 allowed.
 
+**Cut tuning is exhausted (development loop, 2026-11-23).** At screen AUC
+0.829 three cuts bracket the curve: 47.5% ASD / 88.1% control, 61.0% / 81.0%
+(base), 74.8% / 67.5%. No cut reaches ASD recall > 74% with control recall
+≥ 73% at this AUC. Do NOT spend more trials on rescaling, shifting or
+re-deriving the cut. Every next trial must aim to raise AUC: more information
+per subject (Power / Markov members stacked on training-fold OOF scores,
+partial correlation, better FC shrinkage), a stronger classifier, or features
+that are stable across sites.
+
 Then re-tune the training-fold cut on top of every accepted step (the cut
 mechanism should stay in the base once accepted). After two FAILs in the same
 direction, switch direction.
