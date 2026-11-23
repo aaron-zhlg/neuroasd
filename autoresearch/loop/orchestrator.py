@@ -59,11 +59,14 @@ The loop is sequential. First assignment this round must be a SINGLE subagent:
 Never dispatch more than one.
 
 When briefing the coder, demand ONE mechanism and tell it to call \
-record_hypothesis first. Read workspace ruled_out before choosing: ensemble, \
-atlas-swap, GCN-member, and L1 directions were already tested and lost; prefer \
-the untested directions in program.md section 5. Do not ask for DANN, or for retrying \
-the threshold / calibration / age-sex / Gordon+HCP concat / logistic C=1e-2 \
-already in the incumbent. The scored path is neuroasd/model.py.
+record_hypothesis first. Only this session's workspace ruled_out is binding. \
+Ideas that lost in October (ensembles, atlas swaps, GCN members, L1) were judged \
+on balanced accuracy with per-group calibration and may be retried for ASD \
+recall. Any model family is allowed. A cut chosen on training-fold out-of-fold \
+scores, class weights or prior correction are allowed; z-scoring, ranking or \
+thresholding across the test subjects is not (per-subject rule). The base \
+already has age/sex, Gordon+HCP concatenation and logistic C=1e-2. The scored \
+path is neuroasd/model.py.
 
 Available subagent types:
 {roster}
