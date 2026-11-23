@@ -1,52 +1,68 @@
 {
-  "updated_at": "2026-10-15",
-  "primary_metric": "balanced_accuracy_mean",
+  "updated_at": "2026-11-23",
+  "primary_metric": "sensitivity_mean",
   "reference": {
-    "name": "iter10_estimator-swap-replace-the-singl_v1",
+    "name": "iter10-per-subject",
     "tag": "iter10-loso-institution-v1",
-    "source": "experiments/iter10_estimator-swap-replace-the-singl_v1/results.json",
-    "features": "Gordon+HCP tangent concat + age/sex + L2 logistic (C=1e-2) + training-only threshold + label-free per-group calibration",
-    "note": "The loop starts from this model (neuroasd/model.py), tag iter10-loso-institution-v1 / PR #18. A trial wins only if it beats these numbers. Concatenation is not stacking. The original Gordon-only ridge baseline remains at tag linear-baseline-dcan-v1.",
+    "source": "autoresearch.trial --name base-per-subject, all three stages, 2026-11-23 (matches experiments/iter10_.../recall.json per-subject rows)",
+    "features": "iter10 recipe (Gordon+HCP tangent concat + age/sex + L2 logistic C=1e-2), scored per subject: raw decision value cut at 0, no per-group calibration",
+    "note": "Per-subject scoring: each test subject's label depends only on the training split and its own data, as in the cross-site papers. iter10's per-group calibration used the other test subjects' scores and is no longer allowed (the linter checks this).",
     "loso-site": {
-      "balanced_accuracy_mean": 0.7282,
-      "accuracy_mean": 0.7187,
-      "auc_mean": 0.7969,
-      "sensitivity_mean": 0.745,
-      "specificity_mean": 0.7115
+      "sensitivity_mean": 0.5466,
+      "specificity_mean": 0.8185,
+      "balanced_accuracy_mean": 0.6826,
+      "accuracy_mean": 0.6943,
+      "auc_mean": 0.7969
     },
     "loso-institution": {
-      "balanced_accuracy_mean": 0.7084,
-      "accuracy_mean": 0.7009,
-      "auc_mean": 0.7786,
-      "sensitivity_mean": 0.7076,
-      "specificity_mean": 0.7092
+      "sensitivity_mean": 0.5504,
+      "specificity_mean": 0.8035,
+      "balanced_accuracy_mean": 0.677,
+      "accuracy_mean": 0.674,
+      "auc_mean": 0.7786
     },
     "screen": {
-      "sites": ["NYU", "UM_1", "USM", "ABIDEII-OHSU_1", "ABIDEII-NYU_1", "ABIDEII-SDSU_1"],
-      "balanced_accuracy_mean": 0.731
+      "sites": [
+        "NYU",
+        "UM_1",
+        "USM",
+        "ABIDEII-OHSU_1",
+        "ABIDEII-NYU_1",
+        "ABIDEII-SDSU_1"
+      ],
+      "sensitivity_mean": 0.5714,
+      "specificity_mean": 0.8501,
+      "balanced_accuracy_mean": 0.7107,
+      "accuracy_mean": 0.714,
+      "auc_mean": 0.8303
     }
   },
   "rule": {
     "accept_margin": 0.003,
     "improve_margin": 0.01,
     "regress_tolerance": 0.005,
-    "note": "Two bars, both either-split (one split gains the margin, the other drops at most regress_tolerance). ACCEPT: +0.3pp vs the current base (iter10, then the last accepted trial); the code becomes the new base. OPEN PR: an accepted trial that is also +1pp vs the last PR'd model (iter10 until the first PR), so small steps add up to a PR."
+    "note": "Two bars on ASD recall, both either-split (one split gains the margin, the other drops at most regress_tolerance), and control recall >= floor on both splits. ACCEPT: +0.3pp vs the current base; the code becomes the new base. OPEN PR: an accepted trial that is also +1pp vs the last PR'd model (iter10-per-subject until the first PR)."
   },
   "gates": {
     "screen": {
-      "metric": "balanced_accuracy_mean",
-      "threshold": 0.70,
-      "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The iter10 incumbent scores 0.731 here. 0.70 kills large regressions without requiring a new record on six sites."
+      "metric": "sensitivity_mean",
+      "threshold": 0.54,
+      "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The per-subject base scores ASD recall 0.571 / control recall 0.850 here. 0.54 kills large regressions without requiring a record on six sites; control recall must also stay >= the floor."
     },
     "loso-site": {
-      "metric": "balanced_accuracy_mean",
-      "threshold": 0.71,
-      "rationale": "Must stay near the iter10 site-LOSO reference (0.728) before paying for the institution sweep. 0.71 is a filter, not the destination."
+      "metric": "sensitivity_mean",
+      "threshold": 0.5,
+      "rationale": "Must stay near the base site ASD recall before paying for the institution sweep; control recall above the floor."
     },
     "loso-institution": {
-      "metric": "balanced_accuracy_mean",
+      "metric": "sensitivity_mean",
       "rule": "either_split_improves",
-      "rationale": "Accept as the new base if site or institution balanced accuracy gains >= 0.003 vs the current base and the other split drops by at most 0.005. Open a PR only when the accepted trial is also >= 0.01 above the last PR'd model (iter10-loso-institution-v1: site 0.7282 / institution 0.7084). Reproducing the base is not a win. Always report accuracy, AUC, ASD recall, and control recall."
+      "rationale": "Accept as the new base if site or institution ASD recall gains >= 0.003 vs the current base, the other split drops by at most 0.005, and control recall is >= the floor on both splits. Open a PR only when the accepted trial is also >= 0.01 above the last PR'd model. Always report balanced accuracy, accuracy, AUC and both recalls."
     }
+  },
+  "floor": {
+    "metric": "specificity_mean",
+    "min": 0.6,
+    "rationale": "Control recall must stay >= 60% on every split, so a trial cannot raise ASD recall by calling everyone ASD. 60% is below every cross-site paper's specificity (Heinsfeld 62%, Abraham 72%)."
   }
 }

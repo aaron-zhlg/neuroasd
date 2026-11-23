@@ -264,10 +264,10 @@ def test_promotion_freezes_code() -> None:
         "loso-institution",
         name,
         _fake_verdict("loso-institution", True, 0.70),
-        {"auc_mean": 0.70, "accuracy_mean": 0.81},
+        {"auc_mean": 0.70, "accuracy_mean": 0.81, "sensitivity_mean": 0.76, "specificity_mean": 0.65},
         False,
     )
-    _check("accuracy target stops the loop", load_workspace()["status"] == "target_reached")
+    _check("ASD recall target stops the loop", load_workspace()["status"] == "target_reached")
     _check("target reached has no next role", next_role() is None)
 
 
@@ -361,11 +361,11 @@ def test_pr_body_leads_with_scores() -> None:
         result,
         prior={"screen": {"balanced_accuracy_mean": 0.64, "margin": 0.01, "passed": True}},
     )
-    _check("PR title has balanced acc and PASS", "0.671" in title and "PASS" in title, title)
+    _check("PR title has ASD recall and PASS", "0.580" in title and "PASS" in title, title)
     _check("PR body starts with Scores", body.lstrip().startswith("## Scores"), body[:80])
     _check(
-        "balanced accuracy appears before hypothesis",
-        body.index("**Balanced accuracy**") < body.index("## Hypothesis"),
+        "ASD recall appears before hypothesis",
+        body.index("**ASD recall**") < body.index("## Hypothesis"),
     )
 
 
@@ -569,15 +569,19 @@ def test_winner_raises_the_bar() -> None:
 
     clear_session_dirs()
     iter10 = load_gates()["reference"]
-    site0 = iter10["loso-site"]["balanced_accuracy_mean"]
-    inst0 = iter10["loso-institution"]["balanced_accuracy_mean"]
+    site0 = iter10["loso-site"]["sensitivity_mean"]
+    inst0 = iter10["loso-institution"]["sensitivity_mean"]
     metrics = ("balanced_accuracy_mean", "accuracy_mean", "auc_mean",
                "sensitivity_mean", "specificity_mean")
 
-    def summary(site: float, inst: float) -> dict[str, float]:
+    def summary(site: float, inst: float, control: float = 0.75) -> dict[str, float]:
         out = {key: inst for key in metrics}
         out.update({"site_" + key: site for key in metrics})
+        out["specificity_mean"] = out["site_specificity_mean"] = control
         return out
+
+    low = apply_gate("loso-institution", "z", summary(site0 + 0.05, inst0 + 0.05, control=0.59))
+    _check("ASD recall gain with control recall < 60% is rejected", not low["passed"] and not low["open_pr"], str(low))
 
     a = summary(site0 + 0.004, inst0 + 0.001)
     first = apply_gate("loso-institution", "a", a)
@@ -605,16 +609,18 @@ def test_winner_raises_the_bar() -> None:
     on_disk = json.loads(GATES_PATH.read_text(encoding="utf-8"))
     _check("gates.json untouched", on_disk["reference"]["name"] == iter10["name"])
 
-    site_floor = c["site_balanced_accuracy_mean"] - 0.005
-    doomed = apply_gate("loso-site", "e", {"balanced_accuracy_mean": site_floor - 0.001})
+    site_floor = c["site_sensitivity_mean"] - 0.005
+    doomed = apply_gate("loso-site", "e", {"sensitivity_mean": site_floor - 0.001, "specificity_mean": 0.75})
     _check("site below base - tolerance fails early", not doomed["passed"], str(doomed))
-    ok_site = apply_gate("loso-site", "f", {"balanced_accuracy_mean": site_floor + 0.001})
+    ok_site = apply_gate("loso-site", "f", {"sensitivity_mean": site_floor + 0.001, "specificity_mean": 0.75})
     _check("site within tolerance goes on", ok_site["passed"], str(ok_site))
+    no_ctl = apply_gate("loso-site", "g", {"sensitivity_mean": site_floor + 0.05, "specificity_mean": 0.55})
+    _check("site with control recall < 60% fails", not no_ctl["passed"], str(no_ctl))
 
     clear_session_dirs()
     _check("--fresh clears the base", not session_reference_path().exists())
     _check("--fresh clears the PR bar", not pr_reference_path().exists())
-    early = apply_gate("loso-site", "f", {"balanced_accuracy_mean": site0 - 0.006})
+    early = apply_gate("loso-site", "f", {"sensitivity_mean": site0 - 0.006, "specificity_mean": 0.75})
     _check("site 0.6pp under iter10 fails early", not early["passed"], str(early))
     _check("back to iter10", load_gates()["reference"]["name"] == iter10["name"])
 
@@ -682,6 +688,28 @@ def test_experimenter_accepts_without_pr() -> None:
     clear_session_dirs()
 
 
+def test_per_subject_rule() -> None:
+    print("per-subject scoring")
+    import numpy as np
+
+    from autoresearch.loop.protocol import batch_independence_reasons
+    from neuroasd.model import fit_predict
+
+    _check("base model scores each subject on its own", batch_independence_reasons(fit_predict) == [])
+
+    def per_group(train, test):
+        score, _ = fit_predict(train, test)
+        z = (score - score.mean()) / score.std()
+        return z, (z > 0).astype(int)
+
+    def test_quantile_cut(train, test):
+        score, _ = fit_predict(train, test)
+        return score, (score > np.median(score)).astype(int)
+
+    _check("test-set z-scoring is caught", bool(batch_independence_reasons(per_group)))
+    _check("cut at the test-set median is caught", bool(batch_independence_reasons(test_quantile_cut)))
+
+
 def test_coder_cannot_write_gates() -> None:
     print("path guards")
     tools = CodeTools()
@@ -696,6 +724,7 @@ def test_coder_cannot_write_gates() -> None:
 def main() -> None:
     print(f"loop check  tmp={_TMP}\n")
     tests = [
+        test_per_subject_rule,
         test_role_order,
         test_idle_trial_refused,
         test_write_then_measure,

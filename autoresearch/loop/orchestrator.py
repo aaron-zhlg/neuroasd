@@ -23,11 +23,14 @@ from autoresearch.loop.workspace import (
 )
 
 DEFAULT_GOAL = (
-    "Improve ASD vs control classification on DCAN ABIDE I + II toward 80% "
-    "accuracy, starting from the tagged iter10 recipe in neuroasd/model.py "
-    "(iter10-loso-institution-v1). Progress is by small steps: a trial is "
-    "ACCEPTED as the new base if it gains >= 0.3pp balanced accuracy on site "
-    "or institution over the current base and the other split drops <= 0.5pp. "
+    "Raise ASD recall (sensitivity) on unseen DCAN ABIDE I + II sites toward "
+    "75%, scored per subject (no statistics from other test subjects), while "
+    "control recall stays >= 60%. Start from the iter10 recipe in "
+    "neuroasd/model.py scored per subject (ASD recall 54.7% site / 55.0% "
+    "institution). Progress is by small steps: a trial is "
+    "ACCEPTED as the new base if it gains >= 0.3pp ASD recall on site "
+    "or institution over the current base, the other split drops <= 0.5pp, "
+    "and control recall is >= 60% on both. "
     "A review PR opens only once accepted steps add up to +1pp over the last "
     "PR (iter10 at first). Build on the base; refining a just-accepted "
     "direction is a valid next step. Concatenation is not stacking; ensemble "
@@ -89,8 +92,8 @@ spawn experimenter again. One stage per experimenter instance.
 coder. The failed diff has been reverted. Do not describe that code as current. \
 Put workspace.ruled_out, the insight, and next_code_change into the coder \
 objective. The coder is a fresh instance and cannot see this chat.
-- After loso-institution PASS: if accuracy is still below the 80% target, spawn coder \
-on the winning code (do not revert). complete is true only when accuracy \
+- After loso-institution PASS: if ASD recall is still below the 75% target, spawn coder \
+on the winning code (do not revert). complete is true only when ASD recall \
 reaches the target.
 - Never claim a best-epoch number as progress.
 
@@ -116,7 +119,7 @@ SYNTHESIZER_INSTRUCTIONS = """\
 Write the session report from the subagent findings only.
 
 Open with whether a better model was found (loso-institution PASS only). Then:
-- Each change tried, balanced accuracy, accuracy, AUC, ASD recall, gate margin, PASS/FAIL.
+- Each change tried, ASD recall, control recall, balanced accuracy, AUC, gate margin, PASS/FAIL.
 - What was ruled out.
 - If a review branch was opened, say so; a human still has to merge.
 - Diagnostic best-epoch AUC is not a result.
@@ -192,10 +195,10 @@ def _experimenter_assignment(proposed: Assignment | None = None) -> Assignment:
         (
             f"{objective}\n\n"
             "Run the required stage, then store_insight so the next coder can "
-            "read it. Official metric: fold-mean balanced accuracy."
+            "read it. Official metric: fold-mean ASD recall, with control recall >= 60%."
         ),
         (
-            "stage, balanced_accuracy_mean, accuracy, AUC, ASD recall, gate margin, PASS/FAIL, what is ruled out, "
+            "stage, ASD recall, control recall, balanced accuracy, AUC, gate margin, PASS/FAIL, what is ruled out, "
             "and next_code_change or next stage."
         ),
     )
@@ -281,7 +284,7 @@ class GNNLead(Orchestrator):
         return [forced] if forced is not None else []
 
     def run(self, goal: str) -> OrchestratorReport:
-        """Loop write → lint → trial until accuracy target, max_rounds, or Ctrl-C.
+        """Loop write → lint → trial until the ASD recall target, max_rounds, or Ctrl-C.
 
         ``max_rounds <= 0`` means no cap. A loso-institution PASS keeps the winning
         code and continues. Workspace is kept across process restarts.
@@ -291,7 +294,7 @@ class GNNLead(Orchestrator):
         self._log(f"\n[lead] planning: {goal}")
         if unlimited:
             self._log(
-                "[lead] max_rounds=0; run until loso-institution accuracy target or Ctrl-C"
+                "[lead] max_rounds=0; run until loso-institution ASD recall target or Ctrl-C"
             )
         complexity, assignments = self._plan(goal)
         self._log(f"[lead] complexity={complexity}; {len(assignments)} initial task(s)")
@@ -355,13 +358,13 @@ def main() -> None:
         type=int,
         default=0,
         metavar="N",
-        help="Max write/lint/run rounds for a local smoke. Omit or 0 = until accuracy target or Ctrl-C.",
+        help="Max write/lint/run rounds for a local smoke. Omit or 0 = until the ASD recall target or Ctrl-C.",
     )
     parser.add_argument(
-        "--target-acc",
+        "--target-recall",
         type=float,
-        default=0.80,
-        help="Stop after a loso-institution PASS whose accuracy_mean reaches this (default 0.80).",
+        default=0.75,
+        help="Stop after a loso-institution PASS whose ASD recall (sensitivity_mean) reaches this (default 0.75).",
     )
     parser.add_argument(
         "--fresh",
@@ -373,7 +376,7 @@ def main() -> None:
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--log-dir", default="outputs/autoresearch/loop/logs")
     args = parser.parse_args()
-    os.environ["AUTORESEARCH_LOOP_TARGET_ACC"] = str(args.target_acc)
+    os.environ["AUTORESEARCH_LOOP_TARGET_RECALL"] = str(args.target_recall)
 
     def build() -> GNNLead:
         return GNNLead(

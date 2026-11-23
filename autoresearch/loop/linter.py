@@ -27,9 +27,16 @@ verbatim. Do not override a FAIL.
 """
 
 _SCORED_IMPORT = (
+    "import sys, warnings\n"
+    "warnings.filterwarnings('ignore')\n"
     "from neuroasd.model import fit_predict\n"
     "from autoresearch.trial import smoke_check\n"
+    "from autoresearch.loop.protocol import batch_independence_reasons\n"
     "smoke_check()\n"
+    "reasons = batch_independence_reasons(fit_predict)\n"
+    "if reasons:\n"
+    "    print('PER-SUBJECT FAIL: ' + ' '.join(reasons), file=sys.stderr)\n"
+    "    sys.exit(4)\n"
 )
 
 
@@ -68,10 +75,9 @@ def lint_paths(files_changed: list[str]) -> dict[str, Any]:
 
     errors.extend(measurement_coverage(files_changed))
 
-    touches_scored_tree = any(
-        path.endswith(("model.py", "trial.py", "linear_baseline.py"))
-        for path in files_changed
-    )
+    # Any Python change can reach the scored path (model.py imports other
+    # neuroasd modules), so every one is import-, smoke- and per-subject-checked.
+    touches_scored_tree = any(path.endswith(".py") for path in files_changed)
     if touches_scored_tree:
         probe = subprocess.run(
             [sys.executable, "-c", _SCORED_IMPORT],
@@ -80,13 +86,15 @@ def lint_paths(files_changed: list[str]) -> dict[str, Any]:
             text=True,
             check=False,
         )
-        if probe.returncode != 0:
+        if probe.returncode == 4:
+            errors.append((probe.stderr or probe.stdout).strip()[-1500:])
+        elif probe.returncode != 0:
             errors.append(
                 "import check failed (neuroasd.model.fit_predict / trial.smoke_check):\n"
                 + (probe.stderr or probe.stdout)[-1500:]
             )
         else:
-            notes.append("scored-path smoke_check ok")
+            notes.append("scored-path smoke_check ok; per-subject scoring ok")
 
     passed = not errors
     return {
@@ -130,7 +138,8 @@ class LintAgent(SubAgent):
     name = "linter"
     description = (
         "Lints the coder's pending edit: syntax, evaluation-leak patterns, "
-        "whether trial.py will actually score the change, and imports of "
+        "whether trial.py will actually score the change, per-subject scoring "
+        "(no statistics from other test subjects), and imports of "
         "neuroasd.model.fit_predict / autoresearch.trial. Use after a coder "
         "finishes and before any training. Not for writing code or running trials."
     )

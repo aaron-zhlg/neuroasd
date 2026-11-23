@@ -8,10 +8,12 @@ iterating. Built on [orchestra](https://github.com/aaron-zhlg/orchestra).
 
 `program.md` is written for the agent. This file is written for you.
 
-The loop starts from the tagged iter10 recipe
-(`iter10-loso-institution-v1`, `neuroasd/model.py`), not from the old GCN
-PRs on C-PAC ABIDE I. A trial that gains ≥ 0.3 pp over the current base is
-accepted and becomes the new base. A review PR opens only once accepted steps
+Objective: **ASD recall on unseen sites, scored per subject** (each test
+subject judged from the training split and its own data only, as in the
+cross-site papers), with control recall ≥ 60%. The loop starts from the iter10
+recipe (`iter10-loso-institution-v1`, `neuroasd/model.py`) scored per subject,
+ASD recall 54.7% site / 55.0% institution. A trial that gains ≥ 0.3 pp ASD
+recall over the current base is accepted and becomes the new base. A review PR opens only once accepted steps
 add up to ≥ 1 pp over the last PR (iter10 until the first PR).
 
 ---
@@ -70,12 +72,13 @@ outputs/autoresearch/          local only, gitignored
 
 | Stage | Evaluation | Gate |
 |-------|------------|------|
-| `screen` | LOSO on 6 mixed ABIDE I / II sites | balanced accuracy ≥ 0.70 |
-| `loso-site` | LOSO on all 33 two-class sites | balanced accuracy ≥ 0.71 and ≥ base site − 0.5 pp |
-| `loso-institution` | Leave-one-institution-out, 23 institutions | accept: either split +0.3 pp vs the base, other ≤ 0.5 pp drop. PR: also +1 pp vs the last PR |
+| `screen` | LOSO on 6 mixed ABIDE I / II sites | ASD recall ≥ 0.54, control recall ≥ 0.60 |
+| `loso-site` | LOSO on all 33 two-class sites | ASD recall ≥ base site − 0.5 pp, control recall ≥ 0.60 |
+| `loso-institution` | Leave-one-institution-out, 23 institutions | accept: ASD recall on either split +0.3 pp vs the base, other ≤ 0.5 pp drop, control recall ≥ 0.60 on both. PR: also +1 pp vs the last PR |
 
-Primary metric: fold-mean balanced accuracy. Every result also reports
-accuracy, AUC, ASD recall, and control recall.
+Primary metric: fold-mean ASD recall. Floor: control recall ≥ 0.60. Every
+result also reports balanced accuracy, accuracy and AUC. The linter rejects
+any model whose test scores change when the test set is scored in pieces.
 
 Only a `loso-institution` pass justifies a new directory under `experiments/`
 and a review PR. A `screen` PASS is only a filter.
@@ -107,7 +110,7 @@ idle
   → screen PASS   → same code, loso-site
   → site PASS     → same code, loso-institution
   → institution PASS → review PR; keep the code; coder stacks the next mechanism
-  → institution accuracy ≥ 0.80 → stop
+  → institution ASD recall ≥ 0.75 → stop
 ```
 
 Writable: `neuroasd/*.py` and `autoresearch/trial.py`. Not writable:
@@ -117,7 +120,7 @@ Writable: `neuroasd/*.py` and `autoresearch/trial.py`. Not writable:
 A protocol-clean `loso-institution` PASS opens a review PR (scores first),
 snapshots the winning files as the new baseline, and **keeps searching**.
 It does not wait for merge and does not raise `gates.json`. The loop stops
-when `loso-institution` accuracy_mean reaches `--target-acc` (default 0.80)
+when `loso-institution` ASD recall reaches `--target-recall` (default 0.75)
 or on Ctrl-C.
 
 ---
@@ -131,7 +134,7 @@ uv run python -m autoresearch.trial --name class-weight --stage screen --note "c
 
 set -a; source .env; set +a
 uv run python -m autoresearch.loop.check_loop
-uv run python -m autoresearch.loop                # until 80% accuracy or Ctrl-C
+uv run python -m autoresearch.loop                # until 75% ASD recall or Ctrl-C
 uv run python -m autoresearch.loop --fresh        # wipe workspace and restart
 ```
 

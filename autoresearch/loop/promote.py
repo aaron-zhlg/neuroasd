@@ -167,7 +167,7 @@ def pr_title(result: dict[str, Any]) -> str:
     margin = verdict.get("margin")
     margin_s = f"{float(margin):+.3f}" if isinstance(margin, (int, float)) else "n/a"
     return (
-        f"Trial {name}: {stage} bal.acc {_fmt(summary.get('balanced_accuracy_mean'))} "
+        f"Trial {name}: {stage} ASD recall {_fmt(summary.get('sensitivity_mean'))} "
         f"({passed} {margin_s})"
     )
 
@@ -193,21 +193,22 @@ def pr_body(result: dict[str, Any], *, prior: dict[str, Any] | None = None) -> s
     lines = [
         "## Scores",
         "",
-        "Official metric is **fold-mean balanced accuracy** (one fit per fold). "
+        "Official metric is **fold-mean ASD recall**, scored per subject (one fit per fold, "
+        "no statistics from other test subjects), with control recall >= the floor. "
         "Accuracy and AUC are reported so the number can be compared with the literature.",
         "",
         f"**This trial (`{stage}`)**",
         "",
         "| Metric | Mean ± Std |",
         "|--------|------------|",
-        f"| **Balanced accuracy** | **{_fmt_pm(summary.get('balanced_accuracy_mean'), summary.get('balanced_accuracy_std'))}** |",
+        f"| **ASD recall** | **{_fmt_pm(summary.get('sensitivity_mean'), summary.get('sensitivity_std'))}** |",
+        f"| Control recall | {_fmt_pm(summary.get('specificity_mean'), summary.get('specificity_std'))} |",
+        f"| Balanced accuracy | {_fmt_pm(summary.get('balanced_accuracy_mean'), summary.get('balanced_accuracy_std'))} |",
         f"| Accuracy | {_fmt_pm(summary.get('accuracy_mean'), summary.get('accuracy_std'))} |",
         f"| AUC | {_fmt_pm(summary.get('auc_mean'), summary.get('auc_std'))} |",
-        f"| ASD recall | {_fmt_pm(summary.get('sensitivity_mean'), summary.get('sensitivity_std'))} |",
-        f"| Control recall | {_fmt_pm(summary.get('specificity_mean'), summary.get('specificity_std'))} |",
         "",
         (
-            f"**Gate:** `{verdict.get('metric', 'balanced_accuracy_mean')}` "
+            f"**Gate:** `{verdict.get('metric', 'sensitivity_mean')}` "
             f"{_fmt(verdict.get('observed'), 4)} "
             + (
                 f"vs base `{verdict.get('reference', 'n/a')}`: "
@@ -232,7 +233,7 @@ def pr_body(result: dict[str, Any], *, prior: dict[str, Any] | None = None) -> s
         if prior_stage == stage:
             continue
         ladder_rows.append(
-            f"| `{prior_stage}` | {_fmt(row.get('balanced_accuracy_mean') or row.get('auc_mean'))} | "
+            f"| `{prior_stage}` | {_fmt(row.get('sensitivity_mean') or row.get('balanced_accuracy_mean'))} | "
             f"{row.get('margin', 'n/a')} | "
             f"{'PASS' if row.get('passed') else 'FAIL'} |"
         )
@@ -241,7 +242,7 @@ def pr_body(result: dict[str, Any], *, prior: dict[str, Any] | None = None) -> s
             [
                 "Earlier stages of the same change:",
                 "",
-                "| Stage | Bal. acc | Margin | Verdict |",
+                "| Stage | ASD recall | Margin | Verdict |",
                 "|-------|-----|--------|---------|",
                 *ladder_rows,
                 "",
@@ -373,11 +374,11 @@ Frozen after a `loso-institution` PASS. Metrics are one fit per fold.
 
 | Metric | Mean ± Std |
 |--------|------------|
-| **Balanced accuracy** | **{summary.get('balanced_accuracy_mean', 0):.3f} ± {summary.get('balanced_accuracy_std', 0):.3f}** |
+| **ASD recall** | **{summary.get('sensitivity_mean', 0):.3f} ± {summary.get('sensitivity_std', 0):.3f}** |
+| Control recall | {summary.get('specificity_mean', 0):.3f} ± {summary.get('specificity_std', 0):.3f} |
+| Balanced accuracy | {summary.get('balanced_accuracy_mean', 0):.3f} ± {summary.get('balanced_accuracy_std', 0):.3f} |
 | Accuracy | {summary['accuracy_mean']:.3f} ± {summary['accuracy_std']:.3f} |
 | AUC | {summary['auc_mean']:.3f} ± {summary['auc_std']:.3f} |
-| ASD recall | {summary.get('sensitivity_mean', 0):.3f} ± {summary.get('sensitivity_std', 0):.3f} |
-| Control recall | {summary.get('specificity_mean', 0):.3f} ± {summary.get('specificity_std', 0):.3f} |
 
 ## Reproduce
 

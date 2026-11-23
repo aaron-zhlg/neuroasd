@@ -7,32 +7,35 @@ completely before making any change.
 
 ## 1. Objective
 
-Improve ASD vs control classification on the DCAN ABIDE I + II dataset
-(`data/abide_dcan`, 1,443 subjects, Gordon + HCP / Power / Markov atlases).
+**Raise ASD recall (sensitivity) on unseen sites**, on the DCAN ABIDE I + II
+dataset (`data/abide_dcan`, 1,443 subjects, Gordon + HCP / Power / Markov
+atlases), scored **per subject** the way the cross-site papers score it.
 
-**Starting point:** the tagged iter10 recipe in `neuroasd.model.fit_predict`
-(`iter10-loso-institution-v1`, PR #18), not the old GCN PRs and not the
-original Gordon-only ridge baseline.
+**Starting point:** the iter10 recipe in `neuroasd.model.fit_predict`
+(`iter10-loso-institution-v1`, PR #18) scored per subject: Gordon+HCP tangent
+concatenation, age/sex, L2 logistic at C=1e-2, raw decision value cut at 0.
+iter10's per-group calibration is removed (see rule 9).
 
-| Split | Model | Accuracy | Balanced accuracy | AUC | ASD recall |
+| Split | Model | ASD recall | Control recall | Balanced accuracy | AUC |
 |---|---|---|---|---|---|
-| Leave-one-site-out (33) | iter10 (incumbent) | 71.9% | 72.82% | 0.797 | 74.5% |
-| Leave-one-institution-out (23) | iter10 (incumbent) | 70.1% | 70.84% | 0.779 | 70.8% |
-| Site / institution | Gordon tangent + ridge (historical) | 68.6% / 67.0% | 67.35% / 67.47% | 0.775 / 0.770 | 54.3% / 55.1% |
+| Screen (6 sites) | base (iter10 per subject) | 57.1% | 85.0% | 71.1% | 0.830 |
+| Leave-one-site-out (33) | base (iter10 per subject) | 54.7% | 81.9% | 68.3% | 0.797 |
+| Leave-one-institution-out (23) | base (iter10 per subject) | 55.0% | 80.4% | 67.7% | 0.779 |
+| Cross-site literature, ABIDE I | Heinsfeld 2018 / Abraham 2017 | 69% / 61% | 62% / 72% | – | – |
 
-Progress is by small steps on top of the current **base** (iter10 at first).
-A trial is **accepted** if one split gains ≥ 0.3 pp balanced accuracy over the
-base and the other drops by at most 0.5 pp; its code becomes the new base. A
-review PR opens only when an accepted trial is also ≥ +1 pp over the last PR'd
-model (iter10 until the first PR). Beating the 2026-10-03 ridge baseline does
-not count. The original baseline stays at tag `linear-baseline-dcan-v1`.
+The base calls too few subjects ASD. Progress is by small steps on top of the
+current **base**. A trial is **accepted** if one split gains ≥ 0.3 pp ASD
+recall over the base, the other drops by at most 0.5 pp, **and control recall
+is ≥ 60% on both splits**; its code becomes the new base. A review PR opens
+only when an accepted trial is also ≥ +1 pp ASD recall over the last PR'd model.
 
-**Primary metric:** fold-mean balanced accuracy
-`(ASD recall + control recall) / 2`. Accuracy and AUC are always reported so
-results can be compared with the literature (those papers mostly report
-accuracy, then AUC; almost none report balanced accuracy).
+**Primary metric:** fold-mean ASD recall (`sensitivity_mean`).
+**Floor:** fold-mean control recall (`specificity_mean`) ≥ 0.60 at every stage,
+so calling everyone ASD cannot win. Balanced accuracy, accuracy and AUC are
+always reported. Moving the cut alone trades control recall for ASD recall and
+stops at the floor; lasting gains need a better ranking (higher AUC).
 
-Loop stop: leave-one-institution-out accuracy_mean ≥ 80%.
+Loop stop: leave-one-institution-out ASD recall ≥ 75% (`--target-recall`).
 
 ---
 
@@ -53,6 +56,12 @@ Loop stop: leave-one-institution-out accuracy_mean ≥ 80%.
    search signal.
 8. **Do not use FIQ or head motion as predictive features.** They differ by
    diagnosis and would inflate results. Age and sex are allowed.
+9. **Score each test subject on its own.** A test subject's score and label may
+   depend only on the training split and that subject's own data. No z-scoring,
+   ranking, harmonization (ComBat etc.), clustering or thresholding across the
+   test subjects. iter10's per-group calibration did this and lifted ASD recall
+   from 55% to 75% with information the papers do not use. The linter scores the
+   test set whole, in halves and one subject at a time, and FAILs any change.
 
 ---
 
@@ -62,15 +71,15 @@ Trials are cheap-to-expensive. Do not skip ahead.
 
 | Stage | What it runs | Gate |
 |-------|--------------|------|
-| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | balanced accuracy ≥ 0.70 |
-| `loso-site` | Leave-one-site-out on all 33 sites with both classes | balanced accuracy ≥ 0.71 and ≥ base site − 0.5 pp (below that the final stage cannot pass) |
-| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp. PR: also ≥ +1 pp vs the last PR (iter10: site 0.7282 / institution 0.7084) |
+| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | ASD recall ≥ 0.54, control recall ≥ 0.60 |
+| `loso-site` | Leave-one-site-out on all 33 sites with both classes | ASD recall ≥ base site − 0.5 pp (below that the final stage cannot pass), control recall ≥ 0.60 |
+| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: ASD recall on either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp, control recall ≥ 0.60 on both. PR: also ≥ +1 pp vs the last PR (base: site 0.5466 / institution 0.5504) |
 
 Thresholds live in `autoresearch/gates.json`. `trial.py` exits `0` on PASS and `3` on
 FAIL.
 
-A `loso-institution` PASS opens a review PR. The PR body lists balanced accuracy,
-accuracy, AUC, ASD recall, and control recall for both splits.
+A `loso-institution` PASS opens a review PR. The PR body lists ASD recall,
+control recall, balanced accuracy, accuracy and AUC for both splits.
 
 ---
 
@@ -83,7 +92,7 @@ experiment/trial-<slug>         one trial, opened for review after a win
 
 The loop never merges to `main` and never edits `gates.json`. After a full PASS
 it keeps the winning code and searches for the next mechanism until institution
-accuracy reaches 80%.
+ASD recall reaches 75%.
 
 Failed trials leave no remote branch. Every run appends to
 `outputs/autoresearch/ledger.jsonl`. **Read the ledger before proposing a new
@@ -98,9 +107,9 @@ The harness owns data and metrics. You only edit `fit_predict` (and helpers).
 `train` / `test` expose: `fc(atlas)` for `gordon`, `hcp`, `power`, `markov`;
 `age`; `sex`; `groups`; `sites`; and `train.y`. Test labels are hidden.
 
-The incumbent already has: a training-only balanced-accuracy threshold,
-label-free per-group score z-scoring, age/sex columns, Gordon+HCP
-**concatenation**, and L2 logistic at C=1e-2. Do not retry those.
+The base has: age/sex columns, Gordon+HCP **concatenation**, L2 logistic at
+C=1e-2, and the raw score cut at 0. It has **no** training-only threshold and
+**no** per-group calibration (forbidden by rule 9).
 
 **Concatenation is not stacking.** Concatenation = one classifier on columns
 glued together (iter6). Stacking = one classifier per atlas (or feature type),
@@ -109,10 +118,9 @@ the training fold (`neuroasd.ensemble.stack_scores`). Score averaging
 (`average_scores`) is a third, label-free rule.
 
 Helpers: `neuroasd.ensemble` (`member_scores`, `stack_scores`, `average_scores`,
-`GCNMember` / `gnn_member_scores`). Keep the incumbent threshold and
-calibration unless that is the one mechanism you are replacing.
+`GCNMember` / `gnn_member_scores`).
 
-Already tested on iter10 (2026-10-15, all below iter10 on full LOSO; see
+Already tested on iter10 under balanced accuracy (2026-10-15, all below iter10 on full LOSO; see
 `workspace.ruled_out`): stacking Power+Markov members, Gordon/HCP score
 averaging, a four-atlas member bank, a Fisher-z member, a Power GCN member,
 per-site feature standardization, Power graph-spectral features, swapping HCP
@@ -121,6 +129,10 @@ resubmit these; a variant must change something those trials did not.
 
 Untested directions (all use only FC + age/sex, fit inside the training fold):
 
+0. **A cut chosen on the training fold**: out-of-fold training scores (grouped
+   like the outer split), cut where ASD recall is highest with control recall
+   still ≥ 60%, or at balanced accuracy; or class weights / prior correction.
+   Cheap, but only moves along the ROC curve.
 1. **Regularization chosen by nested CV.** Pick C by inner grouped CV on the
    training fold instead of the fixed C=1e-2.
 2. **Dimensionality reduction** before the classifier: PCA or univariate
@@ -131,7 +143,7 @@ Untested directions (all use only FC + age/sex, fit inside the training fold):
 5. **Sample weighting**: e.g. site-balanced weights so large sites do not
    dominate the fit.
 6. **A nonlinear classifier** on a reduced tangent space (kernel SVM, small
-   MLP). Keep the incumbent threshold and calibration.
+   MLP).
 
 Accepted small steps can be refined: after an accept, tuning or extending the
 same mechanism is a valid next trial.
@@ -182,7 +194,7 @@ uv run python -m autoresearch.loop
 
 ## 8. Reporting
 
-When reporting to the user, lead with the outcome: what was tried, balanced
-accuracy, accuracy, AUC, ASD recall, and whether it beat the linear baseline.
+When reporting to the user, lead with the outcome: what was tried, ASD recall,
+control recall, balanced accuracy, AUC, and whether it beat the base.
 Include the margin, not just PASS/FAIL. Never claim an improvement from a
 `screen` result alone — it is a filter, not evidence.

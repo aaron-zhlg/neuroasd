@@ -338,6 +338,9 @@ class ExperimenterTools:
                 "observed": verdict.get("observed"),
                 "margin": verdict.get("margin"),
                 "passed": verdict.get("passed"),
+                "control_floor": verdict.get("floor"),
+                "control_floor_observed": verdict.get("floor_observed"),
+                "control_floor_passed": verdict.get("floor_passed"),
             },
             "protocol_notes": notes,
             "workspace_status": workspace.get("status"),
@@ -351,9 +354,12 @@ class ExperimenterTools:
                 "name": name,
                 "stage": stage,
                 "hypothesis": hypothesis,
+                "sensitivity_mean": summary.get("sensitivity_mean"),
+                "specificity_mean": summary.get("specificity_mean"),
                 "balanced_accuracy_mean": summary.get("balanced_accuracy_mean"),
                 "auc_mean": summary.get("auc_mean"),
                 "margin": verdict.get("margin"),
+                "control_floor_passed": verdict.get("floor_passed"),
                 "passed": bool(verdict.get("passed")) and not failed_protocol,
                 "ruled_out": None if payload["gate"]["passed"] else hypothesis,
                 "hint": hint,
@@ -417,7 +423,7 @@ def _insight_hint(
     acc = last_win.get("accuracy_mean")
     if workspace.get("status") == "target_reached":
         return (
-            "loso-institution PASS and accuracy target reached. A review PR may be open. "
+            "loso-institution PASS and ASD recall target reached. A review PR may be open. "
             "Loop stops. Do not raise gates.json."
         )
     pr_note = (
@@ -428,7 +434,8 @@ def _insight_hint(
     return (
         "loso-institution ACCEPTED (+0.3pp step over the base). This code is the new base: "
         "add ONE new mechanism on top of it, or refine this direction. "
-        f"Base balanced acc {last_win.get('balanced_accuracy_mean')} accuracy {acc}. "
+        f"Base ASD recall {last_win.get('sensitivity_mean')} control recall {last_win.get('specificity_mean')} "
+        f"accuracy {acc}. "
         f"{pr_note} Do not raise gates.json."
     )
 

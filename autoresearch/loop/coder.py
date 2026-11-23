@@ -49,8 +49,17 @@ not measure it. Prefer editing `neuroasd/model.py`. You may also edit other \
 - Inputs you may use: `train.fc(atlas)` for atlas in gordon/hcp/power/markov, \
 plus age, sex, groups, sites, and train.y. Do NOT use FIQ or head motion as \
 predictive features (they differ by diagnosis and inflate results).
-- The incumbent already has the threshold, per-group calibration, age/sex, \
-Gordon+HCP concatenation, and logistic C=1e-2. Do not retry those.
+- PER-SUBJECT RULE: a test subject's score and label may depend only on the \
+training split and that subject's own data. Do NOT z-score, rank, harmonize \
+(ComBat etc.), cluster or threshold using the test subjects together; the \
+linter scores the test set whole and in pieces and FAILs any difference. \
+iter10's per-group calibration is removed for this reason.
+- The base is iter10 scored per subject: Gordon+HCP tangent concatenation, \
+age/sex, logistic C=1e-2, raw score cut at 0. It calls too few subjects ASD \
+(ASD recall ~55%, control recall ~81%). Legitimate levers: a cut chosen on \
+training-fold out-of-fold scores only, class weights, better features or \
+classifiers that rank ASD higher. A cut only trades control recall for ASD \
+recall; control recall must stay >= 60%.
 - Already tested and below iter10 (see workspace ruled_out): atlas stacking, \
 score averaging, member banks, Fisher-z member, Power GCN member, per-site \
 feature standardization, graph-spectral features, Gordon+Power / Gordon+Markov, \
@@ -59,8 +68,9 @@ L1 logistic. Do not resubmit them.
 choice of C, training-only PCA / feature selection, FC shrinkage or a different \
 tangent reference, partial-correlation features, site-balanced sample weights, \
 a nonlinear classifier on a reduced tangent space.
-- Primary metric is fold-mean balanced accuracy. Always think about ASD recall \
-and control recall, not accuracy alone.
+- Primary metric is fold-mean ASD recall (sensitivity), with control recall \
+(specificity) >= 60% on every split. Also watch AUC: a gain that only moves \
+the cut will stop at the 60% floor.
 - You MAY edit files under neuroasd/ and autoresearch/trial.py. You may NOT edit \
 gates.json, data/, experiments/, autoresearch/loop/, or medresearch/.
 - NEVER select a model using the evaluation / held-out set. Do not gate, report, \

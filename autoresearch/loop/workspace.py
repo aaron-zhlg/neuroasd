@@ -91,12 +91,13 @@ def save_workspace(data: dict[str, Any]) -> None:
     tmp.replace(path)
 
 
-def target_accuracy() -> float:
-    raw = os.environ.get("AUTORESEARCH_LOOP_TARGET_ACC", "0.80")
+def target_recall() -> float:
+    """Stop once an accepted loso-institution trial reaches this ASD recall."""
+    raw = os.environ.get("AUTORESEARCH_LOOP_TARGET_RECALL", "0.75")
     try:
         return float(raw)
     except ValueError:
-        return 0.80
+        return 0.75
 
 
 def slugify(text: str) -> str:
@@ -199,6 +200,8 @@ def apply_trial_outcome(
     bacc = summary.get("balanced_accuracy_mean")
     auc = summary.get("auc_mean")
     acc = summary.get("accuracy_mean")
+    sens = summary.get("sensitivity_mean")
+    spec = summary.get("specificity_mean")
     # The loso-institution verdict is already judged against the current base.
     won = gate_passed
     data.setdefault("last_results", {})[stage] = {
@@ -207,6 +210,8 @@ def apply_trial_outcome(
         "balanced_accuracy_mean": bacc,
         "auc_mean": auc,
         "accuracy_mean": acc,
+        "sensitivity_mean": sens,
+        "specificity_mean": spec,
         "margin": verdict.get("margin"),
         "protocol_failed": protocol_failed,
         "open_pr": bool(verdict.get("open_pr")),
@@ -223,6 +228,8 @@ def apply_trial_outcome(
                 "balanced_accuracy_mean": bacc,
                 "auc_mean": auc,
                 "accuracy_mean": acc,
+                "sensitivity_mean": sens,
+                "specificity_mean": spec,
                 "margin": verdict.get("margin"),
                 "patch": archived,
             },
@@ -239,13 +246,15 @@ def apply_trial_outcome(
             "balanced_accuracy_mean": bacc,
             "auc_mean": auc,
             "accuracy_mean": acc,
+            "sensitivity_mean": sens,
+            "specificity_mean": spec,
         }
         data["snapshotted"] = snapshot_coder_files(list(data.get("files_changed") or []))
         data["reverted"] = []
         data["coder_ok"] = None
         data["lint_ok"] = None
         data["lint_report"] = None
-        if acc is not None and float(acc) >= target_accuracy():
+        if sens is not None and float(sens) >= target_recall():
             data["status"] = "target_reached"
         else:
             data["status"] = "awaiting_new_code"
@@ -261,6 +270,8 @@ def apply_trial_outcome(
             "balanced_accuracy_mean": bacc,
             "auc_mean": auc,
             "accuracy_mean": acc,
+            "sensitivity_mean": sens,
+            "specificity_mean": spec,
         }
     ]
     save_workspace(data)
@@ -292,7 +303,7 @@ def record_unmeasured_trial(
     hypothesis = str(data.get("hypothesis") or "")
     verdict = {
         "stage": stage,
-        "metric": "balanced_accuracy_mean",
+        "metric": "sensitivity_mean",
         "threshold": None,
         "observed": None,
         "margin": None,
@@ -314,6 +325,7 @@ def record_unmeasured_trial(
             "name": name,
             "stage": stage,
             "hypothesis": hypothesis,
+            "sensitivity_mean": None,
             "balanced_accuracy_mean": None,
             "auc_mean": None,
             "margin": None,
@@ -323,7 +335,7 @@ def record_unmeasured_trial(
             "hint": hint,
             "narrative": (
                 f"UNMEASURED {stage}: {error}. exit_code={exit_code}. "
-                "No result.json, no official balanced_accuracy_mean. Not a metric FAIL and not "
+                "No result.json, no official sensitivity_mean (ASD recall). Not a metric FAIL and not "
                 "a PASS. The diff was archived and reverted.\n"
                 + excerpt
             ),
@@ -364,7 +376,7 @@ def ensure_stage_recorded() -> dict[str, Any]:
 
 
 def next_role(workspace: dict[str, Any] | None = None) -> str | None:
-    """Who must run next. ``None`` means accuracy target reached."""
+    """Who must run next. ``None`` means the ASD recall target was reached."""
     data = workspace if workspace is not None else load_workspace()
     status = str(data.get("status") or "idle")
     if status in {"target_reached", "promoted"}:
