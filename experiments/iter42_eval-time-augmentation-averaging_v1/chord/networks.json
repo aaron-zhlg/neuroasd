@@ -1,0 +1,508 @@
+{
+  "method": "Pearson r between each edge's Fisher-z FC and logit(P(control)) of iter42, sign flipped so positive = ASD direction; scores: held-out scores (20 site folds), centered per fold",
+  "atlas": "ho",
+  "subjects": 884,
+  "nodes": 111,
+  "full_fit_training_auc": null,
+  "pattern_abs_max": 0.3697,
+  "top_percent": 5.0,
+  "top_edges": 305,
+  "all_edges": 6105,
+  "network_pairs": [
+    {
+      "a": "Default",
+      "b": "Subcortical",
+      "top": 30,
+      "asd_up": 27,
+      "asd_down": 3,
+      "possible": 140,
+      "enrichment": 4.29
+    },
+    {
+      "a": "Somatomotor",
+      "b": "Subcortical",
+      "top": 29,
+      "asd_up": 29,
+      "asd_down": 0,
+      "possible": 100,
+      "enrichment": 5.8
+    },
+    {
+      "a": "Auditory",
+      "b": "Subcortical",
+      "top": 24,
+      "asd_up": 24,
+      "asd_down": 0,
+      "possible": 100,
+      "enrichment": 4.8
+    },
+    {
+      "a": "Default",
+      "b": "Limbic",
+      "top": 22,
+      "asd_up": 9,
+      "asd_down": 13,
+      "possible": 322,
+      "enrichment": 1.37
+    },
+    {
+      "a": "Salience",
+      "b": "Limbic",
+      "top": 17,
+      "asd_up": 0,
+      "asd_down": 17,
+      "possible": 276,
+      "enrichment": 1.23
+    },
+    {
+      "a": "Default",
+      "b": "Salience",
+      "top": 15,
+      "asd_up": 8,
+      "asd_down": 7,
+      "possible": 168,
+      "enrichment": 1.79
+    },
+    {
+      "a": "Default",
+      "b": "Visual",
+      "top": 15,
+      "asd_up": 6,
+      "asd_down": 9,
+      "possible": 280,
+      "enrichment": 1.07
+    },
+    {
+      "a": "Salience",
+      "b": "Subcortical",
+      "top": 12,
+      "asd_up": 7,
+      "asd_down": 5,
+      "possible": 120,
+      "enrichment": 2.0
+    },
+    {
+      "a": "Default",
+      "b": "Default",
+      "top": 11,
+      "asd_up": 1,
+      "asd_down": 10,
+      "possible": 91,
+      "enrichment": 2.42
+    },
+    {
+      "a": "Default",
+      "b": "Frontoparietal",
+      "top": 8,
+      "asd_up": 0,
+      "asd_down": 8,
+      "possible": 84,
+      "enrichment": 1.91
+    },
+    {
+      "a": "Visual",
+      "b": "Limbic",
+      "top": 8,
+      "asd_up": 2,
+      "asd_down": 6,
+      "possible": 460,
+      "enrichment": 0.35
+    },
+    {
+      "a": "Salience",
+      "b": "Somatomotor",
+      "top": 7,
+      "asd_up": 4,
+      "asd_down": 3,
+      "possible": 120,
+      "enrichment": 1.17
+    },
+    {
+      "a": "DorsalAttention",
+      "b": "Auditory",
+      "top": 7,
+      "asd_up": 0,
+      "asd_down": 7,
+      "possible": 20,
+      "enrichment": 7.01
+    },
+    {
+      "a": "Auditory",
+      "b": "Visual",
+      "top": 7,
+      "asd_up": 0,
+      "asd_down": 7,
+      "possible": 200,
+      "enrichment": 0.7
+    },
+    {
+      "a": "Default",
+      "b": "Somatomotor",
+      "top": 6,
+      "asd_up": 6,
+      "asd_down": 0,
+      "possible": 140,
+      "enrichment": 0.86
+    },
+    {
+      "a": "Visual",
+      "b": "Subcortical",
+      "top": 6,
+      "asd_up": 6,
+      "asd_down": 0,
+      "possible": 200,
+      "enrichment": 0.6
+    },
+    {
+      "a": "Limbic",
+      "b": "Subcortical",
+      "top": 6,
+      "asd_up": 4,
+      "asd_down": 2,
+      "possible": 230,
+      "enrichment": 0.52
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Limbic",
+      "top": 5,
+      "asd_up": 0,
+      "asd_down": 5,
+      "possible": 138,
+      "enrichment": 0.73
+    },
+    {
+      "a": "DorsalAttention",
+      "b": "Subcortical",
+      "top": 5,
+      "asd_up": 5,
+      "asd_down": 0,
+      "possible": 20,
+      "enrichment": 5.0
+    },
+    {
+      "a": "Auditory",
+      "b": "Somatomotor",
+      "top": 5,
+      "asd_up": 0,
+      "asd_down": 5,
+      "possible": 100,
+      "enrichment": 1.0
+    },
+    {
+      "a": "Auditory",
+      "b": "Limbic",
+      "top": 5,
+      "asd_up": 5,
+      "asd_down": 0,
+      "possible": 230,
+      "enrichment": 0.44
+    },
+    {
+      "a": "Limbic",
+      "b": "Limbic",
+      "top": 5,
+      "asd_up": 2,
+      "asd_down": 3,
+      "possible": 253,
+      "enrichment": 0.4
+    },
+    {
+      "a": "Salience",
+      "b": "Salience",
+      "top": 4,
+      "asd_up": 4,
+      "asd_down": 0,
+      "possible": 66,
+      "enrichment": 1.21
+    },
+    {
+      "a": "DorsalAttention",
+      "b": "Somatomotor",
+      "top": 4,
+      "asd_up": 0,
+      "asd_down": 4,
+      "possible": 20,
+      "enrichment": 4.0
+    },
+    {
+      "a": "Language",
+      "b": "Limbic",
+      "top": 4,
+      "asd_up": 4,
+      "asd_down": 0,
+      "possible": 92,
+      "enrichment": 0.87
+    },
+    {
+      "a": "Default",
+      "b": "DorsalAttention",
+      "top": 3,
+      "asd_up": 2,
+      "asd_down": 1,
+      "possible": 28,
+      "enrichment": 2.14
+    },
+    {
+      "a": "Default",
+      "b": "Language",
+      "top": 3,
+      "asd_up": 3,
+      "asd_down": 0,
+      "possible": 56,
+      "enrichment": 1.07
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Somatomotor",
+      "top": 3,
+      "asd_up": 3,
+      "asd_down": 0,
+      "possible": 60,
+      "enrichment": 1.0
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Subcortical",
+      "top": 3,
+      "asd_up": 0,
+      "asd_down": 3,
+      "possible": 60,
+      "enrichment": 1.0
+    },
+    {
+      "a": "Salience",
+      "b": "Language",
+      "top": 3,
+      "asd_up": 0,
+      "asd_down": 3,
+      "possible": 48,
+      "enrichment": 1.25
+    },
+    {
+      "a": "Salience",
+      "b": "Visual",
+      "top": 3,
+      "asd_up": 0,
+      "asd_down": 3,
+      "possible": 240,
+      "enrichment": 0.25
+    },
+    {
+      "a": "Auditory",
+      "b": "Auditory",
+      "top": 3,
+      "asd_up": 0,
+      "asd_down": 3,
+      "possible": 45,
+      "enrichment": 1.33
+    },
+    {
+      "a": "Salience",
+      "b": "Auditory",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 120,
+      "enrichment": 0.33
+    },
+    {
+      "a": "DorsalAttention",
+      "b": "Visual",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 40,
+      "enrichment": 1.0
+    },
+    {
+      "a": "Language",
+      "b": "Subcortical",
+      "top": 2,
+      "asd_up": 1,
+      "asd_down": 1,
+      "possible": 40,
+      "enrichment": 1.0
+    },
+    {
+      "a": "Somatomotor",
+      "b": "Somatomotor",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 45,
+      "enrichment": 0.89
+    },
+    {
+      "a": "Somatomotor",
+      "b": "Visual",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 200,
+      "enrichment": 0.2
+    },
+    {
+      "a": "Somatomotor",
+      "b": "Limbic",
+      "top": 2,
+      "asd_up": 2,
+      "asd_down": 0,
+      "possible": 230,
+      "enrichment": 0.17
+    },
+    {
+      "a": "Subcortical",
+      "b": "Subcortical",
+      "top": 2,
+      "asd_up": 0,
+      "asd_down": 2,
+      "possible": 45,
+      "enrichment": 0.89
+    },
+    {
+      "a": "Salience",
+      "b": "DorsalAttention",
+      "top": 1,
+      "asd_up": 1,
+      "asd_down": 0,
+      "possible": 24,
+      "enrichment": 0.83
+    },
+    {
+      "a": "Language",
+      "b": "Auditory",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 40,
+      "enrichment": 0.5
+    },
+    {
+      "a": "Visual",
+      "b": "Visual",
+      "top": 1,
+      "asd_up": 0,
+      "asd_down": 1,
+      "possible": 190,
+      "enrichment": 0.11
+    },
+    {
+      "a": "Default",
+      "b": "Auditory",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 140,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Frontoparietal",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 15,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Salience",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 72,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "DorsalAttention",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 12,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Language",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 24,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Auditory",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 60,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Frontoparietal",
+      "b": "Visual",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 120,
+      "enrichment": 0.0
+    },
+    {
+      "a": "DorsalAttention",
+      "b": "DorsalAttention",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 1,
+      "enrichment": 0.0
+    },
+    {
+      "a": "DorsalAttention",
+      "b": "Language",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 8,
+      "enrichment": 0.0
+    },
+    {
+      "a": "DorsalAttention",
+      "b": "Limbic",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 46,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Language",
+      "b": "Language",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 6,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Language",
+      "b": "Somatomotor",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 40,
+      "enrichment": 0.0
+    },
+    {
+      "a": "Language",
+      "b": "Visual",
+      "top": 0,
+      "asd_up": 0,
+      "asd_down": 0,
+      "possible": 80,
+      "enrichment": 0.0
+    }
+  ]
+}

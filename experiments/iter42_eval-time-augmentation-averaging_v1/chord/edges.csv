@@ -1,0 +1,101 @@
+rank,parcel_a,network_a,parcel_b,network_b,pattern_asd_direction
+1,Right Thalamus,Subcortical,R STG posterior,Auditory,0.3697
+2,Right Thalamus,Subcortical,R Planum Temporale,Auditory,0.3246
+3,Right Hippocampus,Limbic,L MTG temporooccipital,Default,0.3216
+4,Right Thalamus,Subcortical,L STG posterior,Auditory,0.3107
+5,Right Thalamus,Subcortical,L MTG temporooccipital,Default,0.3068
+6,Right Thalamus,Subcortical,R MTG temporooccipital,Default,0.3062
+7,Right Thalamus,Subcortical,R STG anterior,Auditory,0.2926
+8,Left Pallidum,Subcortical,R MTG posterior,Default,0.2918
+9,Left Thalamus,Subcortical,R STG posterior,Auditory,0.2911
+10,Left Pallidum,Subcortical,L MTG posterior,Default,0.2769
+11,Left Thalamus,Subcortical,L LOC inferior,Visual,0.2750
+12,Right Thalamus,Subcortical,R Parietal Operculum,Somatomotor,0.2735
+13,R Postcentral Gyrus,Somatomotor,L Superior Parietal Lobule,DorsalAttention,-0.2724
+14,Right Thalamus,Subcortical,L Postcentral Gyrus,Somatomotor,0.2723
+15,Right Thalamus,Subcortical,R Postcentral Gyrus,Somatomotor,0.2681
+16,Right Thalamus,Subcortical,L MTG posterior,Default,0.2673
+17,L Postcentral Gyrus,Somatomotor,R Postcentral Gyrus,Somatomotor,-0.2648
+18,Right Thalamus,Subcortical,L LOC inferior,Visual,0.2645
+19,Right Putamen,Subcortical,L MTG posterior,Default,0.2627
+20,Right Thalamus,Subcortical,R Central Opercular Cortex,Somatomotor,0.2625
+21,Right Thalamus,Subcortical,R Heschl's Gyrus,Auditory,0.2614
+22,L MTG temporooccipital,Default,L Parahippocampal posterior,Limbic,0.2613
+23,Right Thalamus,Subcortical,R LOC inferior,Visual,0.2611
+24,L MTG anterior,Default,L Precuneous Cortex,Default,-0.2600
+25,Right Putamen,Subcortical,R STG posterior,Auditory,0.2592
+26,Right Thalamus,Subcortical,L STG anterior,Auditory,0.2590
+27,Left Pallidum,Subcortical,R MTG anterior,Default,0.2589
+28,R STG anterior,Auditory,R Cuneal Cortex,Visual,-0.2580
+29,Left Thalamus,Subcortical,R Postcentral Gyrus,Somatomotor,0.2562
+30,L MTG anterior,Default,L Cuneal Cortex,Visual,-0.2556
+31,L MTG anterior,Default,R Paracingulate Gyrus,Salience,-0.2526
+32,Right Thalamus,Subcortical,L Planum Temporale,Auditory,0.2517
+33,Left Thalamus,Subcortical,R Planum Temporale,Auditory,0.2512
+34,L Frontal Medial Cortex,Default,L Precuneous Cortex,Default,-0.2504
+35,Right Thalamus,Subcortical,R Planum Polare,Auditory,0.2480
+36,Right Hippocampus,Limbic,R Precuneous Cortex,Default,-0.2470
+37,Left Thalamus,Subcortical,L Postcentral Gyrus,Somatomotor,0.2461
+38,Right Thalamus,Subcortical,L Parietal Operculum,Somatomotor,0.2460
+39,Left Amygdala,Limbic,R MTG anterior,Default,0.2458
+40,Right Hippocampus,Limbic,L Cingulate anterior,Salience,-0.2446
+41,Left Thalamus,Subcortical,R Parietal Operculum,Somatomotor,0.2443
+42,Right Putamen,Subcortical,R MTG anterior,Default,0.2424
+43,Right Thalamus,Subcortical,L SMG anterior,Salience,0.2423
+44,L MTG anterior,Default,R Precuneous Cortex,Default,-0.2418
+45,Right Hippocampus,Limbic,R Cingulate anterior,Salience,-0.2396
+46,Left Thalamus,Subcortical,L STG posterior,Auditory,0.2392
+47,Left Thalamus,Subcortical,L Parietal Operculum,Somatomotor,0.2371
+48,Left Thalamus,Subcortical,R Heschl's Gyrus,Auditory,0.2366
+49,Right Pallidum,Subcortical,R STG posterior,Auditory,0.2360
+50,Right Thalamus,Subcortical,L SMG posterior,Salience,0.2354
+51,Right Putamen,Subcortical,L Postcentral Gyrus,Somatomotor,0.2346
+52,R STG posterior,Auditory,L Parahippocampal posterior,Limbic,0.2345
+53,Right Hippocampus,Limbic,R Paracingulate Gyrus,Salience,-0.2329
+54,Left Putamen,Subcortical,R MTG anterior,Default,0.2324
+55,Left Thalamus,Subcortical,R MTG anterior,Default,0.2323
+56,Left Thalamus,Subcortical,R MTG temporooccipital,Default,0.2319
+57,Right Putamen,Subcortical,R MTG posterior,Default,0.2316
+58,R Postcentral Gyrus,Somatomotor,R LOC inferior,Visual,-0.2315
+59,R Frontal Pole,Frontoparietal,L ITG anterior,Limbic,-0.2311
+60,L MTG anterior,Default,R LOC superior,Visual,-0.2299
+61,Left Thalamus,Subcortical,L Middle Frontal Gyrus,Frontoparietal,-0.2291
+62,Left Hippocampus,Limbic,L Cingulate anterior,Salience,-0.2287
+63,L SMG anterior,Salience,L Cingulate posterior,Default,0.2263
+64,L SMG anterior,Salience,R LOC inferior,Visual,-0.2260
+65,Right Thalamus,Subcortical,L MTG anterior,Default,0.2255
+66,R Superior Frontal Gyrus,Frontoparietal,L MTG anterior,Default,-0.2255
+67,R STG anterior,Auditory,L Cuneal Cortex,Visual,-0.2254
+68,L MTG temporooccipital,Default,R SMG posterior,Salience,-0.2252
+69,L MTG posterior,Default,L Cuneal Cortex,Visual,-0.2247
+70,Right Pallidum,Subcortical,L Postcentral Gyrus,Somatomotor,0.2236
+71,Right Pallidum,Subcortical,R Postcentral Gyrus,Somatomotor,0.2230
+72,L SMG posterior,Salience,L Cingulate posterior,Default,0.2224
+73,Right Hippocampus,Limbic,L Precuneous Cortex,Default,-0.2216
+74,Left Thalamus,Subcortical,L Superior Parietal Lobule,DorsalAttention,0.2215
+75,R LOC inferior,Visual,L Cingulate posterior,Default,0.2214
+76,Right Caudate,Subcortical,L Postcentral Gyrus,Somatomotor,0.2210
+77,L IFG pars triangularis,Language,L Frontal Medial Cortex,Default,0.2204
+78,Left Thalamus,Subcortical,L SMG anterior,Salience,0.2202
+79,Left Putamen,Subcortical,L IFG pars triangularis,Language,-0.2201
+80,L MTG posterior,Default,R Precuneous Cortex,Default,-0.2199
+81,Right Thalamus,Subcortical,L Superior Parietal Lobule,DorsalAttention,0.2195
+82,Right Hippocampus,Limbic,L ITG temporooccipital,Visual,0.2191
+83,L MTG anterior,Default,R Cuneal Cortex,Visual,-0.2188
+84,Left Pallidum,Subcortical,R STG posterior,Auditory,0.2187
+85,Left Hippocampus,Limbic,L MTG temporooccipital,Default,0.2187
+86,R Frontal Pole,Frontoparietal,R Temporal Fusiform anterior,Limbic,-0.2186
+87,L Frontal Medial Cortex,Default,R Precuneous Cortex,Default,-0.2186
+88,Right Putamen,Subcortical,L STG posterior,Auditory,0.2185
+89,Right Pallidum,Subcortical,L STG posterior,Auditory,0.2184
+90,Right Putamen,Subcortical,L Parietal Operculum,Somatomotor,0.2184
+91,Right Thalamus,Subcortical,L Central Opercular Cortex,Somatomotor,0.2181
+92,R Planum Polare,Auditory,R Planum Temporale,Auditory,-0.2179
+93,L MTG posterior,Default,R Paracingulate Gyrus,Salience,-0.2175
+94,Right Putamen,Subcortical,L MTG anterior,Default,0.2175
+95,Left Thalamus,Subcortical,R Central Opercular Cortex,Somatomotor,0.2168
+96,R Superior Parietal Lobule,DorsalAttention,L Cingulate posterior,Default,0.2162
+97,L Frontal Medial Cortex,Default,R Paracingulate Gyrus,Salience,-0.2153
+98,L MTG anterior,Default,L Temporal Fusiform anterior,Limbic,0.2153
+99,R MTG anterior,Default,L Cuneal Cortex,Visual,-0.2151
+100,L Insular Cortex,Salience,L MTG posterior,Default,0.2147

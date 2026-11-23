@@ -1,0 +1,5579 @@
+{
+ "model": "iter42 GNN (PR #13, release gnn-iter42-v1), training and scoring code unchanged",
+ "data": "/Users/zhangligao/code/neuroasd/data/abide",
+ "grouping": "site",
+ "seed": 42,
+ "config": {
+  "epochs": 100,
+  "batch_size": 32,
+  "lr": 0.001,
+  "hidden_dim": 64,
+  "dropout": 0.5,
+  "weight_decay": 0.0001
+ },
+ "model_selection": "final-epoch EMA weights, no selection on the held-out group",
+ "evaluated_at": "2026-11-23T00:13:15+00:00",
+ "folds_done": 20,
+ "folds_total": 20,
+ "runtime_seconds": 1930.6,
+ "summary": {
+  "balanced_accuracy_mean": 0.6293,
+  "balanced_accuracy_std": 0.0969,
+  "accuracy_mean": 0.6377,
+  "accuracy_std": 0.0988,
+  "auc_mean": 0.7142,
+  "auc_std": 0.1124,
+  "asd_recall_mean": 0.4865,
+  "asd_recall_std": 0.1792,
+  "control_recall_mean": 0.7721,
+  "control_recall_std": 0.1356
+ },
+ "folds": [
+  {
+   "test_group": "CALTECH",
+   "test_size": 37,
+   "train_size": 847,
+   "accuracy": 0.5135135135135135,
+   "balanced_accuracy": 0.5190058479532164,
+   "auc": 0.695906432748538,
+   "asd_recall": 0.3157894736842105,
+   "control_recall": 0.7222222222222222,
+   "best_auc_diagnostic": 0.7134502923976609,
+   "seconds": 108.3
+  },
+  {
+   "test_group": "CMU",
+   "test_size": 5,
+   "train_size": 879,
+   "accuracy": 0.4,
+   "balanced_accuracy": 0.41666666666666663,
+   "auc": 0.5,
+   "asd_recall": 0.3333333333333333,
+   "control_recall": 0.5,
+   "best_auc_diagnostic": 0.5,
+   "seconds": 109.3
+  },
+  {
+   "test_group": "KKI",
+   "test_size": 39,
+   "train_size": 845,
+   "accuracy": 0.6410256410256411,
+   "balanced_accuracy": 0.6481481481481481,
+   "auc": 0.6358024691358024,
+   "asd_recall": 0.6666666666666666,
+   "control_recall": 0.6296296296296297,
+   "best_auc_diagnostic": 0.7037037037037037,
+   "seconds": 105.9
+  },
+  {
+   "test_group": "LEUVEN_1",
+   "test_size": 29,
+   "train_size": 855,
+   "accuracy": 0.5862068965517241,
+   "balanced_accuracy": 0.5714285714285714,
+   "auc": 0.7095238095238096,
+   "asd_recall": 0.14285714285714285,
+   "control_recall": 1.0,
+   "best_auc_diagnostic": 0.7714285714285715,
+   "seconds": 105.6
+  },
+  {
+   "test_group": "LEUVEN_2",
+   "test_size": 32,
+   "train_size": 852,
+   "accuracy": 0.65625,
+   "balanced_accuracy": 0.6255060728744939,
+   "auc": 0.680161943319838,
+   "asd_recall": 0.46153846153846156,
+   "control_recall": 0.7894736842105263,
+   "best_auc_diagnostic": 0.708502024291498,
+   "seconds": 102.3
+  },
+  {
+   "test_group": "MAX_MUN",
+   "test_size": 42,
+   "train_size": 842,
+   "accuracy": 0.5238095238095238,
+   "balanced_accuracy": 0.47916666666666663,
+   "auc": 0.5694444444444444,
+   "asd_recall": 0.16666666666666666,
+   "control_recall": 0.7916666666666666,
+   "best_auc_diagnostic": 0.625,
+   "seconds": 98.9
+  },
+  {
+   "test_group": "NYU",
+   "test_size": 171,
+   "train_size": 713,
+   "accuracy": 0.6783625730994152,
+   "balanced_accuracy": 0.6599804305283757,
+   "auc": 0.7384679899357004,
+   "asd_recall": 0.5342465753424658,
+   "control_recall": 0.7857142857142857,
+   "best_auc_diagnostic": 0.801509644953872,
+   "seconds": 89.5
+  },
+  {
+   "test_group": "OHSU",
+   "test_size": 23,
+   "train_size": 861,
+   "accuracy": 0.5652173913043478,
+   "balanced_accuracy": 0.571969696969697,
+   "auc": 0.5606060606060606,
+   "asd_recall": 0.4166666666666667,
+   "control_recall": 0.7272727272727273,
+   "best_auc_diagnostic": 0.6439393939393939,
+   "seconds": 94.5
+  },
+  {
+   "test_group": "OLIN",
+   "test_size": 25,
+   "train_size": 859,
+   "accuracy": 0.56,
+   "balanced_accuracy": 0.5681818181818181,
+   "auc": 0.6168831168831168,
+   "asd_recall": 0.5,
+   "control_recall": 0.6363636363636364,
+   "best_auc_diagnostic": 0.7532467532467532,
+   "seconds": 94.0
+  },
+  {
+   "test_group": "PITT",
+   "test_size": 45,
+   "train_size": 839,
+   "accuracy": 0.6444444444444445,
+   "balanced_accuracy": 0.6393280632411067,
+   "auc": 0.7470355731225297,
+   "asd_recall": 0.4090909090909091,
+   "control_recall": 0.8695652173913043,
+   "best_auc_diagnostic": 0.7687747035573123,
+   "seconds": 91.4
+  },
+  {
+   "test_group": "SBL",
+   "test_size": 26,
+   "train_size": 858,
+   "accuracy": 0.6538461538461539,
+   "balanced_accuracy": 0.6726190476190476,
+   "auc": 0.869047619047619,
+   "asd_recall": 0.42857142857142855,
+   "control_recall": 0.9166666666666666,
+   "best_auc_diagnostic": 0.875,
+   "seconds": 93.9
+  },
+  {
+   "test_group": "SDSU",
+   "test_size": 33,
+   "train_size": 851,
+   "accuracy": 0.6363636363636364,
+   "balanced_accuracy": 0.5714285714285714,
+   "auc": 0.623015873015873,
+   "asd_recall": 0.3333333333333333,
+   "control_recall": 0.8095238095238095,
+   "best_auc_diagnostic": 0.7380952380952381,
+   "seconds": 93.4
+  },
+  {
+   "test_group": "STANFORD",
+   "test_size": 36,
+   "train_size": 848,
+   "accuracy": 0.6111111111111112,
+   "balanced_accuracy": 0.6160990712074303,
+   "auc": 0.7523219814241486,
+   "asd_recall": 0.7058823529411765,
+   "control_recall": 0.5263157894736842,
+   "best_auc_diagnostic": 0.7739938080495355,
+   "seconds": 92.3
+  },
+  {
+   "test_group": "TRINITY",
+   "test_size": 44,
+   "train_size": 840,
+   "accuracy": 0.5909090909090909,
+   "balanced_accuracy": 0.5859213250517599,
+   "auc": 0.6832298136645962,
+   "asd_recall": 0.47619047619047616,
+   "control_recall": 0.6956521739130435,
+   "best_auc_diagnostic": 0.7163561076604554,
+   "seconds": 92.2
+  },
+  {
+   "test_group": "UCLA_1",
+   "test_size": 55,
+   "train_size": 829,
+   "accuracy": 0.7454545454545455,
+   "balanced_accuracy": 0.7486772486772486,
+   "auc": 0.8134920634920635,
+   "asd_recall": 0.5714285714285714,
+   "control_recall": 0.9259259259259259,
+   "best_auc_diagnostic": 0.8505291005291005,
+   "seconds": 91.6
+  },
+  {
+   "test_group": "UCLA_2",
+   "test_size": 20,
+   "train_size": 864,
+   "accuracy": 0.75,
+   "balanced_accuracy": 0.7708333333333333,
+   "auc": 0.8229166666666667,
+   "asd_recall": 0.875,
+   "control_recall": 0.6666666666666666,
+   "best_auc_diagnostic": 0.8645833333333334,
+   "seconds": 94.9
+  },
+  {
+   "test_group": "UM_1",
+   "test_size": 82,
+   "train_size": 802,
+   "accuracy": 0.6585365853658537,
+   "balanced_accuracy": 0.6413043478260869,
+   "auc": 0.6817632850241546,
+   "asd_recall": 0.5,
+   "control_recall": 0.782608695652174,
+   "best_auc_diagnostic": 0.7234299516908212,
+   "seconds": 89.7
+  },
+  {
+   "test_group": "UM_2",
+   "test_size": 31,
+   "train_size": 853,
+   "accuracy": 0.8387096774193549,
+   "balanced_accuracy": 0.7916666666666667,
+   "auc": 0.9692982456140351,
+   "asd_recall": 0.5833333333333334,
+   "control_recall": 1.0,
+   "best_auc_diagnostic": 0.9692982456140351,
+   "seconds": 93.4
+  },
+  {
+   "test_group": "USM",
+   "test_size": 61,
+   "train_size": 823,
+   "accuracy": 0.7704918032786885,
+   "balanced_accuracy": 0.772883295194508,
+   "auc": 0.8501144164759724,
+   "asd_recall": 0.7631578947368421,
+   "control_recall": 0.782608695652174,
+   "best_auc_diagnostic": 0.8581235697940504,
+   "seconds": 94.8
+  },
+  {
+   "test_group": "YALE",
+   "test_size": 48,
+   "train_size": 836,
+   "accuracy": 0.7291666666666666,
+   "balanced_accuracy": 0.715034965034965,
+   "auc": 0.7657342657342657,
+   "asd_recall": 0.5454545454545454,
+   "control_recall": 0.8846153846153846,
+   "best_auc_diagnostic": 0.7692307692307693,
+   "seconds": 94.5
+  }
+ ],
+ "predictions": [
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051456",
+   "label": 0,
+   "p_control": 0.53203
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051457",
+   "label": 0,
+   "p_control": 0.47073
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051458",
+   "label": 0,
+   "p_control": 0.63264
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051459",
+   "label": 0,
+   "p_control": 0.50486
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051460",
+   "label": 0,
+   "p_control": 0.61604
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051461",
+   "label": 0,
+   "p_control": 0.42689
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051462",
+   "label": 0,
+   "p_control": 0.4556
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051463",
+   "label": 0,
+   "p_control": 0.57478
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051464",
+   "label": 0,
+   "p_control": 0.34386
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051465",
+   "label": 0,
+   "p_control": 0.53577
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051466",
+   "label": 0,
+   "p_control": 0.51393
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051467",
+   "label": 0,
+   "p_control": 0.60168
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051468",
+   "label": 0,
+   "p_control": 0.5424
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051469",
+   "label": 0,
+   "p_control": 0.50455
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051470",
+   "label": 0,
+   "p_control": 0.52326
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051471",
+   "label": 0,
+   "p_control": 0.31654
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051472",
+   "label": 0,
+   "p_control": 0.50769
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051473",
+   "label": 0,
+   "p_control": 0.58318
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051474",
+   "label": 0,
+   "p_control": 0.4743
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051476",
+   "label": 1,
+   "p_control": 0.6637
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051477",
+   "label": 1,
+   "p_control": 0.52518
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051478",
+   "label": 1,
+   "p_control": 0.4176
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051479",
+   "label": 1,
+   "p_control": 0.54854
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051480",
+   "label": 1,
+   "p_control": 0.82953
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051481",
+   "label": 1,
+   "p_control": 0.36706
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051482",
+   "label": 1,
+   "p_control": 0.89864
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051483",
+   "label": 1,
+   "p_control": 0.35792
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051484",
+   "label": 1,
+   "p_control": 0.66331
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051485",
+   "label": 1,
+   "p_control": 0.56107
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051486",
+   "label": 1,
+   "p_control": 0.77719
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051487",
+   "label": 1,
+   "p_control": 0.77354
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051488",
+   "label": 1,
+   "p_control": 0.76716
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051489",
+   "label": 1,
+   "p_control": 0.39888
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051490",
+   "label": 1,
+   "p_control": 0.65606
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051491",
+   "label": 1,
+   "p_control": 0.46567
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051492",
+   "label": 1,
+   "p_control": 0.81316
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "Caltech_0051493",
+   "label": 1,
+   "p_control": 0.59759
+  },
+  {
+   "fold": "CMU",
+   "subject": "CMU_a_0050649",
+   "label": 0,
+   "p_control": 0.59475
+  },
+  {
+   "fold": "CMU",
+   "subject": "CMU_a_0050653",
+   "label": 0,
+   "p_control": 0.58889
+  },
+  {
+   "fold": "CMU",
+   "subject": "CMU_b_0050651",
+   "label": 0,
+   "p_control": 0.48002
+  },
+  {
+   "fold": "CMU",
+   "subject": "CMU_b_0050657",
+   "label": 1,
+   "p_control": 0.32269
+  },
+  {
+   "fold": "CMU",
+   "subject": "CMU_b_0050669",
+   "label": 1,
+   "p_control": 0.5986
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050772",
+   "label": 1,
+   "p_control": 0.3163
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050773",
+   "label": 1,
+   "p_control": 0.59865
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050774",
+   "label": 1,
+   "p_control": 0.60546
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050775",
+   "label": 1,
+   "p_control": 0.38493
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050776",
+   "label": 1,
+   "p_control": 0.55208
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050777",
+   "label": 1,
+   "p_control": 0.64082
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050778",
+   "label": 1,
+   "p_control": 0.44783
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050779",
+   "label": 1,
+   "p_control": 0.33133
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050780",
+   "label": 1,
+   "p_control": 0.36315
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050781",
+   "label": 1,
+   "p_control": 0.33495
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050782",
+   "label": 1,
+   "p_control": 0.49545
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050783",
+   "label": 1,
+   "p_control": 0.76317
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050785",
+   "label": 1,
+   "p_control": 0.48394
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050786",
+   "label": 1,
+   "p_control": 0.62293
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050787",
+   "label": 1,
+   "p_control": 0.5938
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050788",
+   "label": 1,
+   "p_control": 0.66024
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050789",
+   "label": 1,
+   "p_control": 0.61973
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050790",
+   "label": 1,
+   "p_control": 0.593
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050791",
+   "label": 0,
+   "p_control": 0.46359
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050792",
+   "label": 0,
+   "p_control": 0.30828
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050795",
+   "label": 0,
+   "p_control": 0.45591
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050798",
+   "label": 0,
+   "p_control": 0.76617
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050799",
+   "label": 0,
+   "p_control": 0.23446
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050800",
+   "label": 0,
+   "p_control": 0.38813
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050802",
+   "label": 0,
+   "p_control": 0.81637
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050803",
+   "label": 0,
+   "p_control": 0.53598
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050804",
+   "label": 0,
+   "p_control": 0.54182
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050812",
+   "label": 1,
+   "p_control": 0.41095
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050814",
+   "label": 1,
+   "p_control": 0.63506
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050816",
+   "label": 1,
+   "p_control": 0.53286
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050817",
+   "label": 1,
+   "p_control": 0.71228
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050818",
+   "label": 1,
+   "p_control": 0.79631
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050819",
+   "label": 1,
+   "p_control": 0.57062
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050820",
+   "label": 1,
+   "p_control": 0.81775
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050821",
+   "label": 1,
+   "p_control": 0.31858
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050822",
+   "label": 1,
+   "p_control": 0.53171
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050823",
+   "label": 0,
+   "p_control": 0.43356
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050824",
+   "label": 0,
+   "p_control": 0.38782
+  },
+  {
+   "fold": "KKI",
+   "subject": "KKI_0050825",
+   "label": 0,
+   "p_control": 0.47155
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050682",
+   "label": 1,
+   "p_control": 0.87928
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050683",
+   "label": 1,
+   "p_control": 0.85645
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050685",
+   "label": 1,
+   "p_control": 0.77219
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050686",
+   "label": 0,
+   "p_control": 0.49233
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050687",
+   "label": 1,
+   "p_control": 0.68476
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050688",
+   "label": 1,
+   "p_control": 0.83374
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050689",
+   "label": 0,
+   "p_control": 0.70824
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050690",
+   "label": 0,
+   "p_control": 0.81597
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050691",
+   "label": 1,
+   "p_control": 0.80112
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050692",
+   "label": 1,
+   "p_control": 0.79097
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050693",
+   "label": 0,
+   "p_control": 0.89791
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050694",
+   "label": 0,
+   "p_control": 0.35712
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050695",
+   "label": 0,
+   "p_control": 0.60098
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050696",
+   "label": 0,
+   "p_control": 0.64114
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050697",
+   "label": 0,
+   "p_control": 0.5935
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050698",
+   "label": 1,
+   "p_control": 0.67668
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050699",
+   "label": 1,
+   "p_control": 0.61758
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050700",
+   "label": 0,
+   "p_control": 0.55081
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050701",
+   "label": 1,
+   "p_control": 0.77681
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050702",
+   "label": 0,
+   "p_control": 0.68705
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050703",
+   "label": 1,
+   "p_control": 0.76815
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050704",
+   "label": 0,
+   "p_control": 0.69436
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050705",
+   "label": 0,
+   "p_control": 0.84434
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050706",
+   "label": 1,
+   "p_control": 0.67328
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050707",
+   "label": 1,
+   "p_control": 0.84184
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050708",
+   "label": 0,
+   "p_control": 0.78484
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050709",
+   "label": 1,
+   "p_control": 0.76807
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050710",
+   "label": 1,
+   "p_control": 0.80933
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "Leuven_1_0050711",
+   "label": 0,
+   "p_control": 0.65218
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050722",
+   "label": 1,
+   "p_control": 0.80153
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050723",
+   "label": 1,
+   "p_control": 0.80159
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050724",
+   "label": 1,
+   "p_control": 0.75792
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050725",
+   "label": 1,
+   "p_control": 0.78844
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050726",
+   "label": 1,
+   "p_control": 0.53724
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050727",
+   "label": 1,
+   "p_control": 0.34815
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050728",
+   "label": 1,
+   "p_control": 0.5741
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050730",
+   "label": 1,
+   "p_control": 0.58206
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050731",
+   "label": 1,
+   "p_control": 0.46519
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050732",
+   "label": 1,
+   "p_control": 0.73449
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050733",
+   "label": 1,
+   "p_control": 0.4534
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050735",
+   "label": 1,
+   "p_control": 0.70029
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050736",
+   "label": 1,
+   "p_control": 0.66216
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050737",
+   "label": 1,
+   "p_control": 0.47247
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050738",
+   "label": 1,
+   "p_control": 0.55389
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050739",
+   "label": 1,
+   "p_control": 0.73961
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050740",
+   "label": 1,
+   "p_control": 0.69002
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050741",
+   "label": 1,
+   "p_control": 0.71109
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050742",
+   "label": 1,
+   "p_control": 0.80576
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050743",
+   "label": 0,
+   "p_control": 0.26653
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050745",
+   "label": 0,
+   "p_control": 0.53625
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050746",
+   "label": 0,
+   "p_control": 0.3446
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050747",
+   "label": 0,
+   "p_control": 0.06004
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050748",
+   "label": 0,
+   "p_control": 0.70041
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050749",
+   "label": 0,
+   "p_control": 0.29308
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050751",
+   "label": 0,
+   "p_control": 0.67667
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050752",
+   "label": 0,
+   "p_control": 0.60575
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050753",
+   "label": 0,
+   "p_control": 0.40027
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050754",
+   "label": 0,
+   "p_control": 0.48525
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050755",
+   "label": 0,
+   "p_control": 0.67343
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050756",
+   "label": 0,
+   "p_control": 0.74181
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "Leuven_2_0050757",
+   "label": 0,
+   "p_control": 0.83535
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051318",
+   "label": 0,
+   "p_control": 0.59521
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051319",
+   "label": 0,
+   "p_control": 0.52553
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051321",
+   "label": 0,
+   "p_control": 0.63294
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051362",
+   "label": 1,
+   "p_control": 0.64648
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051363",
+   "label": 1,
+   "p_control": 0.78149
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051364",
+   "label": 1,
+   "p_control": 0.58268
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051365",
+   "label": 1,
+   "p_control": 0.95314
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051369",
+   "label": 1,
+   "p_control": 0.77014
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051370",
+   "label": 1,
+   "p_control": 0.66863
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051373",
+   "label": 1,
+   "p_control": 0.46139
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051606",
+   "label": 0,
+   "p_control": 0.84252
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_a_0051607",
+   "label": 0,
+   "p_control": 0.69526
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_b_0051322",
+   "label": 0,
+   "p_control": 0.50006
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_b_0051323",
+   "label": 0,
+   "p_control": 0.5616
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_b_0051324",
+   "label": 0,
+   "p_control": 0.55187
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_b_0051325",
+   "label": 0,
+   "p_control": 0.7328
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_b_0051326",
+   "label": 0,
+   "p_control": 0.45352
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_b_0051327",
+   "label": 0,
+   "p_control": 0.42228
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051328",
+   "label": 0,
+   "p_control": 0.52021
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051332",
+   "label": 1,
+   "p_control": 0.59454
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051333",
+   "label": 1,
+   "p_control": 0.55114
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051334",
+   "label": 1,
+   "p_control": 0.41711
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051335",
+   "label": 1,
+   "p_control": 0.56986
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051336",
+   "label": 1,
+   "p_control": 0.58051
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051338",
+   "label": 1,
+   "p_control": 0.70516
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051339",
+   "label": 1,
+   "p_control": 0.80074
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051340",
+   "label": 1,
+   "p_control": 0.55655
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051342",
+   "label": 1,
+   "p_control": 0.61475
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051343",
+   "label": 1,
+   "p_control": 0.63303
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051344",
+   "label": 1,
+   "p_control": 0.46489
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051345",
+   "label": 1,
+   "p_control": 0.71834
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051346",
+   "label": 1,
+   "p_control": 0.49094
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_c_0051347",
+   "label": 1,
+   "p_control": 0.45405
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051329",
+   "label": 0,
+   "p_control": 0.71262
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051330",
+   "label": 0,
+   "p_control": 0.50131
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051331",
+   "label": 0,
+   "p_control": 0.48416
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051349",
+   "label": 0,
+   "p_control": 0.76793
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051351",
+   "label": 0,
+   "p_control": 0.70274
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051355",
+   "label": 0,
+   "p_control": 0.51217
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051356",
+   "label": 1,
+   "p_control": 0.58499
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051357",
+   "label": 1,
+   "p_control": 0.75025
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "MaxMun_d_0051360",
+   "label": 1,
+   "p_control": 0.56078
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050954",
+   "label": 0,
+   "p_control": 0.4736
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050955",
+   "label": 0,
+   "p_control": 0.65315
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050956",
+   "label": 0,
+   "p_control": 0.50811
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050957",
+   "label": 0,
+   "p_control": 0.62542
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050958",
+   "label": 0,
+   "p_control": 0.45554
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050959",
+   "label": 0,
+   "p_control": 0.36977
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050960",
+   "label": 0,
+   "p_control": 0.45725
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050961",
+   "label": 0,
+   "p_control": 0.47642
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050962",
+   "label": 0,
+   "p_control": 0.47968
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050964",
+   "label": 0,
+   "p_control": 0.44477
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050965",
+   "label": 0,
+   "p_control": 0.45516
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050966",
+   "label": 0,
+   "p_control": 0.34136
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050967",
+   "label": 0,
+   "p_control": 0.50828
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050968",
+   "label": 0,
+   "p_control": 0.34992
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050969",
+   "label": 0,
+   "p_control": 0.36937
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050970",
+   "label": 0,
+   "p_control": 0.39802
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050972",
+   "label": 0,
+   "p_control": 0.17904
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050973",
+   "label": 0,
+   "p_control": 0.63522
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050974",
+   "label": 0,
+   "p_control": 0.52758
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050976",
+   "label": 0,
+   "p_control": 0.61649
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050977",
+   "label": 0,
+   "p_control": 0.6074
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050978",
+   "label": 0,
+   "p_control": 0.39516
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050979",
+   "label": 0,
+   "p_control": 0.5216
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050981",
+   "label": 0,
+   "p_control": 0.55053
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050982",
+   "label": 0,
+   "p_control": 0.81842
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050983",
+   "label": 0,
+   "p_control": 0.35996
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050984",
+   "label": 0,
+   "p_control": 0.43103
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050985",
+   "label": 0,
+   "p_control": 0.24693
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050986",
+   "label": 0,
+   "p_control": 0.62633
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050987",
+   "label": 0,
+   "p_control": 0.4086
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050988",
+   "label": 0,
+   "p_control": 0.57168
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050989",
+   "label": 0,
+   "p_control": 0.37024
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050990",
+   "label": 0,
+   "p_control": 0.36645
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050991",
+   "label": 0,
+   "p_control": 0.68734
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050992",
+   "label": 0,
+   "p_control": 0.58615
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050993",
+   "label": 0,
+   "p_control": 0.30242
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050994",
+   "label": 0,
+   "p_control": 0.48872
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050995",
+   "label": 0,
+   "p_control": 0.72451
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050996",
+   "label": 0,
+   "p_control": 0.25124
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050997",
+   "label": 0,
+   "p_control": 0.63994
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050998",
+   "label": 0,
+   "p_control": 0.3684
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0050999",
+   "label": 0,
+   "p_control": 0.50692
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051000",
+   "label": 0,
+   "p_control": 0.51888
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051001",
+   "label": 0,
+   "p_control": 0.46169
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051002",
+   "label": 0,
+   "p_control": 0.66875
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051003",
+   "label": 0,
+   "p_control": 0.5375
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051006",
+   "label": 0,
+   "p_control": 0.69841
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051007",
+   "label": 0,
+   "p_control": 0.47071
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051008",
+   "label": 0,
+   "p_control": 0.52075
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051009",
+   "label": 0,
+   "p_control": 0.23666
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051010",
+   "label": 0,
+   "p_control": 0.56063
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051011",
+   "label": 0,
+   "p_control": 0.28809
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051012",
+   "label": 0,
+   "p_control": 0.42983
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051013",
+   "label": 0,
+   "p_control": 0.55083
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051014",
+   "label": 0,
+   "p_control": 0.66505
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051015",
+   "label": 0,
+   "p_control": 0.46193
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051016",
+   "label": 0,
+   "p_control": 0.50973
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051017",
+   "label": 0,
+   "p_control": 0.35146
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051018",
+   "label": 0,
+   "p_control": 0.59633
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051019",
+   "label": 0,
+   "p_control": 0.37169
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051020",
+   "label": 0,
+   "p_control": 0.40289
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051021",
+   "label": 0,
+   "p_control": 0.32223
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051023",
+   "label": 0,
+   "p_control": 0.43955
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051024",
+   "label": 0,
+   "p_control": 0.54314
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051025",
+   "label": 0,
+   "p_control": 0.68121
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051026",
+   "label": 0,
+   "p_control": 0.49681
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051027",
+   "label": 0,
+   "p_control": 0.52357
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051028",
+   "label": 0,
+   "p_control": 0.62868
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051029",
+   "label": 0,
+   "p_control": 0.63851
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051032",
+   "label": 0,
+   "p_control": 0.36723
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051033",
+   "label": 0,
+   "p_control": 0.32578
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051034",
+   "label": 0,
+   "p_control": 0.66735
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051035",
+   "label": 0,
+   "p_control": 0.30778
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051036",
+   "label": 1,
+   "p_control": 0.36164
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051038",
+   "label": 1,
+   "p_control": 0.39803
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051039",
+   "label": 1,
+   "p_control": 0.37368
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051040",
+   "label": 1,
+   "p_control": 0.56112
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051041",
+   "label": 1,
+   "p_control": 0.67976
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051042",
+   "label": 1,
+   "p_control": 0.59901
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051044",
+   "label": 1,
+   "p_control": 0.58651
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051045",
+   "label": 1,
+   "p_control": 0.56545
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051046",
+   "label": 1,
+   "p_control": 0.46637
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051047",
+   "label": 1,
+   "p_control": 0.63751
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051048",
+   "label": 1,
+   "p_control": 0.71505
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051049",
+   "label": 1,
+   "p_control": 0.64082
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051050",
+   "label": 1,
+   "p_control": 0.66133
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051051",
+   "label": 1,
+   "p_control": 0.80427
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051052",
+   "label": 1,
+   "p_control": 0.54964
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051053",
+   "label": 1,
+   "p_control": 0.58071
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051054",
+   "label": 1,
+   "p_control": 0.69864
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051055",
+   "label": 1,
+   "p_control": 0.72174
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051056",
+   "label": 1,
+   "p_control": 0.44984
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051057",
+   "label": 1,
+   "p_control": 0.74518
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051058",
+   "label": 1,
+   "p_control": 0.73004
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051059",
+   "label": 1,
+   "p_control": 0.58907
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051060",
+   "label": 1,
+   "p_control": 0.57714
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051061",
+   "label": 1,
+   "p_control": 0.76704
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051062",
+   "label": 1,
+   "p_control": 0.68426
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051063",
+   "label": 1,
+   "p_control": 0.47879
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051064",
+   "label": 1,
+   "p_control": 0.77781
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051065",
+   "label": 1,
+   "p_control": 0.58823
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051066",
+   "label": 1,
+   "p_control": 0.58879
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051067",
+   "label": 1,
+   "p_control": 0.77348
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051068",
+   "label": 1,
+   "p_control": 0.77854
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051069",
+   "label": 1,
+   "p_control": 0.59267
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051070",
+   "label": 1,
+   "p_control": 0.66247
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051071",
+   "label": 1,
+   "p_control": 0.584
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051072",
+   "label": 1,
+   "p_control": 0.63851
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051073",
+   "label": 1,
+   "p_control": 0.51639
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051074",
+   "label": 1,
+   "p_control": 0.51192
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051075",
+   "label": 1,
+   "p_control": 0.68924
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051076",
+   "label": 1,
+   "p_control": 0.74398
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051077",
+   "label": 1,
+   "p_control": 0.72192
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051078",
+   "label": 1,
+   "p_control": 0.82654
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051079",
+   "label": 1,
+   "p_control": 0.62382
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051080",
+   "label": 1,
+   "p_control": 0.57432
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051081",
+   "label": 1,
+   "p_control": 0.56696
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051082",
+   "label": 1,
+   "p_control": 0.47761
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051083",
+   "label": 1,
+   "p_control": 0.62785
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051084",
+   "label": 1,
+   "p_control": 0.45643
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051085",
+   "label": 1,
+   "p_control": 0.50519
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051086",
+   "label": 1,
+   "p_control": 0.44172
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051087",
+   "label": 1,
+   "p_control": 0.56151
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051088",
+   "label": 1,
+   "p_control": 0.61212
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051089",
+   "label": 1,
+   "p_control": 0.74346
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051090",
+   "label": 1,
+   "p_control": 0.69672
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051091",
+   "label": 1,
+   "p_control": 0.30551
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051093",
+   "label": 1,
+   "p_control": 0.6602
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051094",
+   "label": 1,
+   "p_control": 0.52236
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051095",
+   "label": 1,
+   "p_control": 0.43101
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051096",
+   "label": 1,
+   "p_control": 0.47887
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051097",
+   "label": 1,
+   "p_control": 0.71373
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051098",
+   "label": 1,
+   "p_control": 0.87719
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051099",
+   "label": 1,
+   "p_control": 0.77389
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051100",
+   "label": 1,
+   "p_control": 0.53588
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051101",
+   "label": 1,
+   "p_control": 0.60584
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051102",
+   "label": 1,
+   "p_control": 0.66647
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051103",
+   "label": 1,
+   "p_control": 0.38338
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051104",
+   "label": 1,
+   "p_control": 0.56525
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051105",
+   "label": 1,
+   "p_control": 0.62121
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051106",
+   "label": 1,
+   "p_control": 0.76279
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051107",
+   "label": 1,
+   "p_control": 0.68528
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051109",
+   "label": 1,
+   "p_control": 0.80611
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051110",
+   "label": 1,
+   "p_control": 0.64276
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051111",
+   "label": 1,
+   "p_control": 0.54602
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051112",
+   "label": 1,
+   "p_control": 0.79281
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051113",
+   "label": 1,
+   "p_control": 0.5021
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051114",
+   "label": 1,
+   "p_control": 0.5663
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051116",
+   "label": 1,
+   "p_control": 0.74322
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051117",
+   "label": 1,
+   "p_control": 0.54431
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051118",
+   "label": 1,
+   "p_control": 0.56583
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051121",
+   "label": 1,
+   "p_control": 0.45611
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051122",
+   "label": 1,
+   "p_control": 0.66988
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051123",
+   "label": 1,
+   "p_control": 0.45697
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051124",
+   "label": 1,
+   "p_control": 0.53903
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051126",
+   "label": 1,
+   "p_control": 0.59777
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051128",
+   "label": 1,
+   "p_control": 0.62151
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051129",
+   "label": 1,
+   "p_control": 0.49329
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051130",
+   "label": 1,
+   "p_control": 0.3288
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051131",
+   "label": 1,
+   "p_control": 0.74573
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051146",
+   "label": 1,
+   "p_control": 0.49145
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051147",
+   "label": 1,
+   "p_control": 0.65425
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051148",
+   "label": 1,
+   "p_control": 0.75387
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051149",
+   "label": 1,
+   "p_control": 0.58462
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051150",
+   "label": 1,
+   "p_control": 0.74467
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051151",
+   "label": 1,
+   "p_control": 0.49172
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051152",
+   "label": 1,
+   "p_control": 0.54159
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051153",
+   "label": 1,
+   "p_control": 0.41655
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051154",
+   "label": 1,
+   "p_control": 0.56929
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051155",
+   "label": 1,
+   "p_control": 0.44779
+  },
+  {
+   "fold": "NYU",
+   "subject": "NYU_0051156",
+   "label": 1,
+   "p_control": 0.64461
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050142",
+   "label": 0,
+   "p_control": 0.64704
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050143",
+   "label": 0,
+   "p_control": 0.24779
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050144",
+   "label": 0,
+   "p_control": 0.34378
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050145",
+   "label": 0,
+   "p_control": 0.73888
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050146",
+   "label": 0,
+   "p_control": 0.79321
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050147",
+   "label": 0,
+   "p_control": 0.46243
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050148",
+   "label": 0,
+   "p_control": 0.31964
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050149",
+   "label": 0,
+   "p_control": 0.49019
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050150",
+   "label": 0,
+   "p_control": 0.7324
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050152",
+   "label": 0,
+   "p_control": 0.6977
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050153",
+   "label": 0,
+   "p_control": 0.63053
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050156",
+   "label": 0,
+   "p_control": 0.57164
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050157",
+   "label": 1,
+   "p_control": 0.44901
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050158",
+   "label": 1,
+   "p_control": 0.55672
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050159",
+   "label": 1,
+   "p_control": 0.45969
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050160",
+   "label": 1,
+   "p_control": 0.9192
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050161",
+   "label": 1,
+   "p_control": 0.70994
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050166",
+   "label": 1,
+   "p_control": 0.65056
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050167",
+   "label": 1,
+   "p_control": 0.83736
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050168",
+   "label": 1,
+   "p_control": 0.5189
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050169",
+   "label": 1,
+   "p_control": 0.59415
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050170",
+   "label": 1,
+   "p_control": 0.6613
+  },
+  {
+   "fold": "OHSU",
+   "subject": "OHSU_0050171",
+   "label": 1,
+   "p_control": 0.36089
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050102",
+   "label": 1,
+   "p_control": 0.46247
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050104",
+   "label": 1,
+   "p_control": 0.72186
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050105",
+   "label": 1,
+   "p_control": 0.72632
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050107",
+   "label": 1,
+   "p_control": 0.48205
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050111",
+   "label": 1,
+   "p_control": 0.38682
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050112",
+   "label": 1,
+   "p_control": 0.38502
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050113",
+   "label": 1,
+   "p_control": 0.85004
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050114",
+   "label": 1,
+   "p_control": 0.66109
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050115",
+   "label": 1,
+   "p_control": 0.55763
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050116",
+   "label": 1,
+   "p_control": 0.66284
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050117",
+   "label": 1,
+   "p_control": 0.51978
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050118",
+   "label": 0,
+   "p_control": 0.61793
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050119",
+   "label": 0,
+   "p_control": 0.44251
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050121",
+   "label": 0,
+   "p_control": 0.57677
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050122",
+   "label": 0,
+   "p_control": 0.17253
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050125",
+   "label": 0,
+   "p_control": 0.46503
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050127",
+   "label": 0,
+   "p_control": 0.78162
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050128",
+   "label": 0,
+   "p_control": 0.16334
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050129",
+   "label": 0,
+   "p_control": 0.47286
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050130",
+   "label": 0,
+   "p_control": 0.56802
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050131",
+   "label": 0,
+   "p_control": 0.70621
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050132",
+   "label": 0,
+   "p_control": 0.60488
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050133",
+   "label": 0,
+   "p_control": 0.53091
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050134",
+   "label": 0,
+   "p_control": 0.33949
+  },
+  {
+   "fold": "OLIN",
+   "subject": "Olin_0050136",
+   "label": 0,
+   "p_control": 0.4929
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050004",
+   "label": 0,
+   "p_control": 0.32321
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050005",
+   "label": 0,
+   "p_control": 0.74439
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050006",
+   "label": 0,
+   "p_control": 0.35075
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050007",
+   "label": 0,
+   "p_control": 0.50087
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050008",
+   "label": 0,
+   "p_control": 0.64
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050009",
+   "label": 0,
+   "p_control": 0.53847
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050010",
+   "label": 0,
+   "p_control": 0.49976
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050011",
+   "label": 0,
+   "p_control": 0.46256
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050012",
+   "label": 0,
+   "p_control": 0.50745
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050014",
+   "label": 0,
+   "p_control": 0.48173
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050015",
+   "label": 0,
+   "p_control": 0.36591
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050016",
+   "label": 0,
+   "p_control": 0.73154
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050020",
+   "label": 0,
+   "p_control": 0.53808
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050022",
+   "label": 0,
+   "p_control": 0.88689
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050023",
+   "label": 0,
+   "p_control": 0.64412
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050024",
+   "label": 0,
+   "p_control": 0.58199
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050025",
+   "label": 0,
+   "p_control": 0.5097
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050027",
+   "label": 0,
+   "p_control": 0.68826
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050029",
+   "label": 0,
+   "p_control": 0.43826
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050030",
+   "label": 1,
+   "p_control": 0.74929
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050031",
+   "label": 1,
+   "p_control": 0.69169
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050032",
+   "label": 1,
+   "p_control": 0.92041
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050033",
+   "label": 1,
+   "p_control": 0.5831
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050034",
+   "label": 1,
+   "p_control": 0.73416
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050035",
+   "label": 1,
+   "p_control": 0.8048
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050036",
+   "label": 1,
+   "p_control": 0.70561
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050037",
+   "label": 1,
+   "p_control": 0.42968
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050038",
+   "label": 1,
+   "p_control": 0.75307
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050040",
+   "label": 1,
+   "p_control": 0.74043
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050041",
+   "label": 1,
+   "p_control": 0.88729
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050042",
+   "label": 1,
+   "p_control": 0.65875
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050044",
+   "label": 1,
+   "p_control": 0.75054
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050045",
+   "label": 1,
+   "p_control": 0.7045
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050046",
+   "label": 1,
+   "p_control": 0.68622
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050047",
+   "label": 1,
+   "p_control": 0.39727
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050048",
+   "label": 1,
+   "p_control": 0.42934
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050050",
+   "label": 1,
+   "p_control": 0.66977
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050051",
+   "label": 1,
+   "p_control": 0.77473
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050052",
+   "label": 1,
+   "p_control": 0.6242
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050055",
+   "label": 0,
+   "p_control": 0.29509
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050056",
+   "label": 0,
+   "p_control": 0.41877
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050057",
+   "label": 0,
+   "p_control": 0.86561
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050058",
+   "label": 1,
+   "p_control": 0.62678
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050059",
+   "label": 1,
+   "p_control": 0.7479
+  },
+  {
+   "fold": "PITT",
+   "subject": "Pitt_0050060",
+   "label": 1,
+   "p_control": 0.51295
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051557",
+   "label": 1,
+   "p_control": 0.65096
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051558",
+   "label": 1,
+   "p_control": 0.60046
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051559",
+   "label": 1,
+   "p_control": 0.69587
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051560",
+   "label": 1,
+   "p_control": 0.62863
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051561",
+   "label": 1,
+   "p_control": 0.79883
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051562",
+   "label": 1,
+   "p_control": 0.83952
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051563",
+   "label": 1,
+   "p_control": 0.54168
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051564",
+   "label": 1,
+   "p_control": 0.74528
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051565",
+   "label": 1,
+   "p_control": 0.65007
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051566",
+   "label": 1,
+   "p_control": 0.87152
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051567",
+   "label": 1,
+   "p_control": 0.75821
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051570",
+   "label": 1,
+   "p_control": 0.28914
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051571",
+   "label": 0,
+   "p_control": 0.43041
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051572",
+   "label": 0,
+   "p_control": 0.47351
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051573",
+   "label": 0,
+   "p_control": 0.51344
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051574",
+   "label": 0,
+   "p_control": 0.63365
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051576",
+   "label": 0,
+   "p_control": 0.59509
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051577",
+   "label": 0,
+   "p_control": 0.48036
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051578",
+   "label": 0,
+   "p_control": 0.44191
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051579",
+   "label": 0,
+   "p_control": 0.49539
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051580",
+   "label": 0,
+   "p_control": 0.58196
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051581",
+   "label": 0,
+   "p_control": 0.61647
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051582",
+   "label": 0,
+   "p_control": 0.45775
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051583",
+   "label": 0,
+   "p_control": 0.52695
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051584",
+   "label": 0,
+   "p_control": 0.54388
+  },
+  {
+   "fold": "SBL",
+   "subject": "SBL_0051585",
+   "label": 0,
+   "p_control": 0.52429
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050182",
+   "label": 0,
+   "p_control": 0.66631
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050183",
+   "label": 0,
+   "p_control": 0.53207
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050184",
+   "label": 0,
+   "p_control": 0.33463
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050186",
+   "label": 0,
+   "p_control": 0.15764
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050187",
+   "label": 0,
+   "p_control": 0.67268
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050188",
+   "label": 0,
+   "p_control": 0.78466
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050189",
+   "label": 0,
+   "p_control": 0.432
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050190",
+   "label": 0,
+   "p_control": 0.63118
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050191",
+   "label": 0,
+   "p_control": 0.69278
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050193",
+   "label": 1,
+   "p_control": 0.61395
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050194",
+   "label": 1,
+   "p_control": 0.58767
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050195",
+   "label": 1,
+   "p_control": 0.4217
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050196",
+   "label": 1,
+   "p_control": 0.69496
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050197",
+   "label": 1,
+   "p_control": 0.57456
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050198",
+   "label": 1,
+   "p_control": 0.50011
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050199",
+   "label": 1,
+   "p_control": 0.66079
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050200",
+   "label": 1,
+   "p_control": 0.72552
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050201",
+   "label": 1,
+   "p_control": 0.79597
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050203",
+   "label": 1,
+   "p_control": 0.84787
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050204",
+   "label": 1,
+   "p_control": 0.68913
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050205",
+   "label": 1,
+   "p_control": 0.81987
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050206",
+   "label": 1,
+   "p_control": 0.38947
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050207",
+   "label": 0,
+   "p_control": 0.78483
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050208",
+   "label": 1,
+   "p_control": 0.67399
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050209",
+   "label": 1,
+   "p_control": 0.55716
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050210",
+   "label": 1,
+   "p_control": 0.46954
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050211",
+   "label": 1,
+   "p_control": 0.41321
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050212",
+   "label": 0,
+   "p_control": 0.39763
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050213",
+   "label": 1,
+   "p_control": 0.5611
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050214",
+   "label": 1,
+   "p_control": 0.79489
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050215",
+   "label": 1,
+   "p_control": 0.73581
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050216",
+   "label": 0,
+   "p_control": 0.60272
+  },
+  {
+   "fold": "SDSU",
+   "subject": "SDSU_0050217",
+   "label": 1,
+   "p_control": 0.80586
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051160",
+   "label": 0,
+   "p_control": 0.26048
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051162",
+   "label": 0,
+   "p_control": 0.45643
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051163",
+   "label": 0,
+   "p_control": 0.49251
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051164",
+   "label": 0,
+   "p_control": 0.5007
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051165",
+   "label": 0,
+   "p_control": 0.30207
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051167",
+   "label": 0,
+   "p_control": 0.38526
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051168",
+   "label": 0,
+   "p_control": 0.68947
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051169",
+   "label": 0,
+   "p_control": 0.44095
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051170",
+   "label": 0,
+   "p_control": 0.36377
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051171",
+   "label": 0,
+   "p_control": 0.5374
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051172",
+   "label": 0,
+   "p_control": 0.59825
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051173",
+   "label": 0,
+   "p_control": 0.43597
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051174",
+   "label": 0,
+   "p_control": 0.3937
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051175",
+   "label": 0,
+   "p_control": 0.34457
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051177",
+   "label": 0,
+   "p_control": 0.26957
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051178",
+   "label": 0,
+   "p_control": 0.24498
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051179",
+   "label": 0,
+   "p_control": 0.54148
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051180",
+   "label": 1,
+   "p_control": 0.53757
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051181",
+   "label": 1,
+   "p_control": 0.46222
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051182",
+   "label": 1,
+   "p_control": 0.61067
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051183",
+   "label": 1,
+   "p_control": 0.50333
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051184",
+   "label": 1,
+   "p_control": 0.55198
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051185",
+   "label": 1,
+   "p_control": 0.57097
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051186",
+   "label": 1,
+   "p_control": 0.45974
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051187",
+   "label": 1,
+   "p_control": 0.45704
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051188",
+   "label": 1,
+   "p_control": 0.49561
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051189",
+   "label": 1,
+   "p_control": 0.42976
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051190",
+   "label": 1,
+   "p_control": 0.50027
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051191",
+   "label": 1,
+   "p_control": 0.7284
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051192",
+   "label": 1,
+   "p_control": 0.67742
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051193",
+   "label": 1,
+   "p_control": 0.48692
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051194",
+   "label": 1,
+   "p_control": 0.44661
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051196",
+   "label": 1,
+   "p_control": 0.45396
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051197",
+   "label": 1,
+   "p_control": 0.57034
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051198",
+   "label": 1,
+   "p_control": 0.49117
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "Stanford_0051199",
+   "label": 1,
+   "p_control": 0.58422
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050232",
+   "label": 0,
+   "p_control": 0.4515
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050233",
+   "label": 0,
+   "p_control": 0.16484
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050234",
+   "label": 0,
+   "p_control": 0.58081
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050235",
+   "label": 0,
+   "p_control": 0.60408
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050236",
+   "label": 0,
+   "p_control": 0.62679
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050237",
+   "label": 0,
+   "p_control": 0.56579
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050239",
+   "label": 0,
+   "p_control": 0.53186
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050240",
+   "label": 0,
+   "p_control": 0.31653
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050241",
+   "label": 0,
+   "p_control": 0.33912
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050243",
+   "label": 0,
+   "p_control": 0.50121
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050245",
+   "label": 0,
+   "p_control": 0.29673
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050246",
+   "label": 0,
+   "p_control": 0.37314
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050247",
+   "label": 0,
+   "p_control": 0.54904
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050248",
+   "label": 0,
+   "p_control": 0.62509
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050249",
+   "label": 0,
+   "p_control": 0.46857
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050250",
+   "label": 0,
+   "p_control": 0.54451
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050251",
+   "label": 0,
+   "p_control": 0.63285
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050252",
+   "label": 0,
+   "p_control": 0.50537
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050253",
+   "label": 0,
+   "p_control": 0.49066
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050254",
+   "label": 0,
+   "p_control": 0.3914
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050255",
+   "label": 0,
+   "p_control": 0.36351
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050257",
+   "label": 1,
+   "p_control": 0.59583
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050259",
+   "label": 1,
+   "p_control": 0.35275
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050260",
+   "label": 1,
+   "p_control": 0.57091
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050261",
+   "label": 1,
+   "p_control": 0.34861
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050262",
+   "label": 1,
+   "p_control": 0.72489
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050263",
+   "label": 1,
+   "p_control": 0.66173
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050264",
+   "label": 1,
+   "p_control": 0.66176
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050266",
+   "label": 1,
+   "p_control": 0.55058
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050267",
+   "label": 1,
+   "p_control": 0.54936
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050268",
+   "label": 1,
+   "p_control": 0.44395
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050269",
+   "label": 1,
+   "p_control": 0.53957
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050270",
+   "label": 1,
+   "p_control": 0.70031
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0050271",
+   "label": 1,
+   "p_control": 0.7428
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051132",
+   "label": 1,
+   "p_control": 0.57617
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051133",
+   "label": 1,
+   "p_control": 0.26316
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051134",
+   "label": 1,
+   "p_control": 0.47327
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051135",
+   "label": 1,
+   "p_control": 0.79423
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051137",
+   "label": 1,
+   "p_control": 0.80446
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051138",
+   "label": 1,
+   "p_control": 0.73103
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051139",
+   "label": 1,
+   "p_control": 0.66665
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051140",
+   "label": 1,
+   "p_control": 0.47586
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051141",
+   "label": 1,
+   "p_control": 0.25279
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "Trinity_0051142",
+   "label": 1,
+   "p_control": 0.54592
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051205",
+   "label": 0,
+   "p_control": 0.49788
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051206",
+   "label": 0,
+   "p_control": 0.20917
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051208",
+   "label": 0,
+   "p_control": 0.83239
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051210",
+   "label": 0,
+   "p_control": 0.14196
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051211",
+   "label": 0,
+   "p_control": 0.35029
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051212",
+   "label": 0,
+   "p_control": 0.38041
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051214",
+   "label": 0,
+   "p_control": 0.66788
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051216",
+   "label": 0,
+   "p_control": 0.49143
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051217",
+   "label": 0,
+   "p_control": 0.67697
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051218",
+   "label": 0,
+   "p_control": 0.25548
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051220",
+   "label": 0,
+   "p_control": 0.62902
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051221",
+   "label": 0,
+   "p_control": 0.34162
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051222",
+   "label": 0,
+   "p_control": 0.59501
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051223",
+   "label": 0,
+   "p_control": 0.47474
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051224",
+   "label": 0,
+   "p_control": 0.54212
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051225",
+   "label": 0,
+   "p_control": 0.32466
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051226",
+   "label": 0,
+   "p_control": 0.65797
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051229",
+   "label": 0,
+   "p_control": 0.52334
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051230",
+   "label": 0,
+   "p_control": 0.7334
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051234",
+   "label": 0,
+   "p_control": 0.27329
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051235",
+   "label": 0,
+   "p_control": 0.40723
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051236",
+   "label": 0,
+   "p_control": 0.46845
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051237",
+   "label": 0,
+   "p_control": 0.59339
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051239",
+   "label": 0,
+   "p_control": 0.24137
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051240",
+   "label": 0,
+   "p_control": 0.35274
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051241",
+   "label": 0,
+   "p_control": 0.62459
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051248",
+   "label": 0,
+   "p_control": 0.55695
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051249",
+   "label": 0,
+   "p_control": 0.45693
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051250",
+   "label": 1,
+   "p_control": 0.64155
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051251",
+   "label": 1,
+   "p_control": 0.49507
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051252",
+   "label": 1,
+   "p_control": 0.65612
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051253",
+   "label": 1,
+   "p_control": 0.59542
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051254",
+   "label": 1,
+   "p_control": 0.73524
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051255",
+   "label": 1,
+   "p_control": 0.76108
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051256",
+   "label": 1,
+   "p_control": 0.70392
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051257",
+   "label": 1,
+   "p_control": 0.58784
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051260",
+   "label": 1,
+   "p_control": 0.77532
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051261",
+   "label": 1,
+   "p_control": 0.67248
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051262",
+   "label": 1,
+   "p_control": 0.56717
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051264",
+   "label": 1,
+   "p_control": 0.6804
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051265",
+   "label": 1,
+   "p_control": 0.67234
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051266",
+   "label": 1,
+   "p_control": 0.30001
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051267",
+   "label": 1,
+   "p_control": 0.80844
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051268",
+   "label": 1,
+   "p_control": 0.51284
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051269",
+   "label": 1,
+   "p_control": 0.77226
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051271",
+   "label": 1,
+   "p_control": 0.76435
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051272",
+   "label": 1,
+   "p_control": 0.63042
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051273",
+   "label": 1,
+   "p_control": 0.50472
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051275",
+   "label": 1,
+   "p_control": 0.81958
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051276",
+   "label": 1,
+   "p_control": 0.75663
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051277",
+   "label": 1,
+   "p_control": 0.65421
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051279",
+   "label": 1,
+   "p_control": 0.59821
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051280",
+   "label": 1,
+   "p_control": 0.65504
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051281",
+   "label": 1,
+   "p_control": 0.81741
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "UCLA_1_0051282",
+   "label": 1,
+   "p_control": 0.65676
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051291",
+   "label": 0,
+   "p_control": 0.33742
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051293",
+   "label": 0,
+   "p_control": 0.77397
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051294",
+   "label": 0,
+   "p_control": 0.38193
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051295",
+   "label": 0,
+   "p_control": 0.27464
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051298",
+   "label": 0,
+   "p_control": 0.36184
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051301",
+   "label": 0,
+   "p_control": 0.27936
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051302",
+   "label": 0,
+   "p_control": 0.26947
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051303",
+   "label": 1,
+   "p_control": 0.75703
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051305",
+   "label": 1,
+   "p_control": 0.39122
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051306",
+   "label": 1,
+   "p_control": 0.69951
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051307",
+   "label": 1,
+   "p_control": 0.35874
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051308",
+   "label": 1,
+   "p_control": 0.59426
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051309",
+   "label": 1,
+   "p_control": 0.33417
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051311",
+   "label": 1,
+   "p_control": 0.65021
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051312",
+   "label": 1,
+   "p_control": 0.57574
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051313",
+   "label": 1,
+   "p_control": 0.54658
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051314",
+   "label": 1,
+   "p_control": 0.41475
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051315",
+   "label": 1,
+   "p_control": 0.76928
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051316",
+   "label": 1,
+   "p_control": 0.51491
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "UCLA_2_0051317",
+   "label": 0,
+   "p_control": 0.24745
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050272",
+   "label": 0,
+   "p_control": 0.49228
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050273",
+   "label": 0,
+   "p_control": 0.45889
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050274",
+   "label": 0,
+   "p_control": 0.54212
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050275",
+   "label": 0,
+   "p_control": 0.29847
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050276",
+   "label": 0,
+   "p_control": 0.46172
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050277",
+   "label": 0,
+   "p_control": 0.44355
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050278",
+   "label": 0,
+   "p_control": 0.38784
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050280",
+   "label": 0,
+   "p_control": 0.35679
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050282",
+   "label": 0,
+   "p_control": 0.60036
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050283",
+   "label": 0,
+   "p_control": 0.04267
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050284",
+   "label": 0,
+   "p_control": 0.51528
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050285",
+   "label": 0,
+   "p_control": 0.71706
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050287",
+   "label": 0,
+   "p_control": 0.64539
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050289",
+   "label": 0,
+   "p_control": 0.58082
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050290",
+   "label": 0,
+   "p_control": 0.58975
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050291",
+   "label": 0,
+   "p_control": 0.45065
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050292",
+   "label": 0,
+   "p_control": 0.55247
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050293",
+   "label": 0,
+   "p_control": 0.40908
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050294",
+   "label": 0,
+   "p_control": 0.39678
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050295",
+   "label": 0,
+   "p_control": 0.57156
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050297",
+   "label": 0,
+   "p_control": 0.74023
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050298",
+   "label": 0,
+   "p_control": 0.59669
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050300",
+   "label": 0,
+   "p_control": 0.69769
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050301",
+   "label": 0,
+   "p_control": 0.61398
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050302",
+   "label": 0,
+   "p_control": 0.3558
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050307",
+   "label": 0,
+   "p_control": 0.38443
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050310",
+   "label": 0,
+   "p_control": 0.51288
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050314",
+   "label": 0,
+   "p_control": 0.52889
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050315",
+   "label": 0,
+   "p_control": 0.51139
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050318",
+   "label": 0,
+   "p_control": 0.65719
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050319",
+   "label": 0,
+   "p_control": 0.46569
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050320",
+   "label": 0,
+   "p_control": 0.29037
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050321",
+   "label": 0,
+   "p_control": 0.42008
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050324",
+   "label": 0,
+   "p_control": 0.42496
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050325",
+   "label": 0,
+   "p_control": 0.50639
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050326",
+   "label": 0,
+   "p_control": 0.43996
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050327",
+   "label": 1,
+   "p_control": 0.61838
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050329",
+   "label": 1,
+   "p_control": 0.53226
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050330",
+   "label": 1,
+   "p_control": 0.78869
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050331",
+   "label": 1,
+   "p_control": 0.70885
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050332",
+   "label": 1,
+   "p_control": 0.22753
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050334",
+   "label": 1,
+   "p_control": 0.45021
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050335",
+   "label": 1,
+   "p_control": 0.41066
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050336",
+   "label": 1,
+   "p_control": 0.51665
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050337",
+   "label": 1,
+   "p_control": 0.44444
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050338",
+   "label": 1,
+   "p_control": 0.62777
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050339",
+   "label": 1,
+   "p_control": 0.29007
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050340",
+   "label": 1,
+   "p_control": 0.61085
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050341",
+   "label": 1,
+   "p_control": 0.60478
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050342",
+   "label": 1,
+   "p_control": 0.30242
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050343",
+   "label": 1,
+   "p_control": 0.57544
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050344",
+   "label": 1,
+   "p_control": 0.66023
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050345",
+   "label": 1,
+   "p_control": 0.49039
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050346",
+   "label": 1,
+   "p_control": 0.6165
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050347",
+   "label": 1,
+   "p_control": 0.50091
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050348",
+   "label": 1,
+   "p_control": 0.66378
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050349",
+   "label": 1,
+   "p_control": 0.57539
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050350",
+   "label": 1,
+   "p_control": 0.56614
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050351",
+   "label": 1,
+   "p_control": 0.62701
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050352",
+   "label": 1,
+   "p_control": 0.73677
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050353",
+   "label": 1,
+   "p_control": 0.51932
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050355",
+   "label": 1,
+   "p_control": 0.65388
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050356",
+   "label": 1,
+   "p_control": 0.55996
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050357",
+   "label": 1,
+   "p_control": 0.51079
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050358",
+   "label": 1,
+   "p_control": 0.60707
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050360",
+   "label": 1,
+   "p_control": 0.59124
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050361",
+   "label": 1,
+   "p_control": 0.62691
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050362",
+   "label": 1,
+   "p_control": 0.29276
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050363",
+   "label": 1,
+   "p_control": 0.53308
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050364",
+   "label": 1,
+   "p_control": 0.49104
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050365",
+   "label": 1,
+   "p_control": 0.74861
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050366",
+   "label": 1,
+   "p_control": 0.67609
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050367",
+   "label": 1,
+   "p_control": 0.67578
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050368",
+   "label": 1,
+   "p_control": 0.48091
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050369",
+   "label": 1,
+   "p_control": 0.82754
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050370",
+   "label": 1,
+   "p_control": 0.54507
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050372",
+   "label": 1,
+   "p_control": 0.61765
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050373",
+   "label": 1,
+   "p_control": 0.56916
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050374",
+   "label": 1,
+   "p_control": 0.59784
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050375",
+   "label": 1,
+   "p_control": 0.60682
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050377",
+   "label": 1,
+   "p_control": 0.73318
+  },
+  {
+   "fold": "UM_1",
+   "subject": "UM_1_0050379",
+   "label": 1,
+   "p_control": 0.50923
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050382",
+   "label": 1,
+   "p_control": 0.66983
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050385",
+   "label": 1,
+   "p_control": 0.68965
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050386",
+   "label": 1,
+   "p_control": 0.70758
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050387",
+   "label": 1,
+   "p_control": 0.60384
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050388",
+   "label": 1,
+   "p_control": 0.7383
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050390",
+   "label": 1,
+   "p_control": 0.61144
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050391",
+   "label": 1,
+   "p_control": 0.8176
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050397",
+   "label": 0,
+   "p_control": 0.51111
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050399",
+   "label": 0,
+   "p_control": 0.50374
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050402",
+   "label": 0,
+   "p_control": 0.48688
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050404",
+   "label": 0,
+   "p_control": 0.56914
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050405",
+   "label": 0,
+   "p_control": 0.48002
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050406",
+   "label": 0,
+   "p_control": 0.37341
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050407",
+   "label": 0,
+   "p_control": 0.36758
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050408",
+   "label": 0,
+   "p_control": 0.60953
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050410",
+   "label": 0,
+   "p_control": 0.54296
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050411",
+   "label": 0,
+   "p_control": 0.40401
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050412",
+   "label": 0,
+   "p_control": 0.30502
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050413",
+   "label": 0,
+   "p_control": 0.45334
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050414",
+   "label": 1,
+   "p_control": 0.70579
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050415",
+   "label": 1,
+   "p_control": 0.68845
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050416",
+   "label": 1,
+   "p_control": 0.59726
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050417",
+   "label": 1,
+   "p_control": 0.61309
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050418",
+   "label": 1,
+   "p_control": 0.56564
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050419",
+   "label": 1,
+   "p_control": 0.64729
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050421",
+   "label": 1,
+   "p_control": 0.75583
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050424",
+   "label": 1,
+   "p_control": 0.52312
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050425",
+   "label": 1,
+   "p_control": 0.66986
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050426",
+   "label": 1,
+   "p_control": 0.67051
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050427",
+   "label": 1,
+   "p_control": 0.76657
+  },
+  {
+   "fold": "UM_2",
+   "subject": "UM_2_0050428",
+   "label": 1,
+   "p_control": 0.70297
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050433",
+   "label": 1,
+   "p_control": 0.58174
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050434",
+   "label": 1,
+   "p_control": 0.70738
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050435",
+   "label": 1,
+   "p_control": 0.63491
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050436",
+   "label": 1,
+   "p_control": 0.4354
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050437",
+   "label": 1,
+   "p_control": 0.39721
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050438",
+   "label": 1,
+   "p_control": 0.84568
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050439",
+   "label": 1,
+   "p_control": 0.60984
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050440",
+   "label": 1,
+   "p_control": 0.56656
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050441",
+   "label": 1,
+   "p_control": 0.71128
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050442",
+   "label": 1,
+   "p_control": 0.7194
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050443",
+   "label": 1,
+   "p_control": 0.6191
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050444",
+   "label": 1,
+   "p_control": 0.66176
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050445",
+   "label": 1,
+   "p_control": 0.73084
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050446",
+   "label": 1,
+   "p_control": 0.62068
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050447",
+   "label": 1,
+   "p_control": 0.4668
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050448",
+   "label": 1,
+   "p_control": 0.4234
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050449",
+   "label": 1,
+   "p_control": 0.61377
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050455",
+   "label": 1,
+   "p_control": 0.66025
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050463",
+   "label": 1,
+   "p_control": 0.66977
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050466",
+   "label": 1,
+   "p_control": 0.51373
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050467",
+   "label": 1,
+   "p_control": 0.49102
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050468",
+   "label": 1,
+   "p_control": 0.56721
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050469",
+   "label": 1,
+   "p_control": 0.70128
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050477",
+   "label": 0,
+   "p_control": 0.47043
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050480",
+   "label": 0,
+   "p_control": 0.44731
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050482",
+   "label": 0,
+   "p_control": 0.39864
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050483",
+   "label": 0,
+   "p_control": 0.37202
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050485",
+   "label": 0,
+   "p_control": 0.61218
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050486",
+   "label": 0,
+   "p_control": 0.36926
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050487",
+   "label": 0,
+   "p_control": 0.27456
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050488",
+   "label": 0,
+   "p_control": 0.28506
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050490",
+   "label": 0,
+   "p_control": 0.46002
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050491",
+   "label": 0,
+   "p_control": 0.31978
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050492",
+   "label": 0,
+   "p_control": 0.43105
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050493",
+   "label": 0,
+   "p_control": 0.33606
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050494",
+   "label": 0,
+   "p_control": 0.2854
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050496",
+   "label": 0,
+   "p_control": 0.34426
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050497",
+   "label": 0,
+   "p_control": 0.14514
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050498",
+   "label": 0,
+   "p_control": 0.27506
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050499",
+   "label": 0,
+   "p_control": 0.36384
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050500",
+   "label": 0,
+   "p_control": 0.7296
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050502",
+   "label": 0,
+   "p_control": 0.49206
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050503",
+   "label": 0,
+   "p_control": 0.36651
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050504",
+   "label": 0,
+   "p_control": 0.27603
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050505",
+   "label": 0,
+   "p_control": 0.51494
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050507",
+   "label": 0,
+   "p_control": 0.71815
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050514",
+   "label": 0,
+   "p_control": 0.66305
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050515",
+   "label": 0,
+   "p_control": 0.23729
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050516",
+   "label": 0,
+   "p_control": 0.53285
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050518",
+   "label": 0,
+   "p_control": 0.6411
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050519",
+   "label": 0,
+   "p_control": 0.45091
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050520",
+   "label": 0,
+   "p_control": 0.45802
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050521",
+   "label": 0,
+   "p_control": 0.57746
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050524",
+   "label": 0,
+   "p_control": 0.35806
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050525",
+   "label": 0,
+   "p_control": 0.36525
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050526",
+   "label": 0,
+   "p_control": 0.55719
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050527",
+   "label": 0,
+   "p_control": 0.38482
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050528",
+   "label": 0,
+   "p_control": 0.35855
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050529",
+   "label": 0,
+   "p_control": 0.20681
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050530",
+   "label": 0,
+   "p_control": 0.37931
+  },
+  {
+   "fold": "USM",
+   "subject": "USM_0050532",
+   "label": 0,
+   "p_control": 0.36702
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050551",
+   "label": 1,
+   "p_control": 0.43922
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050552",
+   "label": 1,
+   "p_control": 0.65468
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050553",
+   "label": 1,
+   "p_control": 0.79615
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050554",
+   "label": 1,
+   "p_control": 0.75193
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050555",
+   "label": 1,
+   "p_control": 0.75791
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050556",
+   "label": 1,
+   "p_control": 0.74549
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050557",
+   "label": 1,
+   "p_control": 0.49654
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050558",
+   "label": 1,
+   "p_control": 0.76467
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050559",
+   "label": 1,
+   "p_control": 0.30335
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050560",
+   "label": 1,
+   "p_control": 0.7623
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050561",
+   "label": 1,
+   "p_control": 0.62109
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050562",
+   "label": 1,
+   "p_control": 0.51726
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050563",
+   "label": 1,
+   "p_control": 0.84838
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050564",
+   "label": 1,
+   "p_control": 0.53847
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050566",
+   "label": 1,
+   "p_control": 0.74407
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050567",
+   "label": 1,
+   "p_control": 0.81104
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050568",
+   "label": 1,
+   "p_control": 0.68155
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050569",
+   "label": 1,
+   "p_control": 0.79204
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050570",
+   "label": 1,
+   "p_control": 0.73366
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050571",
+   "label": 1,
+   "p_control": 0.50093
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050572",
+   "label": 1,
+   "p_control": 0.70208
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050573",
+   "label": 1,
+   "p_control": 0.61107
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050574",
+   "label": 1,
+   "p_control": 0.61458
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050575",
+   "label": 1,
+   "p_control": 0.7208
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050576",
+   "label": 1,
+   "p_control": 0.77577
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050577",
+   "label": 1,
+   "p_control": 0.76569
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050601",
+   "label": 0,
+   "p_control": 0.90046
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050603",
+   "label": 0,
+   "p_control": 0.36233
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050604",
+   "label": 0,
+   "p_control": 0.72194
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050605",
+   "label": 0,
+   "p_control": 0.62909
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050606",
+   "label": 0,
+   "p_control": 0.38681
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050607",
+   "label": 0,
+   "p_control": 0.76796
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050609",
+   "label": 0,
+   "p_control": 0.17869
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050611",
+   "label": 0,
+   "p_control": 0.49488
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050612",
+   "label": 0,
+   "p_control": 0.66493
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050613",
+   "label": 0,
+   "p_control": 0.42902
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050614",
+   "label": 0,
+   "p_control": 0.42223
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050616",
+   "label": 0,
+   "p_control": 0.23903
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050617",
+   "label": 0,
+   "p_control": 0.35313
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050619",
+   "label": 0,
+   "p_control": 0.50457
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050620",
+   "label": 0,
+   "p_control": 0.43122
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050621",
+   "label": 0,
+   "p_control": 0.64836
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050623",
+   "label": 0,
+   "p_control": 0.71051
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050624",
+   "label": 0,
+   "p_control": 0.39083
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050625",
+   "label": 0,
+   "p_control": 0.51279
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050626",
+   "label": 0,
+   "p_control": 0.28903
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050627",
+   "label": 0,
+   "p_control": 0.75079
+  },
+  {
+   "fold": "YALE",
+   "subject": "Yale_0050628",
+   "label": 0,
+   "p_control": 0.36616
+  }
+ ]
+}
