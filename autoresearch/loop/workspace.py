@@ -8,6 +8,7 @@ import re
 from typing import Any
 
 from autoresearch.loop.paths import (
+    REPO_ROOT,
     archive_failed_diff,
     revert_coder_files,
     snapshot_coder_files,
@@ -252,7 +253,12 @@ def apply_trial_outcome(
             "sensitivity_mean": sens,
             "specificity_mean": spec,
         }
-        data["snapshotted"] = snapshot_coder_files(list(data.get("files_changed") or []))
+        # Snapshot every model file, not only this trial's files_changed: an
+        # earlier fix-up round may have edited a file this list does not name,
+        # and a stale snapshot would make later FAILs revert to mismatched code.
+        changed = set(data.get("files_changed") or [])
+        changed.update(f"neuroasd/{p.name}" for p in (REPO_ROOT / "neuroasd").glob("*.py"))
+        data["snapshotted"] = snapshot_coder_files(sorted(changed))
         data["reverted"] = []
         data["coder_ok"] = None
         data["lint_ok"] = None
