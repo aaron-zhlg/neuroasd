@@ -110,7 +110,7 @@ idle
   → screen PASS   → same code, loso-site
   → site PASS     → same code, loso-institution
   → institution PASS → review PR; keep the code; coder stacks the next mechanism
-  → institution ASD recall ≥ 0.75 → stop
+  → no ceiling: runs until Ctrl-C (optional --target-recall)
 ```
 
 Writable: `neuroasd/*.py` and `autoresearch/trial.py`. Not writable:
@@ -120,7 +120,7 @@ Writable: `neuroasd/*.py` and `autoresearch/trial.py`. Not writable:
 A protocol-clean `loso-institution` PASS opens a review PR (scores first),
 snapshots the winning files as the new baseline, and **keeps searching**.
 It does not wait for merge and does not raise `gates.json`. The loop stops
-when `loso-institution` ASD recall reaches `--target-recall` (default 0.75)
+only on Ctrl-C, or when `loso-institution` ASD recall reaches the optional `--target-recall`
 or on Ctrl-C.
 
 ---
@@ -134,7 +134,7 @@ uv run python -m autoresearch.trial --name class-weight --stage screen --note "c
 
 set -a; source .env; set +a
 uv run python -m autoresearch.loop.check_loop
-uv run python -m autoresearch.loop                # until 75% ASD recall or Ctrl-C
+uv run python -m autoresearch.loop                # until Ctrl-C
 uv run python -m autoresearch.loop --fresh        # wipe workspace and restart
 ```
 

@@ -23,14 +23,17 @@ from autoresearch.loop.workspace import (
 )
 
 DEFAULT_GOAL = (
-    "Raise ASD recall (sensitivity) on unseen DCAN ABIDE I + II sites toward "
-    "75%, scored per subject (no statistics from other test subjects), while "
+    "Keep raising ASD recall (sensitivity) on unseen DCAN ABIDE I + II sites, "
+    "with no ceiling, scored per subject (no statistics from other test subjects), while "
     "control recall stays >= 60%. Start from the iter10 recipe in "
     "neuroasd/model.py scored per subject (ASD recall 54.7% site / 55.0% "
     "institution). Progress is by small steps: a trial is "
     "ACCEPTED as the new base if it gains >= 0.3pp ASD recall on site "
     "or institution over the current base, the other split drops <= 0.5pp, "
-    "and control recall is >= 60% on both. "
+    "and control recall is >= 60% on both. Every accepted step becomes the new "
+    "base, so ASD recall only goes up. Ideas ruled out in October were judged on "
+    "balanced accuracy with per-group calibration; they may be retried for ASD "
+    "recall. A training-fold-only cut is allowed (it is not calibration). "
     "A review PR opens only once accepted steps add up to +1pp over the last "
     "PR (iter10 at first). Build on the base; refining a just-accepted "
     "direction is a valid next step. Concatenation is not stacking; ensemble "
@@ -92,9 +95,9 @@ spawn experimenter again. One stage per experimenter instance.
 coder. The failed diff has been reverted. Do not describe that code as current. \
 Put workspace.ruled_out, the insight, and next_code_change into the coder \
 objective. The coder is a fresh instance and cannot see this chat.
-- After loso-institution PASS: if ASD recall is still below the 75% target, spawn coder \
-on the winning code (do not revert). complete is true only when ASD recall \
-reaches the target.
+- After loso-institution PASS: spawn coder on the winning code (do not revert) \
+and keep raising ASD recall. There is no target; complete stays false until \
+the operator stops the loop.
 - Never claim a best-epoch number as progress.
 
 Available subagent types:
@@ -363,8 +366,8 @@ def main() -> None:
     parser.add_argument(
         "--target-recall",
         type=float,
-        default=0.75,
-        help="Stop after a loso-institution PASS whose ASD recall (sensitivity_mean) reaches this (default 0.75).",
+        default=None,
+        help="Optional: stop after a loso-institution PASS whose ASD recall reaches this. Default: never stop.",
     )
     parser.add_argument(
         "--fresh",
@@ -376,7 +379,10 @@ def main() -> None:
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--log-dir", default="outputs/autoresearch/loop/logs")
     args = parser.parse_args()
-    os.environ["AUTORESEARCH_LOOP_TARGET_RECALL"] = str(args.target_recall)
+    if args.target_recall is not None:
+        os.environ["AUTORESEARCH_LOOP_TARGET_RECALL"] = str(args.target_recall)
+    else:
+        os.environ.pop("AUTORESEARCH_LOOP_TARGET_RECALL", None)
 
     def build() -> GNNLead:
         return GNNLead(

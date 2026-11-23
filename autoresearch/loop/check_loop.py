@@ -260,6 +260,20 @@ def test_promotion_freezes_code() -> None:
         (_TMP / "gcn_edit.py").read_text() == "hidden = 64\n",
         (_TMP / "gcn_edit.py").read_text() if (_TMP / "gcn_edit.py").exists() else "missing",
     )
+    import os
+
+    os.environ.pop("AUTORESEARCH_LOOP_TARGET_RECALL", None)
+    snapshot = json.loads(json.dumps(load_workspace()))
+    apply_trial_outcome(
+        "loso-institution",
+        name,
+        _fake_verdict("loso-institution", True, 0.70),
+        {"auc_mean": 0.70, "accuracy_mean": 0.81, "sensitivity_mean": 0.95, "specificity_mean": 0.65},
+        False,
+    )
+    _check("no target by default: the loop keeps going", load_workspace()["status"] != "target_reached")
+    save_workspace(snapshot)
+    os.environ["AUTORESEARCH_LOOP_TARGET_RECALL"] = "0.75"
     apply_trial_outcome(
         "loso-institution",
         name,
@@ -267,7 +281,8 @@ def test_promotion_freezes_code() -> None:
         {"auc_mean": 0.70, "accuracy_mean": 0.81, "sensitivity_mean": 0.76, "specificity_mean": 0.65},
         False,
     )
-    _check("ASD recall target stops the loop", load_workspace()["status"] == "target_reached")
+    os.environ.pop("AUTORESEARCH_LOOP_TARGET_RECALL", None)
+    _check("optional ASD recall target stops the loop", load_workspace()["status"] == "target_reached")
     _check("target reached has no next role", next_role() is None)
 
 

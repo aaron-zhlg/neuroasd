@@ -35,7 +35,9 @@ so calling everyone ASD cannot win. Balanced accuracy, accuracy and AUC are
 always reported. Moving the cut alone trades control recall for ASD recall and
 stops at the floor; lasting gains need a better ranking (higher AUC).
 
-Loop stop: leave-one-institution-out ASD recall ≥ 75% (`--target-recall`).
+No ceiling: every accepted step becomes the new base, so ASD recall only goes
+up. The loop runs until the operator stops it (`--target-recall X` sets an
+optional stop).
 
 ---
 
@@ -92,7 +94,7 @@ experiment/trial-<slug>         one trial, opened for review after a win
 
 The loop never merges to `main` and never edits `gates.json`. After a full PASS
 it keeps the winning code and searches for the next mechanism until institution
-ASD recall reaches 75%.
+the operator stops it.
 
 Failed trials leave no remote branch. Every run appends to
 `outputs/autoresearch/ledger.jsonl`. **Read the ledger before proposing a new
@@ -120,12 +122,17 @@ the training fold (`neuroasd.ensemble.stack_scores`). Score averaging
 Helpers: `neuroasd.ensemble` (`member_scores`, `stack_scores`, `average_scores`,
 `GCNMember` / `gnn_member_scores`).
 
-Already tested on iter10 under balanced accuracy (2026-10-15, all below iter10 on full LOSO; see
-`workspace.ruled_out`): stacking Power+Markov members, Gordon/HCP score
-averaging, a four-atlas member bank, a Fisher-z member, a Power GCN member,
-per-site feature standardization, Power graph-spectral features, swapping HCP
-for Power or Markov, and L1 logistic (too slow: screen timed out). Do not
-resubmit these; a variant must change something those trials did not.
+Tried on iter10 under the OLD goal (2026-10-15, balanced accuracy with
+per-group calibration; all below iter10 there): stacking Power+Markov members,
+Gordon/HCP score averaging, a four-atlas member bank, a Fisher-z member, a Power
+GCN member, per-site feature standardization, Power graph-spectral features,
+swapping HCP for Power or Markov, and L1 logistic (too slow: screen timed out).
+That verdict does not carry over to per-subject ASD recall, so they may be
+retried. Only this session's `workspace.ruled_out` is binding.
+
+Any model family is allowed (linear, kernel, trees, MLP, GNN through
+`neuroasd.ensemble`), as long as the folds finish inside the stage time limits
+(screen 40 min, loso-site and loso-institution 120 min each).
 
 Untested directions (all use only FC + age/sex, fit inside the training fold):
 

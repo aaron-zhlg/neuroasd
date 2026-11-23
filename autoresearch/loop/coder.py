@@ -60,10 +60,15 @@ age/sex, logistic C=1e-2, raw score cut at 0. It calls too few subjects ASD \
 training-fold out-of-fold scores only, class weights, better features or \
 classifiers that rank ASD higher. A cut only trades control recall for ASD \
 recall; control recall must stay >= 60%.
-- Already tested and below iter10 (see workspace ruled_out): atlas stacking, \
-score averaging, member banks, Fisher-z member, Power GCN member, per-site \
-feature standardization, graph-spectral features, Gordon+Power / Gordon+Markov, \
-L1 logistic. Do not resubmit them.
+- Tried in October under the OLD goal (balanced accuracy with per-group \
+calibration) and below iter10 there: atlas stacking, score averaging, member \
+banks, Fisher-z member, Power GCN member, per-site feature standardization, \
+graph-spectral features, Gordon+Power / Gordon+Markov, L1 logistic. That verdict \
+does not carry over to per-subject ASD recall; you may retry them. Only \
+workspace ruled_out from THIS session is binding.
+- Any model family is allowed (linear, kernel, tree, MLP, GNN via \
+neuroasd.ensemble) if one fold fits within the stage time limits \
+(screen 40 min, full LOSO 120 min for all folds).
 - Untested directions (pick one; program.md section 5 has details): nested-CV \
 choice of C, training-only PCA / feature selection, FC shrinkage or a different \
 tangent reference, partial-correlation features, site-balanced sample weights, \

@@ -92,12 +92,15 @@ def save_workspace(data: dict[str, Any]) -> None:
 
 
 def target_recall() -> float:
-    """Stop once an accepted loso-institution trial reaches this ASD recall."""
-    raw = os.environ.get("AUTORESEARCH_LOOP_TARGET_RECALL", "0.75")
+    """Stop once an accepted loso-institution trial reaches this ASD recall.
+
+    Unset (the default) means never: the loop keeps raising ASD recall until Ctrl-C.
+    """
+    raw = os.environ.get("AUTORESEARCH_LOOP_TARGET_RECALL", "")
     try:
         return float(raw)
     except ValueError:
-        return 0.75
+        return float("inf")
 
 
 def slugify(text: str) -> str:
