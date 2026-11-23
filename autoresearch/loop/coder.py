@@ -75,6 +75,12 @@ neuroasd.ensemble) if one fold fits within the stage time limits \
 choice of C, training-only PCA / feature selection, FC shrinkage or a different \
 tangent reference, partial-correlation features, site-balanced sample weights, \
 a nonlinear classifier on a reduced tangent space.
+- HARD RULE: no per-subject normalization of any kind (z-scoring, centering, \
+global-connectivity subtraction, rank / quantile transforms of a subject's own \
+edges or tangent vector). Ruled out three times this session (iter5, iter25, and \
+before the locked set); every variant lowered ASD recall.
+- HARD RULE: tangent space stays the edge map; Fisher-z replacement lost 8.8 pp \
+ASD recall (iter24).
 - HARD RULE: every trial must change the model's predictions. No \
 instrumentation-, logging- or diagnostics-only edits, no refactors, no \
 "plumbing" rounds: they cannot raise ASD recall and waste a full LOSO run.
