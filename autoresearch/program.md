@@ -16,11 +16,14 @@ atlases), scored **per subject** the way the cross-site papers score it.
 concatenation, age/sex, L2 logistic at C=1e-2, raw decision value cut at 0.
 iter10's per-group calibration is removed (see rule 9).
 
+Base: iter10 recipe + a cut chosen on training-fold out-of-fold scores
+(PR #19), on the 1,120 development subjects:
+
 | Split | Model | ASD recall | Control recall | Balanced accuracy | AUC |
 |---|---|---|---|---|---|
-| Screen (6 sites) | base (iter10 per subject) | 57.1% | 85.0% | 71.1% | 0.830 |
-| Leave-one-site-out (33) | base (iter10 per subject) | 54.7% | 81.9% | 68.3% | 0.797 |
-| Leave-one-institution-out (23) | base (iter10 per subject) | 55.0% | 80.4% | 67.7% | 0.779 |
+| Screen (6 sites) | base | 61.9% | 80.3% | 71.1% | 0.829 |
+| Leave-one-site-out (development sites) | base | 61.1% | 79.3% | 70.2% | 0.801 |
+| Leave-one-institution-out (16 institutions) | base | 59.2% | 78.3% | 68.8% | 0.790 |
 | Cross-site literature, ABIDE I | Heinsfeld 2018 / Abraham 2017 | 69% / 61% | 62% / 72% | – | – |
 
 The base calls too few subjects ASD. Progress is by small steps on top of the
@@ -42,6 +45,20 @@ stops at the floor; lasting gains need a better ranking (higher AUC).
 No ceiling: every accepted step becomes the new base, so ASD recall only goes
 up. The loop runs until the operator stops it (`--target-recall X` sets an
 optional stop).
+
+---
+
+### Locked test set
+
+323 subjects from 7 institutions (PITT, TRINITY, ABIDEII-IP_1, ABIDEII-EMC_1,
+CALTECH, LEUVEN, UCLA; chosen with a fixed seed, see
+`autoresearch/loop/holdout.py`) are removed before any stage runs. Every number
+the loop sees comes from the remaining **1,120 development subjects**. Because
+the loop keeps the best of many variants, its own scores are optimistic; only
+`autoresearch.loop.final_holdout`, run rarely by the operator on an already
+chosen model, scores the locked set, and only that number is compared with the
+papers. Models get data only through `fit_predict`; reading files under
+`data/` is refused at run time and by the linter.
 
 ---
 
@@ -68,6 +85,8 @@ optional stop).
    test subjects. iter10's per-group calibration did this and lifted ASD recall
    from 55% to 75% with information the papers do not use. The linter scores the
    test set whole, in halves and one subject at a time, and FAILs any change.
+10. **Never read data outside `fit_predict`.** No file reads, no harness
+   imports. `autoresearch/trial.py` is read-only.
 
 ---
 
@@ -77,9 +96,9 @@ Trials are cheap-to-expensive. Do not skip ahead.
 
 | Stage | What it runs | Gate |
 |-------|--------------|------|
-| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | ASD recall ≥ 0.54, control recall ≥ 0.73 |
+| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | ASD recall ≥ 0.59, control recall ≥ 0.73 |
 | `loso-site` | Leave-one-site-out on all 33 sites with both classes | ASD recall ≥ base site − 0.5 pp (below that the final stage cannot pass), control recall ≥ 0.73 |
-| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: ASD recall on either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp, control recall ≥ 0.73 on both. PR: also ≥ +1 pp vs the last PR (base: site 0.5466 / institution 0.5504) |
+| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: ASD recall on either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp, control recall ≥ 0.73 on both. PR: also ≥ +1 pp vs the last PR (base: site 0.6108 / institution 0.5922) |
 
 Thresholds live in `autoresearch/gates.json`. `trial.py` exits `0` on PASS and `3` on
 FAIL.
@@ -114,8 +133,9 @@ The harness owns data and metrics. You only edit `fit_predict` (and helpers).
 `age`; `sex`; `groups`; `sites`; and `train.y`. Test labels are hidden.
 
 The base has: age/sex columns, Gordon+HCP **concatenation**, L2 logistic at
-C=1e-2, and the raw score cut at 0. It has **no** training-only threshold and
-**no** per-group calibration (forbidden by rule 9).
+C=1e-2, and a cut chosen on training-fold out-of-fold scores (max ASD recall
+with OOF control recall ≥ 73%). It has **no** per-group calibration
+(forbidden by rule 9).
 
 **Concatenation is not stacking.** Concatenation = one classifier on columns
 glued together (iter6). Stacking = one classifier per atlas (or feature type),

@@ -45,7 +45,10 @@ After a loso-institution PASS, add the next mechanism on top of the winning code
 - The experimenter scores `autoresearch/trial.py`, which calls \
 `neuroasd.model.fit_predict`. If a change is not visible there, the trial will \
 not measure it. Prefer editing `neuroasd/model.py`. You may also edit other \
-`neuroasd/*.py` files or `autoresearch/trial.py` if the mechanism needs it.
+`neuroasd/*.py` files. `autoresearch/trial.py` is read-only.
+- Use only what fit_predict receives. Never open data files, manifests or \
+labels yourself: 323 subjects from 7 institutions are a locked test set the \
+loop must never see, and the linter FAILs code that reads data/ directly.
 - Inputs you may use: `train.fc(atlas)` for atlas in gordon/hcp/power/markov, \
 plus age, sex, groups, sites, and train.y. Do NOT use FIQ or head motion as \
 predictive features (they differ by diagnosis and inflate results).
@@ -54,12 +57,12 @@ training split and that subject's own data. Do NOT z-score, rank, harmonize \
 (ComBat etc.), cluster or threshold using the test subjects together; the \
 linter scores the test set whole and in pieces and FAILs any difference. \
 iter10's per-group calibration is removed for this reason.
-- The base is iter10 scored per subject: Gordon+HCP tangent concatenation, \
-age/sex, logistic C=1e-2, raw score cut at 0. It calls too few subjects ASD \
-(ASD recall ~55%, control recall ~81%). Legitimate levers: a cut chosen on \
-training-fold out-of-fold scores only, class weights, better features or \
-classifiers that rank ASD higher. A cut only trades control recall for ASD \
-recall; control recall must stay >= 73%.
+- The base is iter10 scored per subject plus a cut chosen on training-fold \
+out-of-fold scores (max ASD recall with OOF control recall >= 73%): Gordon+HCP \
+tangent concatenation, age/sex, logistic C=1e-2. On the development subjects \
+it scores ASD recall ~61% / control recall ~79% (site), so the cut is still \
+conservative. Levers: a better-calibrated cut, class weights, better features \
+or classifiers that rank ASD higher. Control recall must stay >= 73%.
 - Tried in October under the OLD goal (balanced accuracy with per-group \
 calibration) and below iter10 there: atlas stacking, score averaging, member \
 banks, Fisher-z member, Power GCN member, per-site feature standardization, \
@@ -76,7 +79,7 @@ a nonlinear classifier on a reduced tangent space.
 - Primary metric is fold-mean ASD recall (sensitivity), with control recall \
 (specificity) >= 73% on every split. Also watch AUC: a gain that only moves \
 the cut will stop at the 73% floor.
-- You MAY edit files under neuroasd/ and autoresearch/trial.py. You may NOT edit \
+- You MAY edit files under neuroasd/ only. You may NOT edit autoresearch/trial.py, \
 gates.json, data/, experiments/, autoresearch/loop/, or medresearch/.
 - NEVER select a model using the evaluation / held-out set. Do not gate, report, \
 or save a "best epoch" on val/test/LOSO as the official score.
@@ -153,7 +156,6 @@ class CodeTools:
             Paths relative to the repo root.
         """
         files = sorted(rel(path) for path in NEUROASD_DIR.glob("*.py"))
-        files.append(rel(TRIAL_PY))
         return files
 
     def read_file(self, path: str) -> str:
@@ -196,8 +198,8 @@ class CodeTools:
     def _guard_write(self, target, content: str) -> None:
         if not is_writable(target):
             raise PermissionError(
-                f"not writable: {rel(target)}. Only neuroasd/*.py and "
-                "autoresearch/trial.py may be edited."
+                f"not writable: {rel(target)}. Only neuroasd/*.py may be edited "
+                "(autoresearch/trial.py owns the folds, the locked test set and the gate)."
             )
         reasons = leak_reasons_in_source(content)
         if reasons:

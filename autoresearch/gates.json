@@ -2,24 +2,24 @@
   "updated_at": "2026-11-23",
   "primary_metric": "sensitivity_mean",
   "reference": {
-    "name": "iter10-per-subject",
-    "tag": "iter10-loso-institution-v1",
-    "source": "autoresearch.trial --name base-per-subject, all three stages, 2026-11-23 (matches experiments/iter10_.../recall.json per-subject rows)",
-    "features": "iter10 recipe (Gordon+HCP tangent concat + age/sex + L2 logistic C=1e-2), scored per subject: raw decision value cut at 0, no per-group calibration",
-    "note": "Per-subject scoring: each test subject's label depends only on the training split and its own data, as in the cross-site papers. iter10's per-group calibration used the other test subjects' scores and is no longer allowed (the linter checks this).",
+    "name": "iter1-train-cut-dev",
+    "tag": null,
+    "source": "autoresearch.trial --name base-iter1-dev, 2026-11-23, on the 1,120 development subjects (locked test set removed)",
+    "features": "iter10 recipe (Gordon+HCP tangent concat + age/sex + L2 logistic C=1e-2) + training-fold-only OOF cut (max ASD recall s.t. OOF control recall >= 73%), scored per subject (PR #19)",
+    "note": "All loop numbers are on the 1,120 development subjects. The 323 locked subjects (autoresearch/loop/holdout.py) are scored only by autoresearch.loop.final_holdout.",
     "loso-site": {
-      "sensitivity_mean": 0.5466,
-      "specificity_mean": 0.8185,
-      "balanced_accuracy_mean": 0.6826,
-      "accuracy_mean": 0.6943,
-      "auc_mean": 0.7969
+      "sensitivity_mean": 0.6108,
+      "specificity_mean": 0.7927,
+      "balanced_accuracy_mean": 0.7017,
+      "accuracy_mean": 0.7151,
+      "auc_mean": 0.8013
     },
     "loso-institution": {
-      "sensitivity_mean": 0.5504,
-      "specificity_mean": 0.8035,
-      "balanced_accuracy_mean": 0.677,
-      "accuracy_mean": 0.674,
-      "auc_mean": 0.7786
+      "sensitivity_mean": 0.5921,
+      "specificity_mean": 0.7834,
+      "balanced_accuracy_mean": 0.6877,
+      "accuracy_mean": 0.6872,
+      "auc_mean": 0.7896
     },
     "screen": {
       "sites": [
@@ -30,11 +30,18 @@
         "ABIDEII-NYU_1",
         "ABIDEII-SDSU_1"
       ],
-      "sensitivity_mean": 0.5714,
-      "specificity_mean": 0.8501,
-      "balanced_accuracy_mean": 0.7107,
-      "accuracy_mean": 0.714,
-      "auc_mean": 0.8303
+      "sensitivity_mean": 0.6186,
+      "specificity_mean": 0.8034,
+      "balanced_accuracy_mean": 0.711,
+      "accuracy_mean": 0.7168,
+      "auc_mean": 0.8288
+    },
+    "locked_test_set_first_look": {
+      "institution_mean_asd_recall": 0.6079,
+      "institution_mean_control_recall": 0.7016,
+      "auc_mean": 0.7667,
+      "pooled_asd_recall": 0.5321,
+      "pooled_control_recall": 0.7485
     }
   },
   "rule": {
@@ -46,8 +53,8 @@
   "gates": {
     "screen": {
       "metric": "sensitivity_mean",
-      "threshold": 0.54,
-      "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The per-subject base scores ASD recall 0.571 / control recall 0.850 here. 0.54 kills large regressions without requiring a record on six sites; control recall must also stay >= the floor."
+      "threshold": 0.59,
+      "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The development base scores ASD recall 0.619 / control recall 0.803 here. 0.59 kills large regressions; control recall must also stay >= the floor."
     },
     "loso-site": {
       "metric": "sensitivity_mean",

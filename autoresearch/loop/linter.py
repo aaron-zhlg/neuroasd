@@ -15,8 +15,8 @@ from typing import Any
 from orchestra import SubAgent
 
 from autoresearch.loop.experimenter import measurement_coverage
-from autoresearch.loop.paths import REPO_ROOT, resolve_repo_path
-from autoresearch.loop.protocol import leak_reasons_in_source
+from autoresearch.loop.paths import REPO_ROOT, _revert_source_text, resolve_repo_path
+from autoresearch.loop.protocol import data_access_reasons, leak_reasons_in_source
 from autoresearch.loop.workspace import load_workspace, record_lint
 
 INSTRUCTIONS = """\
@@ -51,6 +51,15 @@ def _resolve_changed(path: str) -> Path | None:
     return None
 
 
+def _added_lines(target: Path, source: str) -> str:
+    """Lines in ``source`` that the base version of the file does not have."""
+    try:
+        before = set(_revert_source_text(target).splitlines())
+    except Exception:  # noqa: BLE001 - no base copy: treat every line as new
+        before = set()
+    return "\n".join(line for line in source.splitlines() if line not in before)
+
+
 def lint_paths(files_changed: list[str]) -> dict[str, Any]:
     """Return a structured lint report. ``passed`` is the only verdict that matters."""
     errors: list[str] = []
@@ -72,6 +81,7 @@ def lint_paths(files_changed: list[str]) -> dict[str, Any]:
         except SyntaxError as exc:
             errors.append(f"syntax error in {rel_path}: {exc}")
         errors.extend(f"{rel_path}: {reason}" for reason in leak_reasons_in_source(source))
+        errors.extend(f"{rel_path}: {reason}" for reason in data_access_reasons(_added_lines(target, source)))
 
     errors.extend(measurement_coverage(files_changed))
 

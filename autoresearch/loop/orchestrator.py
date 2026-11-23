@@ -25,9 +25,10 @@ from autoresearch.loop.workspace import (
 DEFAULT_GOAL = (
     "Keep raising ASD recall (sensitivity) on unseen DCAN ABIDE I + II sites, "
     "with no ceiling, scored per subject (no statistics from other test subjects), while "
-    "control recall stays >= 73%. Start from the iter10 recipe in "
-    "neuroasd/model.py scored per subject (ASD recall 54.7% site / 55.0% "
-    "institution). Progress is by small steps: a trial is "
+    "control recall stays >= 73%. Start from neuroasd/model.py: the iter10 "
+    "recipe scored per subject plus a training-fold-only cut (ASD recall 61.1% "
+    "site / 59.2% institution on the 1,120 development subjects; 323 subjects "
+    "are a locked test set the loop never sees). Progress is by small steps: a trial is "
     "ACCEPTED as the new base if it gains >= 0.3pp ASD recall on site "
     "or institution over the current base, the other split drops <= 0.5pp, "
     "and control recall is >= 73% on both. Goal: beat every published paper on "
@@ -37,7 +38,7 @@ DEFAULT_GOAL = (
     "balanced accuracy with per-group calibration; they may be retried for ASD "
     "recall. A training-fold-only cut is allowed (it is not calibration). "
     "A review PR opens only once accepted steps add up to +1pp over the last "
-    "PR (iter10 at first). Build on the base; refining a just-accepted "
+    "PR (the base at first). Build on the base; refining a just-accepted "
     "direction is a valid next step. Concatenation is not stacking; ensemble "
     "helpers live in neuroasd.ensemble. Change one mechanism at a time."
 )

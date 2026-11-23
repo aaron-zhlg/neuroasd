@@ -4,6 +4,9 @@ The harness owns data loading, fold splits, and metrics. The model only sees
 what `Split` exposes (FC per atlas, age, sex, fold groups, site, and training
 labels), so it cannot read FIQ, head motion, or test labels.
 
+The locked test institutions in `autoresearch.loop.holdout` (323 subjects) are
+removed before anything else; every stage runs on the remaining 1,120.
+
 Stages, cheap to expensive (see `autoresearch/program.md`):
 
     screen            leave-one-site-out on 6 mixed ABIDE I / II sites
@@ -35,6 +38,7 @@ from pathlib import Path
 import numpy as np
 from sklearn.metrics import roc_auc_score
 
+from autoresearch.loop.holdout import HOLDOUT_SUBJECTS, holdout_mask
 from autoresearch.loop.paths import load_pr_reference, load_session_reference, trials_dir
 from neuroasd.linear_baseline import GROUPINGS, clean_fc
 
@@ -63,13 +67,48 @@ PASS_EXIT_CODE = 0
 FAIL_EXIT_CODE = 3
 
 
-class Source:
-    """All subjects of the DCAN ABIDE I + II dataset; FC loaded lazily per atlas."""
+_HARNESS = threading.local()
+_DATA_ROOT = str((REPO_ROOT / "data").resolve())
+_real_open = __import__("builtins").open
 
-    def __init__(self, data_dirs: dict[str, Path] = DATA_DIRS) -> None:
+
+def _guarded_open(file, *args, **kwargs):
+    """Refuse reads under data/ unless the harness itself is loading FC."""
+    if not getattr(_HARNESS, "loading", False) and isinstance(file, (str, os.PathLike)):
+        path = os.path.realpath(os.fspath(file))
+        if path.startswith(_DATA_ROOT) or "/data/abide" in path:
+            raise PermissionError(
+                f"model code tried to read {file}; models may only use the splits passed to fit_predict"
+            )
+    return _real_open(file, *args, **kwargs)
+
+
+def _install_data_guard() -> None:
+    import builtins
+    import io
+
+    builtins.open = _guarded_open
+    io.open = _guarded_open
+
+
+class Source:
+    """Development subjects of DCAN ABIDE I + II; FC loaded lazily per atlas.
+
+    The locked test institutions (`autoresearch.loop.holdout`) are removed here,
+    so no stage, fold or model ever sees them. `split="holdout"` returns only
+    them and is used by `autoresearch.loop.final_holdout` alone.
+    """
+
+    def __init__(self, data_dirs: dict[str, Path] = DATA_DIRS, split: str = "development") -> None:
         self.data_dirs = data_dirs
         with (data_dirs["gordon"] / "processed" / "manifest.csv").open(newline="", encoding="utf-8") as handle:
-            self.rows = list(csv.DictReader(handle))
+            all_rows = list(csv.DictReader(handle))
+        locked = holdout_mask([row["SITE_ID"] for row in all_rows])
+        if int(locked.sum()) != HOLDOUT_SUBJECTS:
+            raise RuntimeError(f"locked test set has {int(locked.sum())} subjects, expected {HOLDOUT_SUBJECTS}")
+        keep = locked if split == "holdout" else ~locked
+        self._keep = np.flatnonzero(keep)
+        self.rows = [all_rows[i] for i in self._keep]
         self.file_ids = [row["FILE_ID"] for row in self.rows]
         self.y = np.array([int(row["label"]) for row in self.rows])
         self.sites = np.array([row["SITE_ID"] for row in self.rows])
@@ -84,11 +123,20 @@ class Source:
                 if atlas not in self.data_dirs:
                     raise KeyError(f"unknown atlas {atlas!r}; choose from {sorted(self.data_dirs)}")
                 root = self.data_dirs[atlas]
-                with (root / "processed" / "manifest.csv").open(newline="", encoding="utf-8") as handle:
-                    rows = list(csv.DictReader(handle))
+                _HARNESS.loading = True
+                try:
+                    with (root / "processed" / "manifest.csv").open(newline="", encoding="utf-8") as handle:
+                        rows = list(csv.DictReader(handle))
+                finally:
+                    _HARNESS.loading = False
+                rows = [rows[i] for i in self._keep]
                 if [row["FILE_ID"] for row in rows] != self.file_ids:
                     raise RuntimeError(f"{root} does not hold the same subjects as data/abide_dcan")
-                stack = [np.load(root / row["fc_path"]) for row in rows]
+                _HARNESS.loading = True
+                try:
+                    stack = [np.load(root / row["fc_path"]) for row in rows]
+                finally:
+                    _HARNESS.loading = False
                 self._fc[atlas] = clean_fc(np.stack(stack).astype(np.float32))
             return self._fc[atlas]
 
@@ -394,6 +442,7 @@ def main() -> None:
 
     started = time.time()
     source = Source()
+    _install_data_guard()
     folds = run_folds(source, args.stage, args.workers, log=(lambda _m: None) if args.quiet else print)
     summary = summarize(folds)
     if args.stage == FINAL_STAGE:
@@ -409,7 +458,8 @@ def main() -> None:
         "ran_at": datetime.now(timezone.utc).isoformat(),
         "runtime_seconds": round(elapsed, 1),
         "git": revision,
-        "data": {"subjects": len(source.y), "atlases": sorted(DATA_DIRS)},
+        "data": {"subjects": len(source.y), "atlases": sorted(DATA_DIRS),
+                 "locked_test_set": f"{HOLDOUT_SUBJECTS} subjects excluded (autoresearch.loop.holdout)"},
         "model_selection": MODEL_SELECTION,
         "summary": {key: round(value, 4) for key, value in summary.items()},
         "folds": folds,

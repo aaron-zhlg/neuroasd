@@ -25,6 +25,27 @@ _LEAK_PATTERNS = (
 )
 
 
+# A model must get its data only through fit_predict(train, test). Reading files
+# directly would reach the locked test institutions (autoresearch.loop.holdout)
+# and the test labels.
+_DATA_ACCESS_PATTERNS = (
+    re.compile(r"manifest\.csv|labels\.npy|file_ids\.txt|fc_path|roi_path"),
+    re.compile(r"""["'][^"']*data/abide"""),
+    re.compile(r"\bDATA_DIRS\b|\bSource\s*\(|autoresearch\.trial|autoresearch\.loop"),
+    re.compile(r"\bHOLDOUT_|holdout_mask"),
+)
+
+
+def data_access_reasons(content: str) -> list[str]:
+    """Reasons this model source would read data outside fit_predict's arguments."""
+    return [
+        f"matched {pattern.pattern!r}: models may only use the train/test splits passed to "
+        "fit_predict; reading data files or the harness reaches the locked test set"
+        for pattern in _DATA_ACCESS_PATTERNS
+        if pattern.search(content)
+    ]
+
+
 def leak_reasons_in_source(content: str) -> list[str]:
     """Return reasons this source would reintroduce evaluation-set selection."""
     reasons: list[str] = []

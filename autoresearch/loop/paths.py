@@ -80,8 +80,7 @@ def is_writable(path: Path) -> bool:
     extra = _writable_extra()
     if extra and resolved.is_relative_to(extra):
         return True
-    if resolved == TRIAL_PY.resolve():
-        return True
+    # trial.py owns the folds, the locked test set and the gate; not editable.
     return resolved.is_relative_to(NEUROASD_DIR.resolve())
 
 

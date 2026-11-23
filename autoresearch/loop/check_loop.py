@@ -734,6 +734,21 @@ def test_coder_cannot_write_gates() -> None:
         _check("gates.json not writable", False)
     except PermissionError:
         _check("gates.json not writable", True)
+    try:
+        tools.write_file("autoresearch/trial.py", "x = 1\n")
+        _check("trial.py not writable", False)
+    except PermissionError:
+        _check("trial.py not writable", True)
+    from autoresearch.loop.protocol import data_access_reasons
+
+    _check("reading the manifest is a lint error",
+           bool(data_access_reasons('rows = open("data/abide_dcan/processed/manifest.csv")')))
+    _check("importing the harness is a lint error", bool(data_access_reasons("from autoresearch.trial import Source")))
+    _check("ordinary model code passes", not data_access_reasons("feats = train.fc('gordon')"))
+    from autoresearch.loop.holdout import HOLDOUT_INSTITUTIONS
+
+    _check("locked test set keeps the screen institutions out",
+           not set(HOLDOUT_INSTITUTIONS) & {"NYU", "UM", "USM", "OHSU", "SDSU"})
 
 
 def main() -> None:
