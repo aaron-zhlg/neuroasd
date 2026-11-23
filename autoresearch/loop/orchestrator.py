@@ -25,12 +25,14 @@ from autoresearch.loop.workspace import (
 DEFAULT_GOAL = (
     "Keep raising ASD recall (sensitivity) on unseen DCAN ABIDE I + II sites, "
     "with no ceiling, scored per subject (no statistics from other test subjects), while "
-    "control recall stays >= 60%. Start from the iter10 recipe in "
+    "control recall stays >= 73%. Start from the iter10 recipe in "
     "neuroasd/model.py scored per subject (ASD recall 54.7% site / 55.0% "
     "institution). Progress is by small steps: a trial is "
     "ACCEPTED as the new base if it gains >= 0.3pp ASD recall on site "
     "or institution over the current base, the other split drops <= 0.5pp, "
-    "and control recall is >= 60% on both. Every accepted step becomes the new "
+    "and control recall is >= 73% on both. Goal: beat every published paper on "
+    "both recalls at once: ASD recall > 74.3% (best paper) with control recall "
+    ">= 73% (above the best paper's 72.3%). Every accepted step becomes the new "
     "base, so ASD recall only goes up. Ideas ruled out in October were judged on "
     "balanced accuracy with per-group calibration; they may be retried for ASD "
     "recall. A training-fold-only cut is allowed (it is not calibration). "
@@ -201,7 +203,7 @@ def _experimenter_assignment(proposed: Assignment | None = None) -> Assignment:
         (
             f"{objective}\n\n"
             "Run the required stage, then store_insight so the next coder can "
-            "read it. Official metric: fold-mean ASD recall, with control recall >= 60%."
+            "read it. Official metric: fold-mean ASD recall, with control recall >= 73%."
         ),
         (
             "stage, ASD recall, control recall, balanced accuracy, AUC, gate margin, PASS/FAIL, what is ruled out, "

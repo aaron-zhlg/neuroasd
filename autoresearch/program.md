@@ -26,11 +26,15 @@ iter10's per-group calibration is removed (see rule 9).
 The base calls too few subjects ASD. Progress is by small steps on top of the
 current **base**. A trial is **accepted** if one split gains ≥ 0.3 pp ASD
 recall over the base, the other drops by at most 0.5 pp, **and control recall
-is ≥ 60% on both splits**; its code becomes the new base. A review PR opens
+is ≥ 73% on both splits**; its code becomes the new base. A review PR opens
 only when an accepted trial is also ≥ +1 pp ASD recall over the last PR'd model.
 
+**Goal: beat every paper on both recalls at once.** Best published ASD recall
+is 74.3% (BrainMass) and best control recall 72.3% (Abraham 2017), so the floor
+is 73% and the bar is ASD recall > 74.3% on both splits.
+
 **Primary metric:** fold-mean ASD recall (`sensitivity_mean`).
-**Floor:** fold-mean control recall (`specificity_mean`) ≥ 0.60 at every stage,
+**Floor:** fold-mean control recall (`specificity_mean`) ≥ 0.73 at every stage,
 so calling everyone ASD cannot win. Balanced accuracy, accuracy and AUC are
 always reported. Moving the cut alone trades control recall for ASD recall and
 stops at the floor; lasting gains need a better ranking (higher AUC).
@@ -73,9 +77,9 @@ Trials are cheap-to-expensive. Do not skip ahead.
 
 | Stage | What it runs | Gate |
 |-------|--------------|------|
-| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | ASD recall ≥ 0.54, control recall ≥ 0.60 |
-| `loso-site` | Leave-one-site-out on all 33 sites with both classes | ASD recall ≥ base site − 0.5 pp (below that the final stage cannot pass), control recall ≥ 0.60 |
-| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: ASD recall on either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp, control recall ≥ 0.60 on both. PR: also ≥ +1 pp vs the last PR (base: site 0.5466 / institution 0.5504) |
+| `screen` | Leave-one-site-out on 6 mixed sites (NYU, UM_1, USM, ABIDEII-OHSU_1, ABIDEII-NYU_1, ABIDEII-SDSU_1) | ASD recall ≥ 0.54, control recall ≥ 0.73 |
+| `loso-site` | Leave-one-site-out on all 33 sites with both classes | ASD recall ≥ base site − 0.5 pp (below that the final stage cannot pass), control recall ≥ 0.73 |
+| `loso-institution` | Leave-one-institution-out on 23 institutions (final) | accept: ASD recall on either split ≥ +0.3 pp vs the **base**, other drops ≤ 0.5 pp, control recall ≥ 0.73 on both. PR: also ≥ +1 pp vs the last PR (base: site 0.5466 / institution 0.5504) |
 
 Thresholds live in `autoresearch/gates.json`. `trial.py` exits `0` on PASS and `3` on
 FAIL.
@@ -138,7 +142,7 @@ Untested directions (all use only FC + age/sex, fit inside the training fold):
 
 0. **A cut chosen on the training fold**: out-of-fold training scores (grouped
    like the outer split), cut where ASD recall is highest with control recall
-   still ≥ 60%, or at balanced accuracy; or class weights / prior correction.
+   still ≥ 73%, or at balanced accuracy; or class weights / prior correction.
    Cheap, but only moves along the ROC curve.
 1. **Regularization chosen by nested CV.** Pick C by inner grouped CV on the
    training fold instead of the fixed C=1e-2.

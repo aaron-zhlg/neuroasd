@@ -59,7 +59,7 @@ age/sex, logistic C=1e-2, raw score cut at 0. It calls too few subjects ASD \
 (ASD recall ~55%, control recall ~81%). Legitimate levers: a cut chosen on \
 training-fold out-of-fold scores only, class weights, better features or \
 classifiers that rank ASD higher. A cut only trades control recall for ASD \
-recall; control recall must stay >= 60%.
+recall; control recall must stay >= 73%.
 - Tried in October under the OLD goal (balanced accuracy with per-group \
 calibration) and below iter10 there: atlas stacking, score averaging, member \
 banks, Fisher-z member, Power GCN member, per-site feature standardization, \
@@ -74,8 +74,8 @@ choice of C, training-only PCA / feature selection, FC shrinkage or a different 
 tangent reference, partial-correlation features, site-balanced sample weights, \
 a nonlinear classifier on a reduced tangent space.
 - Primary metric is fold-mean ASD recall (sensitivity), with control recall \
-(specificity) >= 60% on every split. Also watch AUC: a gain that only moves \
-the cut will stop at the 60% floor.
+(specificity) >= 73% on every split. Also watch AUC: a gain that only moves \
+the cut will stop at the 73% floor.
 - You MAY edit files under neuroasd/ and autoresearch/trial.py. You may NOT edit \
 gates.json, data/, experiments/, autoresearch/loop/, or medresearch/.
 - NEVER select a model using the evaluation / held-out set. Do not gate, report, \

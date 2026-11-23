@@ -10,7 +10,7 @@ iterating. Built on [orchestra](https://github.com/aaron-zhlg/orchestra).
 
 Objective: **ASD recall on unseen sites, scored per subject** (each test
 subject judged from the training split and its own data only, as in the
-cross-site papers), with control recall ≥ 60%. The loop starts from the iter10
+cross-site papers), with control recall ≥ 73%. The loop starts from the iter10
 recipe (`iter10-loso-institution-v1`, `neuroasd/model.py`) scored per subject,
 ASD recall 54.7% site / 55.0% institution. A trial that gains ≥ 0.3 pp ASD
 recall over the current base is accepted and becomes the new base. A review PR opens only once accepted steps
@@ -72,11 +72,11 @@ outputs/autoresearch/          local only, gitignored
 
 | Stage | Evaluation | Gate |
 |-------|------------|------|
-| `screen` | LOSO on 6 mixed ABIDE I / II sites | ASD recall ≥ 0.54, control recall ≥ 0.60 |
-| `loso-site` | LOSO on all 33 two-class sites | ASD recall ≥ base site − 0.5 pp, control recall ≥ 0.60 |
-| `loso-institution` | Leave-one-institution-out, 23 institutions | accept: ASD recall on either split +0.3 pp vs the base, other ≤ 0.5 pp drop, control recall ≥ 0.60 on both. PR: also +1 pp vs the last PR |
+| `screen` | LOSO on 6 mixed ABIDE I / II sites | ASD recall ≥ 0.54, control recall ≥ 0.73 |
+| `loso-site` | LOSO on all 33 two-class sites | ASD recall ≥ base site − 0.5 pp, control recall ≥ 0.73 |
+| `loso-institution` | Leave-one-institution-out, 23 institutions | accept: ASD recall on either split +0.3 pp vs the base, other ≤ 0.5 pp drop, control recall ≥ 0.73 on both. PR: also +1 pp vs the last PR |
 
-Primary metric: fold-mean ASD recall. Floor: control recall ≥ 0.60. Every
+Primary metric: fold-mean ASD recall. Floor: control recall ≥ 0.73. Every
 result also reports balanced accuracy, accuracy and AUC. The linter rejects
 any model whose test scores change when the test set is scored in pieces.
 

@@ -62,7 +62,33 @@
   },
   "floor": {
     "metric": "specificity_mean",
-    "min": 0.6,
-    "rationale": "Control recall must stay >= 60% on every split, so a trial cannot raise ASD recall by calling everyone ASD. 60% is below every cross-site paper's specificity (Heinsfeld 62%, Abraham 72%)."
+    "min": 0.73,
+    "rationale": "Control recall must stay >= 73% on every split: above every paper's control recall (Abraham 2017 72.3%, ASD-DiagNet 72.2%, BrainMass 71.9%, BrainNetTF 69.3%, Heinsfeld 2018 62%). With this floor, ASD recall above 74.3% (BrainMass, the best paper) beats every paper on both recalls."
+  },
+  "papers_to_beat": {
+    "asd_recall_best": 0.743,
+    "control_recall_best": 0.723,
+    "rows": {
+      "Heinsfeld 2018 (LOSO)": [
+        0.69,
+        0.62
+      ],
+      "Abraham 2017 (LOSO)": [
+        0.61,
+        0.723
+      ],
+      "BrainNetTF": [
+        0.725,
+        0.693
+      ],
+      "BrainMass": [
+        0.743,
+        0.719
+      ],
+      "ASD-DiagNet": [
+        0.683,
+        0.722
+      ]
+    }
   }
 }
