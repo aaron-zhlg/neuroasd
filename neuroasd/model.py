@@ -19,12 +19,21 @@ raw decision value cut at 0. The per-group score z-scoring of iter10 is removed:
 it used the unlabeled scores of the whole held-out site, which the cross-site
 papers do not do.
 
-This version keeps the feature block and the estimator exactly as they are and
-changes only the operating point: the cut comes from grouped OUT-OF-FOLD
-decision values of the TRAINING rows (`_oof_threshold`), maximizing ASD recall
-subject to control recall >= `MIN_CONTROL_RECALL` on those training-fold OOF
-scores. The scored scalar is then applied to each test subject independently, so
-no test score, test label, or test-set statistic of any kind enters it.
+Features and the estimator strength are unchanged. Two training-only knobs now
+sit on top of the incumbent:
+
+1. An ASYMMETRIC ASD class weight drawn from the pre-registered grid
+   `ASD_WEIGHT_GRID`. Each candidate weight is scored by grouped OUT-OF-FOLD
+   decision values of the TRAINING rows only; the winner maximizes OOF ASD
+   recall subject to OOF control recall >= `MIN_CONTROL_RECALL`, ties broken
+   towards the smaller (more conservative) weight, with weight 1.0 as the
+   fallback when no grid point clears the floor.
+2. The operating point (one scalar cut) from those same training-fold OOF
+   scores, maximizing ASD recall subject to the same control-recall floor.
+
+Both are fit on training rows only and applied to each test subject
+independently, so no test score, test label, or test-set statistic of any kind
+enters the score or the label.
 
 Per-subject rule: a test subject's score and label may depend only on the
 training split and on that subject's own data, never on other test subjects.
@@ -60,7 +69,14 @@ LOGREG_C = 1e-2
 INNER_FOLDS = 5
 MIN_CONTROL_RECALL = 0.73
 ASD_LABEL = 0
+CONTROL_LABEL = 1
 FALLBACK_THRESHOLD = 0.0
+
+# PRE-REGISTERED, FIXED grid for the asymmetric ASD class weight (the control
+# weight stays 1.0). Declared before any measurement, never extended from the
+# scored folds: the choice among these three values is made on grouped OOF
+# scores of the TRAINING rows only, weight 1.0 first and 1.0 as fallback.
+ASD_WEIGHT_GRID = (1.0, 2.0, 4.0)
 
 
 class L2LogisticClassifier:
@@ -72,12 +88,27 @@ class L2LogisticClassifier:
     score interface (higher = more likely control) that the harness consumes.
     Deterministic: L-BFGS with a
     fixed ``random_state``, no subsampling, no randomness in the fit.
+
+    ``asd_weight`` scales only the ASD class (label 0) in the loss; the control
+    class (label 1) keeps weight 1.0. ``asd_weight == 1.0`` is the incumbent.
     """
 
-    def __init__(self, c: float = LOGREG_C, max_iter: int = 2000, tol: float = 1e-4) -> None:
+    def __init__(
+        self,
+        c: float = LOGREG_C,
+        asd_weight: float = 1.0,
+        max_iter: int = 2000,
+        tol: float = 1e-4,
+    ) -> None:
         self.c = c
+        self.asd_weight = float(asd_weight)
         self.max_iter = max_iter
         self.tol = tol
+
+    def _class_weight(self):
+        if abs(self.asd_weight - 1.0) < 1e-12:
+            return None
+        return {ASD_LABEL: float(self.asd_weight), CONTROL_LABEL: 1.0}
 
     def fit(self, x: np.ndarray, y: np.ndarray, groups=None) -> "L2LogisticClassifier":
         self.model_ = LogisticRegression(
@@ -86,6 +117,7 @@ class L2LogisticClassifier:
             solver="lbfgs",
             max_iter=self.max_iter,
             tol=self.tol,
+            class_weight=self._class_weight(),
             random_state=0,
         ).fit(x, y)
         return self
@@ -94,9 +126,9 @@ class L2LogisticClassifier:
         return self.model_.decision_function(x)
 
 
-def _make_estimator() -> L2LogisticClassifier:
+def _make_estimator(asd_weight: float = 1.0) -> L2LogisticClassifier:
     """The one estimator fitted per fold (and per inner grouped fold)."""
-    return L2LogisticClassifier(c=LOGREG_C)
+    return L2LogisticClassifier(c=LOGREG_C, asd_weight=asd_weight)
 
 
 def _covariate_columns(train, test) -> np.ndarray:
@@ -194,31 +226,95 @@ def threshold_from_oof(y, scores, min_control_recall: float = MIN_CONTROL_RECALL
     return best_cut
 
 
-def _oof_threshold(feats: np.ndarray, y, groups) -> float:
-    """Operating point from out-of-fold decision values of the TRAINING rows only.
+def _recalls(y, scores, cut: float) -> tuple[float, float]:
+    """(ASD recall, control recall) on the given scores at one scalar cut."""
+    y = np.asarray(y).ravel()
+    scores = np.asarray(scores, dtype=float).ravel()
+    ok = np.isfinite(scores)
+    y, scores = y[ok], scores[ok]
+    asd, ctl = y == ASD_LABEL, y != ASD_LABEL
+    if asd.sum() == 0 or ctl.sum() == 0:
+        return 0.0, 0.0
+    return float((scores[asd] <= cut).mean()), float((scores[ctl] > cut).mean())
+
+
+def _oof_scores(feats: np.ndarray, y, groups, asd_weight: float = 1.0) -> np.ndarray:
+    """Grouped out-of-fold decision values of the TRAINING rows only.
 
     Grouped inner folds mirror the outer split (same grouping label); each inner
-    fold refits the fixed-C logistic on its own training part and scores the held
-    out part, so the OOF scores never see their own labels. The features come
-    from the training-fold tangent reference/scalers already (see `_design`), and
-    no test row is in ``feats``. Falls back to the incumbent cut (0.0) when inner
-    folds are impossible.
+    fold refits the fixed-C logistic (at this ASD class weight) on its own
+    training part and scores the held-out part, so the OOF scores never see
+    their own labels. No test row is in ``feats``.
     """
     y = np.asarray(y)
     groups = np.asarray(groups)
     n = len(y)
+    oof = np.full(n, np.nan, dtype=float)
     n_groups = len(np.unique(groups))
     if n_groups < 2 or len(np.unique(y)) < 2:
-        return FALLBACK_THRESHOLD
+        return oof
 
-    oof = np.full(n, np.nan, dtype=float)
     splitter = GroupKFold(n_splits=min(INNER_FOLDS, n_groups))
     for inner_train, inner_val in splitter.split(np.zeros((n, 1)), y, groups):
         if len(np.unique(y[inner_train])) < 2:
             continue
-        clf = _make_estimator().fit(feats[inner_train], y[inner_train], groups[inner_train])
+        clf = _make_estimator(asd_weight).fit(feats[inner_train], y[inner_train], groups[inner_train])
         oof[inner_val] = clf.decision_function(feats[inner_val])
-    return threshold_from_oof(y, oof)
+    return oof
+
+
+def _oof_threshold(feats: np.ndarray, y, groups, asd_weight: float = 1.0) -> float:
+    """Operating point from out-of-fold decision values of the TRAINING rows only.
+
+    Falls back to the incumbent cut (0.0) when inner folds are impossible.
+    """
+    return threshold_from_oof(y, _oof_scores(feats, y, groups, asd_weight))
+
+
+def select_asd_weight(
+    feats: np.ndarray,
+    y,
+    groups,
+    grid: tuple[float, ...] = ASD_WEIGHT_GRID,
+) -> tuple[float, float]:
+    """Pick the ASD class weight and the cut on TRAINING-fold OOF scores only.
+
+    For every pre-registered weight the grouped OOF decision values are produced
+    from the training rows, the incumbent cut rule (`threshold_from_oof`) is
+    applied to those same OOF scores, and the resulting OOF ASD / control recalls
+    are compared. The winner maximizes ASD recall subject to control recall
+    >= `MIN_CONTROL_RECALL`, ties broken towards the smaller weight (the more
+    conservative one). If no grid point clears the floor the fallback is weight
+    1.0 with its own OOF cut, i.e. exactly the incumbent operating point.
+
+    Only training rows and training labels are used; test rows are not an
+    argument, so this cannot leak.
+    """
+    y = np.asarray(y).ravel()
+    baseline: tuple[float, float] | None = None
+    best_key: tuple[float, float] | None = None
+    best: tuple[float, float] | None = None
+
+    for weight in grid:
+        weight = float(weight)
+        oof = _oof_scores(feats, y, groups, weight)
+        if not np.isfinite(oof).any():
+            continue
+        cut = threshold_from_oof(y, oof)
+        asd_recall, control_recall = _recalls(y, oof, cut)
+        if baseline is None:
+            baseline = (weight, cut)  # grid starts at 1.0 = incumbent
+        if control_recall + 1e-12 < MIN_CONTROL_RECALL:
+            continue
+        key = (asd_recall, -weight)
+        if best_key is None or key > best_key:
+            best_key, best = key, (weight, cut)
+
+    if best is not None:
+        return best
+    if baseline is not None:
+        return baseline
+    return 1.0, FALLBACK_THRESHOLD
 
 
 def fit_predict(train, test) -> tuple[np.ndarray, np.ndarray]:
@@ -228,12 +324,15 @@ def fit_predict(train, test) -> tuple[np.ndarray, np.ndarray]:
     y = np.asarray(train.y)
     groups = np.asarray(train.groups)
 
-    # Operating point: chosen from training-fold out-of-fold decision values only.
-    threshold = _oof_threshold(feats[:n_train], y, groups)
+    # Training-only knobs: ASD class weight and the operating point, both chosen
+    # from grouped OOF decision values of the TRAINING rows (test rows are never
+    # passed in). Weight 1.0 / cut 0.0 is the fallback, i.e. the incumbent.
+    asd_weight, threshold = select_asd_weight(feats[:n_train], y, groups)
 
-    # Estimator: a single strongly L2-regularized logistic regression at the
-    # pre-registered fixed strength on the training rows (unchanged).
-    clf = _make_estimator().fit(feats[:n_train], y, groups)
+    # Estimator: one strongly L2-regularized logistic regression at the
+    # pre-registered fixed strength, fit on the training rows only, now with the
+    # selected asymmetric ASD class weight.
+    clf = _make_estimator(asd_weight).fit(feats[:n_train], y, groups)
     raw_test = clf.decision_function(feats[n_train:])
 
     # Per-subject decision: each test subject is compared with the one scalar cut
