@@ -199,6 +199,12 @@ class ExperimenterTools:
                 "workspace": workspace,
             }
         stage = required_stage(workspace)
+        if stage == "screen" and _tree_equals_base(workspace):
+            record_unmeasured_trial("no code change: every neuroasd/*.py file equals the accepted base")
+            return {
+                "ok": False,
+                "error": "no code change vs the accepted base; nothing to measure. The coder must write one mechanism.",
+            }
         if stage is None:
             return {
                 "ok": False,
@@ -439,6 +445,23 @@ def _insight_hint(
         f"accuracy {acc}. "
         f"{pr_note} Do not raise gates.json."
     )
+
+
+def _tree_equals_base(workspace: dict | None = None) -> bool:
+    """True when every file this round claims to have changed equals its base version."""
+    from autoresearch.loop.paths import _revert_source_text, resolve_repo_path
+
+    files = list((workspace or load_workspace()).get("files_changed") or [])
+    if not files:
+        return False
+    for rel_path in files:
+        try:
+            path = resolve_repo_path(rel_path)
+        except ValueError:
+            return False
+        if not path.is_file() or path.read_text(encoding="utf-8", errors="replace") != _revert_source_text(path):
+            return False
+    return True
 
 
 def _start_all_splits(promotion: dict | None, name: str) -> None:
