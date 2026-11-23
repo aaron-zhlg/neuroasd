@@ -200,6 +200,13 @@ per subject (Power / Markov members stacked on training-fold OOF scores,
 partial correlation, better FC shrinkage), a stronger classifier, or features
 that are stable across sites.
 
+**Current base (2026-11-23): PR #25 / iter17.** Gordon+HCP, Power and Markov
+members with Ledoit-Wolf FC, training-only top-K edge selection, two L2 scales
+(C=1e-2, 1e-1) for Gordon+HCP fed as separate columns to the meta-learner. It
+was ACCEPTED, not refuted: build on it, never delete the 4-column meta layout.
+Locked-set check (PR #24): control recall drops to ~66% on new institutions,
+so prefer mechanisms that raise ranking (AUC) over ones that move the cut.
+
 **Not ruled out, only too slow (2026-11-23):** a partial-correlation member on
 the Gordon+HCP pair (731 regions) timed out at screen (40 min), partly because
 another job shared the CPU. Retry it on a smaller atlas (Power 94 or Markov 205)
