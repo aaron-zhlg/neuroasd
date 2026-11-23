@@ -49,7 +49,9 @@
     "improve_margin": 0.003,
     "regress_tolerance": 0.005,
     "note": "ASD recall, either split (one split gains the margin, the other drops at most regress_tolerance), control recall >= floor on both. Every accepted step (+0.3pp vs the current base) becomes the new base AND opens a review PR, so every new best score can be reproduced from its own branch.",
-    "screen_tolerance": 0.02
+    "screen_tolerance": 0.02,
+    "auc_tolerance": 0.005,
+    "auc_note": "A trial may not lower AUC by more than auc_tolerance on either LOSO split vs the base: a recall gain bought with worse ranking only moves the cut and does not survive new institutions (iter29: site AUC 0.808 -> 0.785)."
   },
   "gates": {
     "screen": {

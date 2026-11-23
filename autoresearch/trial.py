@@ -303,6 +303,17 @@ def floor_check(gates: dict, values: dict[str, float]) -> dict:
             "floor_passed": not low, "floor_failed_on": sorted(low)}
 
 
+def auc_check(gates: dict, values: dict[str, float], ref: dict) -> dict:
+    """AUC may not drop more than auc_tolerance below the base on any listed split."""
+    tol = float(gates["rule"].get("auc_tolerance", 0.005))
+    low = {}
+    for split, value in values.items():
+        base = (ref.get(split) or {}).get("auc_mean")
+        if base is not None and value is not None and value < float(base) - tol:
+            low[split] = round(value - float(base), 4)
+    return {"auc_tolerance": tol, "auc_drop": low, "auc_passed": not low}
+
+
 def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
     gates = load_gates()
     gate = gates["gates"][stage]
@@ -331,6 +342,8 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
                     "a lower site score cannot win at loso-institution."
                 )
         control = floor_check(gates, {stage: summary[FLOOR_METRIC]})
+        ranking = (auc_check(gates, {"loso-site": summary.get("auc_mean")}, gates["reference"])
+                   if stage == "loso-site" else {"auc_passed": True})
         return {
             "stage": stage,
             "metric": PRIMARY_METRIC,
@@ -338,7 +351,8 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
             "observed": round(observed, 4),
             "margin": round(observed - threshold, 4),
             **control,
-            "passed": bool(observed >= threshold and control["floor_passed"]),
+            **ranking,
+            "passed": bool(observed >= threshold and control["floor_passed"] and ranking["auc_passed"]),
             "rationale": rationale,
         }
     base, last_pr = gates["reference"], gates["pr_reference"]
@@ -354,7 +368,8 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
 
     accept = against(base, "accept_margin")
     pr = against(last_pr, "improve_margin")
-    accepted = bool(accept["passed"] and control["floor_passed"])
+    ranking = auc_check(gates, {"loso-site": summary.get("site_auc_mean"), "loso-institution": summary.get("auc_mean")}, base)
+    accepted = bool(accept["passed"] and control["floor_passed"] and ranking["auc_passed"])
     return {
         "stage": stage,
         "metric": PRIMARY_METRIC,
@@ -366,6 +381,7 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
         "observed_site": round(site, 4),
         **accept,
         **control,
+        **ranking,
         "passed": accepted,
         "open_pr": bool(accepted and pr["passed"]),
         "pr_reference": last_pr["name"],

@@ -593,7 +593,13 @@ def test_winner_raises_the_bar() -> None:
         out = {key: inst for key in metrics}
         out.update({"site_" + key: site for key in metrics})
         out["specificity_mean"] = out["site_specificity_mean"] = control
+        out["auc_mean"] = out["site_auc_mean"] = 0.95
         return out
+
+    worse_auc = summary(site0 + 0.05, inst0 + 0.05)
+    worse_auc["site_auc_mean"] = 0.10
+    dropped = apply_gate("loso-institution", "w", worse_auc)
+    _check("recall gain with an AUC drop is rejected", not dropped["passed"] and dropped["auc_drop"], str(dropped))
 
     low = apply_gate("loso-institution", "z", summary(site0 + 0.05, inst0 + 0.05, control=0.59))
     _check("ASD recall gain with control recall < 60% is rejected", not low["passed"] and not low["open_pr"], str(low))
