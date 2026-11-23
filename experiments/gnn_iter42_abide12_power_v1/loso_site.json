@@ -1,0 +1,8837 @@
+{
+ "model": "iter42 GNN (PR #13, release gnn-iter42-v1), training and scoring code unchanged",
+ "data": "/Users/zhangligao/code/neuroasd/data/abide_dcan_power",
+ "grouping": "site",
+ "seed": 42,
+ "config": {
+  "epochs": 100,
+  "batch_size": 32,
+  "lr": 0.001,
+  "hidden_dim": 64,
+  "dropout": 0.5,
+  "weight_decay": 0.0001
+ },
+ "model_selection": "final-epoch EMA weights, no selection on the held-out group",
+ "evaluated_at": "2026-11-23T00:17:37+00:00",
+ "folds_done": 33,
+ "folds_total": 33,
+ "runtime_seconds": 5057.0,
+ "summary": {
+  "balanced_accuracy_mean": 0.63,
+  "balanced_accuracy_std": 0.0768,
+  "accuracy_mean": 0.6326,
+  "accuracy_std": 0.0801,
+  "auc_mean": 0.6953,
+  "auc_std": 0.0954,
+  "asd_recall_mean": 0.5441,
+  "asd_recall_std": 0.205,
+  "control_recall_mean": 0.7158,
+  "control_recall_std": 0.1322
+ },
+ "folds": [
+  {
+   "test_group": "ABIDEII-BNI_1",
+   "test_size": 23,
+   "train_size": 1420,
+   "accuracy": 0.4782608695652174,
+   "balanced_accuracy": 0.5,
+   "auc": 0.7727272727272727,
+   "asd_recall": 0.0,
+   "control_recall": 1.0,
+   "best_auc_diagnostic": 0.7727272727272727,
+   "seconds": 150.8
+  },
+  {
+   "test_group": "ABIDEII-EMC_1",
+   "test_size": 26,
+   "train_size": 1417,
+   "accuracy": 0.6538461538461539,
+   "balanced_accuracy": 0.6547619047619048,
+   "auc": 0.7916666666666666,
+   "asd_recall": 0.6428571428571429,
+   "control_recall": 0.6666666666666666,
+   "best_auc_diagnostic": 0.7976190476190476,
+   "seconds": 152.1
+  },
+  {
+   "test_group": "ABIDEII-GU_1",
+   "test_size": 39,
+   "train_size": 1404,
+   "accuracy": 0.5128205128205128,
+   "balanced_accuracy": 0.47857142857142854,
+   "auc": 0.5257142857142857,
+   "asd_recall": 0.35714285714285715,
+   "control_recall": 0.6,
+   "best_auc_diagnostic": 0.5885714285714285,
+   "seconds": 150.0
+  },
+  {
+   "test_group": "ABIDEII-IP_1",
+   "test_size": 45,
+   "train_size": 1398,
+   "accuracy": 0.6888888888888889,
+   "balanced_accuracy": 0.6922268907563025,
+   "auc": 0.7584033613445378,
+   "asd_recall": 0.7058823529411765,
+   "control_recall": 0.6785714285714286,
+   "best_auc_diagnostic": 0.8130252100840336,
+   "seconds": 151.4
+  },
+  {
+   "test_group": "ABIDEII-IU_1",
+   "test_size": 31,
+   "train_size": 1412,
+   "accuracy": 0.5806451612903226,
+   "balanced_accuracy": 0.5770833333333334,
+   "auc": 0.5708333333333333,
+   "asd_recall": 0.4666666666666667,
+   "control_recall": 0.6875,
+   "best_auc_diagnostic": 0.625,
+   "seconds": 151.4
+  },
+  {
+   "test_group": "ABIDEII-KKI_1",
+   "test_size": 124,
+   "train_size": 1319,
+   "accuracy": 0.6935483870967742,
+   "balanced_accuracy": 0.5883333333333334,
+   "auc": 0.6087499999999999,
+   "asd_recall": 0.4166666666666667,
+   "control_recall": 0.76,
+   "best_auc_diagnostic": 0.6225,
+   "seconds": 145.5
+  },
+  {
+   "test_group": "ABIDEII-NYU_1",
+   "test_size": 60,
+   "train_size": 1383,
+   "accuracy": 0.6166666666666667,
+   "balanced_accuracy": 0.6300904977375565,
+   "auc": 0.668552036199095,
+   "asd_recall": 0.5294117647058824,
+   "control_recall": 0.7307692307692307,
+   "best_auc_diagnostic": 0.7047511312217194,
+   "seconds": 149.0
+  },
+  {
+   "test_group": "ABIDEII-OHSU_1",
+   "test_size": 92,
+   "train_size": 1351,
+   "accuracy": 0.6739130434782609,
+   "balanced_accuracy": 0.6577380952380952,
+   "auc": 0.6780753968253969,
+   "asd_recall": 0.5833333333333334,
+   "control_recall": 0.7321428571428571,
+   "best_auc_diagnostic": 0.6860119047619048,
+   "seconds": 153.6
+  },
+  {
+   "test_group": "ABIDEII-ONRC_2",
+   "test_size": 51,
+   "train_size": 1392,
+   "accuracy": 0.6078431372549019,
+   "balanced_accuracy": 0.591282894736842,
+   "auc": 0.5953947368421053,
+   "asd_recall": 0.5263157894736842,
+   "control_recall": 0.65625,
+   "best_auc_diagnostic": 0.6496710526315789,
+   "seconds": 155.2
+  },
+  {
+   "test_group": "ABIDEII-SDSU_1",
+   "test_size": 47,
+   "train_size": 1396,
+   "accuracy": 0.6170212765957447,
+   "balanced_accuracy": 0.6362781954887218,
+   "auc": 0.7236842105263158,
+   "asd_recall": 0.5357142857142857,
+   "control_recall": 0.7368421052631579,
+   "best_auc_diagnostic": 0.7894736842105263,
+   "seconds": 150.5
+  },
+  {
+   "test_group": "ABIDEII-TCD_1",
+   "test_size": 27,
+   "train_size": 1416,
+   "accuracy": 0.7407407407407407,
+   "balanced_accuracy": 0.6911764705882353,
+   "auc": 0.7705882352941176,
+   "asd_recall": 0.5,
+   "control_recall": 0.8823529411764706,
+   "best_auc_diagnostic": 0.8,
+   "seconds": 151.9
+  },
+  {
+   "test_group": "ABIDEII-UCD_1",
+   "test_size": 23,
+   "train_size": 1420,
+   "accuracy": 0.4782608695652174,
+   "balanced_accuracy": 0.5153846153846154,
+   "auc": 0.6307692307692307,
+   "asd_recall": 0.23076923076923078,
+   "control_recall": 0.8,
+   "best_auc_diagnostic": 0.6846153846153846,
+   "seconds": 151.9
+  },
+  {
+   "test_group": "ABIDEII-USM_1",
+   "test_size": 24,
+   "train_size": 1419,
+   "accuracy": 0.6666666666666666,
+   "balanced_accuracy": 0.6714285714285715,
+   "auc": 0.75,
+   "asd_recall": 0.7,
+   "control_recall": 0.6428571428571429,
+   "best_auc_diagnostic": 0.8071428571428572,
+   "seconds": 154.3
+  },
+  {
+   "test_group": "CALTECH",
+   "test_size": 26,
+   "train_size": 1417,
+   "accuracy": 0.6153846153846154,
+   "balanced_accuracy": 0.6666666666666666,
+   "auc": 0.8181818181818182,
+   "asd_recall": 1.0,
+   "control_recall": 0.3333333333333333,
+   "best_auc_diagnostic": 0.8666666666666667,
+   "seconds": 151.5
+  },
+  {
+   "test_group": "CMU",
+   "test_size": 9,
+   "train_size": 1434,
+   "accuracy": 0.6666666666666666,
+   "balanced_accuracy": 0.65,
+   "auc": 0.45,
+   "asd_recall": 0.5,
+   "control_recall": 0.8,
+   "best_auc_diagnostic": 0.8,
+   "seconds": 151.9
+  },
+  {
+   "test_group": "KKI",
+   "test_size": 34,
+   "train_size": 1409,
+   "accuracy": 0.7647058823529411,
+   "balanced_accuracy": 0.8041666666666667,
+   "auc": 0.8166666666666668,
+   "asd_recall": 0.9,
+   "control_recall": 0.7083333333333334,
+   "best_auc_diagnostic": 0.8374999999999999,
+   "seconds": 154.0
+  },
+  {
+   "test_group": "LEUVEN_1",
+   "test_size": 24,
+   "train_size": 1419,
+   "accuracy": 0.5833333333333334,
+   "balanced_accuracy": 0.6013986013986015,
+   "auc": 0.6293706293706294,
+   "asd_recall": 0.38461538461538464,
+   "control_recall": 0.8181818181818182,
+   "best_auc_diagnostic": 0.7272727272727273,
+   "seconds": 154.0
+  },
+  {
+   "test_group": "LEUVEN_2",
+   "test_size": 25,
+   "train_size": 1418,
+   "accuracy": 0.64,
+   "balanced_accuracy": 0.6378205128205128,
+   "auc": 0.7692307692307693,
+   "asd_recall": 0.5833333333333334,
+   "control_recall": 0.6923076923076923,
+   "best_auc_diagnostic": 0.7692307692307692,
+   "seconds": 152.8
+  },
+  {
+   "test_group": "MAX_MUN",
+   "test_size": 46,
+   "train_size": 1397,
+   "accuracy": 0.5869565217391305,
+   "balanced_accuracy": 0.5311890838206628,
+   "auc": 0.5633528265107212,
+   "asd_recall": 0.21052631578947367,
+   "control_recall": 0.8518518518518519,
+   "best_auc_diagnostic": 0.594541910331384,
+   "seconds": 152.6
+  },
+  {
+   "test_group": "NYU",
+   "test_size": 161,
+   "train_size": 1282,
+   "accuracy": 0.6459627329192547,
+   "balanced_accuracy": 0.641025641025641,
+   "auc": 0.7310897435897435,
+   "asd_recall": 0.6153846153846154,
+   "control_recall": 0.6666666666666666,
+   "best_auc_diagnostic": 0.733974358974359,
+   "seconds": 161.6
+  },
+  {
+   "test_group": "OHSU",
+   "test_size": 27,
+   "train_size": 1416,
+   "accuracy": 0.5185185185185185,
+   "balanced_accuracy": 0.5192307692307692,
+   "auc": 0.6263736263736264,
+   "asd_recall": 0.5384615384615384,
+   "control_recall": 0.5,
+   "best_auc_diagnostic": 0.7032967032967034,
+   "seconds": 179.1
+  },
+  {
+   "test_group": "OLIN",
+   "test_size": 7,
+   "train_size": 1436,
+   "accuracy": 0.42857142857142855,
+   "balanced_accuracy": 0.4583333333333333,
+   "auc": 0.5833333333333333,
+   "asd_recall": 0.25,
+   "control_recall": 0.6666666666666666,
+   "best_auc_diagnostic": 1.0,
+   "seconds": 175.5
+  },
+  {
+   "test_group": "PITT",
+   "test_size": 23,
+   "train_size": 1420,
+   "accuracy": 0.6956521739130435,
+   "balanced_accuracy": 0.6706349206349207,
+   "auc": 0.6746031746031746,
+   "asd_recall": 0.5555555555555556,
+   "control_recall": 0.7857142857142857,
+   "best_auc_diagnostic": 0.7222222222222222,
+   "seconds": 165.4
+  },
+  {
+   "test_group": "SBL",
+   "test_size": 9,
+   "train_size": 1434,
+   "accuracy": 0.6666666666666666,
+   "balanced_accuracy": 0.65,
+   "auc": 0.6,
+   "asd_recall": 0.5,
+   "control_recall": 0.8,
+   "best_auc_diagnostic": 0.9,
+   "seconds": 157.5
+  },
+  {
+   "test_group": "SDSU",
+   "test_size": 30,
+   "train_size": 1413,
+   "accuracy": 0.7,
+   "balanced_accuracy": 0.6805555555555556,
+   "auc": 0.7546296296296295,
+   "asd_recall": 0.5833333333333334,
+   "control_recall": 0.7777777777777778,
+   "best_auc_diagnostic": 0.7731481481481481,
+   "seconds": 155.6
+  },
+  {
+   "test_group": "STANFORD",
+   "test_size": 32,
+   "train_size": 1411,
+   "accuracy": 0.6875,
+   "balanced_accuracy": 0.6984126984126984,
+   "auc": 0.7063492063492063,
+   "asd_recall": 0.7857142857142857,
+   "control_recall": 0.6111111111111112,
+   "best_auc_diagnostic": 0.7261904761904763,
+   "seconds": 156.5
+  },
+  {
+   "test_group": "TRINITY",
+   "test_size": 34,
+   "train_size": 1409,
+   "accuracy": 0.6176470588235294,
+   "balanced_accuracy": 0.6535714285714286,
+   "auc": 0.7535714285714286,
+   "asd_recall": 0.8571428571428571,
+   "control_recall": 0.45,
+   "best_auc_diagnostic": 0.7928571428571428,
+   "seconds": 155.7
+  },
+  {
+   "test_group": "UCLA_1",
+   "test_size": 52,
+   "train_size": 1391,
+   "accuracy": 0.5961538461538461,
+   "balanced_accuracy": 0.5961538461538461,
+   "auc": 0.7440828402366864,
+   "asd_recall": 0.3076923076923077,
+   "control_recall": 0.8846153846153846,
+   "best_auc_diagnostic": 0.8091715976331361,
+   "seconds": 156.4
+  },
+  {
+   "test_group": "UCLA_2",
+   "test_size": 17,
+   "train_size": 1426,
+   "accuracy": 0.6470588235294118,
+   "balanced_accuracy": 0.6515151515151515,
+   "auc": 0.7727272727272727,
+   "asd_recall": 0.6666666666666666,
+   "control_recall": 0.6363636363636364,
+   "best_auc_diagnostic": 0.8484848484848485,
+   "seconds": 159.6
+  },
+  {
+   "test_group": "UM_1",
+   "test_size": 81,
+   "train_size": 1362,
+   "accuracy": 0.6172839506172839,
+   "balanced_accuracy": 0.625,
+   "auc": 0.6679292929292929,
+   "asd_recall": 0.6666666666666666,
+   "control_recall": 0.5833333333333334,
+   "best_auc_diagnostic": 0.7140151515151515,
+   "seconds": 153.1
+  },
+  {
+   "test_group": "UM_2",
+   "test_size": 29,
+   "train_size": 1414,
+   "accuracy": 0.7586206896551724,
+   "balanced_accuracy": 0.7447368421052631,
+   "auc": 0.831578947368421,
+   "asd_recall": 0.7,
+   "control_recall": 0.7894736842105263,
+   "best_auc_diagnostic": 0.8526315789473684,
+   "seconds": 151.8
+  },
+  {
+   "test_group": "USM",
+   "test_size": 81,
+   "train_size": 1362,
+   "accuracy": 0.7407407407407407,
+   "balanced_accuracy": 0.7441646191646192,
+   "auc": 0.8286240786240786,
+   "asd_recall": 0.7045454545454546,
+   "control_recall": 0.7837837837837838,
+   "best_auc_diagnostic": 0.8273955773955775,
+   "seconds": 121.5
+  },
+  {
+   "test_group": "YALE",
+   "test_size": 42,
+   "train_size": 1401,
+   "accuracy": 0.6904761904761905,
+   "balanced_accuracy": 0.6795454545454546,
+   "auc": 0.7795454545454547,
+   "asd_recall": 0.45,
+   "control_recall": 0.9090909090909091,
+   "best_auc_diagnostic": 0.8227272727272728,
+   "seconds": 122.9
+  }
+ ],
+ "predictions": [
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29007",
+   "label": 0,
+   "p_control": 0.68158
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29010",
+   "label": 0,
+   "p_control": 0.7514
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29013",
+   "label": 0,
+   "p_control": 0.62615
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29015",
+   "label": 0,
+   "p_control": 0.7068
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29025",
+   "label": 0,
+   "p_control": 0.53911
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29027",
+   "label": 0,
+   "p_control": 0.51475
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29028",
+   "label": 0,
+   "p_control": 0.7152
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29052",
+   "label": 0,
+   "p_control": 0.52159
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29053",
+   "label": 0,
+   "p_control": 0.5362
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29055",
+   "label": 0,
+   "p_control": 0.55427
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_30144",
+   "label": 0,
+   "p_control": 0.52739
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_30148",
+   "label": 0,
+   "p_control": 0.50907
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29011",
+   "label": 1,
+   "p_control": 0.58569
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29014",
+   "label": 1,
+   "p_control": 0.57514
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29018",
+   "label": 1,
+   "p_control": 0.78294
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29019",
+   "label": 1,
+   "p_control": 0.74137
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29021",
+   "label": 1,
+   "p_control": 0.71976
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29024",
+   "label": 1,
+   "p_control": 0.76742
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29034",
+   "label": 1,
+   "p_control": 0.62198
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29035",
+   "label": 1,
+   "p_control": 0.63582
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29050",
+   "label": 1,
+   "p_control": 0.84724
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_29056",
+   "label": 1,
+   "p_control": 0.67309
+  },
+  {
+   "fold": "ABIDEII-BNI_1",
+   "subject": "abide2_30146",
+   "label": 1,
+   "p_control": 0.57139
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29864",
+   "label": 0,
+   "p_control": 0.30839
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29865",
+   "label": 0,
+   "p_control": 0.28342
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29866",
+   "label": 0,
+   "p_control": 0.63235
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29867",
+   "label": 0,
+   "p_control": 0.35383
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29868",
+   "label": 0,
+   "p_control": 0.6401
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29869",
+   "label": 0,
+   "p_control": 0.36947
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29870",
+   "label": 0,
+   "p_control": 0.46753
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29872",
+   "label": 0,
+   "p_control": 0.30577
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29874",
+   "label": 0,
+   "p_control": 0.70983
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29876",
+   "label": 0,
+   "p_control": 0.55602
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29877",
+   "label": 0,
+   "p_control": 0.57692
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29879",
+   "label": 0,
+   "p_control": 0.36256
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29881",
+   "label": 0,
+   "p_control": 0.24721
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29885",
+   "label": 0,
+   "p_control": 0.1062
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29891",
+   "label": 1,
+   "p_control": 0.63812
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29892",
+   "label": 1,
+   "p_control": 0.3798
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29895",
+   "label": 1,
+   "p_control": 0.78218
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29901",
+   "label": 1,
+   "p_control": 0.79075
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29904",
+   "label": 1,
+   "p_control": 0.3781
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29905",
+   "label": 1,
+   "p_control": 0.65564
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29906",
+   "label": 1,
+   "p_control": 0.7678
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29907",
+   "label": 1,
+   "p_control": 0.52274
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29908",
+   "label": 1,
+   "p_control": 0.45608
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29911",
+   "label": 1,
+   "p_control": 0.43773
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29912",
+   "label": 1,
+   "p_control": 0.87802
+  },
+  {
+   "fold": "ABIDEII-EMC_1",
+   "subject": "abide2_29915",
+   "label": 1,
+   "p_control": 0.59221
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28752",
+   "label": 0,
+   "p_control": 0.45578
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28754",
+   "label": 0,
+   "p_control": 0.5357
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28787",
+   "label": 0,
+   "p_control": 0.59621
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28789",
+   "label": 0,
+   "p_control": 0.33755
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28791",
+   "label": 0,
+   "p_control": 0.27251
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28795",
+   "label": 0,
+   "p_control": 0.24232
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28796",
+   "label": 0,
+   "p_control": 0.51604
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28805",
+   "label": 0,
+   "p_control": 0.72693
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28807",
+   "label": 0,
+   "p_control": 0.23637
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28810",
+   "label": 0,
+   "p_control": 0.51786
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28815",
+   "label": 0,
+   "p_control": 0.62276
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28824",
+   "label": 0,
+   "p_control": 0.6742
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28843",
+   "label": 0,
+   "p_control": 0.58336
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28844",
+   "label": 0,
+   "p_control": 0.74648
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28742",
+   "label": 1,
+   "p_control": 0.38305
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28743",
+   "label": 1,
+   "p_control": 0.28396
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28746",
+   "label": 1,
+   "p_control": 0.5877
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28747",
+   "label": 1,
+   "p_control": 0.68329
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28748",
+   "label": 1,
+   "p_control": 0.54391
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28749",
+   "label": 1,
+   "p_control": 0.50664
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28753",
+   "label": 1,
+   "p_control": 0.5341
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28760",
+   "label": 1,
+   "p_control": 0.6037
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28792",
+   "label": 1,
+   "p_control": 0.80946
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28794",
+   "label": 1,
+   "p_control": 0.58621
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28797",
+   "label": 1,
+   "p_control": 0.27429
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28801",
+   "label": 1,
+   "p_control": 0.3502
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28803",
+   "label": 1,
+   "p_control": 0.61525
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28804",
+   "label": 1,
+   "p_control": 0.33686
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28806",
+   "label": 1,
+   "p_control": 0.42864
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28813",
+   "label": 1,
+   "p_control": 0.46839
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28814",
+   "label": 1,
+   "p_control": 0.45925
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28826",
+   "label": 1,
+   "p_control": 0.63897
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28827",
+   "label": 1,
+   "p_control": 0.65289
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28828",
+   "label": 1,
+   "p_control": 0.39672
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28829",
+   "label": 1,
+   "p_control": 0.55641
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28837",
+   "label": 1,
+   "p_control": 0.36347
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28845",
+   "label": 1,
+   "p_control": 0.7518
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28846",
+   "label": 1,
+   "p_control": 0.61897
+  },
+  {
+   "fold": "ABIDEII-GU_1",
+   "subject": "abide2_28847",
+   "label": 1,
+   "p_control": 0.52414
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29584",
+   "label": 0,
+   "p_control": 0.67115
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29587",
+   "label": 0,
+   "p_control": 0.2633
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29588",
+   "label": 0,
+   "p_control": 0.44718
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29592",
+   "label": 0,
+   "p_control": 0.42058
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29595",
+   "label": 0,
+   "p_control": 0.21266
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29603",
+   "label": 0,
+   "p_control": 0.69821
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29606",
+   "label": 0,
+   "p_control": 0.37312
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29610",
+   "label": 0,
+   "p_control": 0.35976
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29612",
+   "label": 0,
+   "p_control": 0.58681
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29613",
+   "label": 0,
+   "p_control": 0.55047
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29619",
+   "label": 0,
+   "p_control": 0.49691
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29624",
+   "label": 0,
+   "p_control": 0.35444
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29627",
+   "label": 0,
+   "p_control": 0.40264
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29628",
+   "label": 0,
+   "p_control": 0.51514
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29629",
+   "label": 0,
+   "p_control": 0.34589
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29633",
+   "label": 0,
+   "p_control": 0.27969
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29634",
+   "label": 0,
+   "p_control": 0.49679
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29580",
+   "label": 1,
+   "p_control": 0.6325
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29581",
+   "label": 1,
+   "p_control": 0.58318
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29582",
+   "label": 1,
+   "p_control": 0.74665
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29583",
+   "label": 1,
+   "p_control": 0.64068
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29585",
+   "label": 1,
+   "p_control": 0.52583
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29586",
+   "label": 1,
+   "p_control": 0.38597
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29589",
+   "label": 1,
+   "p_control": 0.39626
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29590",
+   "label": 1,
+   "p_control": 0.65655
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29593",
+   "label": 1,
+   "p_control": 0.58769
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29594",
+   "label": 1,
+   "p_control": 0.56041
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29596",
+   "label": 1,
+   "p_control": 0.7718
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29597",
+   "label": 1,
+   "p_control": 0.70851
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29598",
+   "label": 1,
+   "p_control": 0.63173
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29600",
+   "label": 1,
+   "p_control": 0.64976
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29601",
+   "label": 1,
+   "p_control": 0.45781
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29602",
+   "label": 1,
+   "p_control": 0.82291
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29604",
+   "label": 1,
+   "p_control": 0.61598
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29605",
+   "label": 1,
+   "p_control": 0.50344
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29607",
+   "label": 1,
+   "p_control": 0.43653
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29608",
+   "label": 1,
+   "p_control": 0.59667
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29611",
+   "label": 1,
+   "p_control": 0.75969
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29616",
+   "label": 1,
+   "p_control": 0.5438
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29618",
+   "label": 1,
+   "p_control": 0.4987
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29620",
+   "label": 1,
+   "p_control": 0.51489
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29625",
+   "label": 1,
+   "p_control": 0.41251
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29631",
+   "label": 1,
+   "p_control": 0.43416
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29632",
+   "label": 1,
+   "p_control": 0.42094
+  },
+  {
+   "fold": "ABIDEII-IP_1",
+   "subject": "abide2_29635",
+   "label": 1,
+   "p_control": 0.38104
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29540",
+   "label": 0,
+   "p_control": 0.62688
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29541",
+   "label": 0,
+   "p_control": 0.68731
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29542",
+   "label": 0,
+   "p_control": 0.09964
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29543",
+   "label": 0,
+   "p_control": 0.55256
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29545",
+   "label": 0,
+   "p_control": 0.15532
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29547",
+   "label": 0,
+   "p_control": 0.28248
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29549",
+   "label": 0,
+   "p_control": 0.60872
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29555",
+   "label": 0,
+   "p_control": 0.81049
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29559",
+   "label": 0,
+   "p_control": 0.34183
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29562",
+   "label": 0,
+   "p_control": 0.14676
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29566",
+   "label": 0,
+   "p_control": 0.42395
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29568",
+   "label": 0,
+   "p_control": 0.66751
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29569",
+   "label": 0,
+   "p_control": 0.22789
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29572",
+   "label": 0,
+   "p_control": 0.7224
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29575",
+   "label": 0,
+   "p_control": 0.68137
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29546",
+   "label": 1,
+   "p_control": 0.4294
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29548",
+   "label": 1,
+   "p_control": 0.50994
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29550",
+   "label": 1,
+   "p_control": 0.23476
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29551",
+   "label": 1,
+   "p_control": 0.60018
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29554",
+   "label": 1,
+   "p_control": 0.59233
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29556",
+   "label": 1,
+   "p_control": 0.87696
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29557",
+   "label": 1,
+   "p_control": 0.34614
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29560",
+   "label": 1,
+   "p_control": 0.48958
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29563",
+   "label": 1,
+   "p_control": 0.66641
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29564",
+   "label": 1,
+   "p_control": 0.69732
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29565",
+   "label": 1,
+   "p_control": 0.22632
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29567",
+   "label": 1,
+   "p_control": 0.58828
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29570",
+   "label": 1,
+   "p_control": 0.70242
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29571",
+   "label": 1,
+   "p_control": 0.65618
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29573",
+   "label": 1,
+   "p_control": 0.56802
+  },
+  {
+   "fold": "ABIDEII-IU_1",
+   "subject": "abide2_29574",
+   "label": 1,
+   "p_control": 0.66119
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29274",
+   "label": 0,
+   "p_control": 0.5568
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29275",
+   "label": 0,
+   "p_control": 0.83586
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29277",
+   "label": 0,
+   "p_control": 0.45588
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29283",
+   "label": 0,
+   "p_control": 0.4243
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29284",
+   "label": 0,
+   "p_control": 0.54034
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29286",
+   "label": 0,
+   "p_control": 0.44246
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29289",
+   "label": 0,
+   "p_control": 0.40401
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29292",
+   "label": 0,
+   "p_control": 0.51675
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29375",
+   "label": 0,
+   "p_control": 0.63133
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29385",
+   "label": 0,
+   "p_control": 0.60307
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29389",
+   "label": 0,
+   "p_control": 0.5895
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29393",
+   "label": 0,
+   "p_control": 0.37491
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29400",
+   "label": 0,
+   "p_control": 0.38645
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29404",
+   "label": 0,
+   "p_control": 0.40736
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29408",
+   "label": 0,
+   "p_control": 0.86049
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29415",
+   "label": 0,
+   "p_control": 0.50598
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29416",
+   "label": 0,
+   "p_control": 0.72461
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29430",
+   "label": 0,
+   "p_control": 0.60541
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29435",
+   "label": 0,
+   "p_control": 0.46376
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29449",
+   "label": 0,
+   "p_control": 0.23663
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29456",
+   "label": 0,
+   "p_control": 0.89498
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29477",
+   "label": 0,
+   "p_control": 0.76132
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29479",
+   "label": 0,
+   "p_control": 0.16755
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29481",
+   "label": 0,
+   "p_control": 0.6313
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29297",
+   "label": 1,
+   "p_control": 0.61859
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29298",
+   "label": 1,
+   "p_control": 0.66785
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29301",
+   "label": 1,
+   "p_control": 0.60878
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29302",
+   "label": 1,
+   "p_control": 0.37409
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29304",
+   "label": 1,
+   "p_control": 0.75918
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29305",
+   "label": 1,
+   "p_control": 0.58476
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29306",
+   "label": 1,
+   "p_control": 0.12702
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29308",
+   "label": 1,
+   "p_control": 0.43413
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29309",
+   "label": 1,
+   "p_control": 0.7139
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29310",
+   "label": 1,
+   "p_control": 0.2559
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29312",
+   "label": 1,
+   "p_control": 0.52499
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29314",
+   "label": 1,
+   "p_control": 0.62102
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29315",
+   "label": 1,
+   "p_control": 0.60667
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29317",
+   "label": 1,
+   "p_control": 0.60767
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29320",
+   "label": 1,
+   "p_control": 0.47811
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29321",
+   "label": 1,
+   "p_control": 0.55223
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29323",
+   "label": 1,
+   "p_control": 0.55707
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29324",
+   "label": 1,
+   "p_control": 0.79032
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29325",
+   "label": 1,
+   "p_control": 0.64936
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29329",
+   "label": 1,
+   "p_control": 0.65497
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29330",
+   "label": 1,
+   "p_control": 0.79875
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29332",
+   "label": 1,
+   "p_control": 0.58567
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29333",
+   "label": 1,
+   "p_control": 0.74032
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29334",
+   "label": 1,
+   "p_control": 0.86239
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29335",
+   "label": 1,
+   "p_control": 0.44123
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29336",
+   "label": 1,
+   "p_control": 0.76902
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29337",
+   "label": 1,
+   "p_control": 0.61986
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29339",
+   "label": 1,
+   "p_control": 0.67575
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29340",
+   "label": 1,
+   "p_control": 0.33471
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29341",
+   "label": 1,
+   "p_control": 0.60588
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29342",
+   "label": 1,
+   "p_control": 0.50475
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29343",
+   "label": 1,
+   "p_control": 0.55118
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29346",
+   "label": 1,
+   "p_control": 0.56305
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29349",
+   "label": 1,
+   "p_control": 0.64798
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29350",
+   "label": 1,
+   "p_control": 0.41095
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29359",
+   "label": 1,
+   "p_control": 0.35828
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29362",
+   "label": 1,
+   "p_control": 0.40479
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29363",
+   "label": 1,
+   "p_control": 0.77656
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29365",
+   "label": 1,
+   "p_control": 0.65264
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29366",
+   "label": 1,
+   "p_control": 0.60111
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29368",
+   "label": 1,
+   "p_control": 0.43227
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29369",
+   "label": 1,
+   "p_control": 0.43321
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29370",
+   "label": 1,
+   "p_control": 0.4819
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29371",
+   "label": 1,
+   "p_control": 0.82017
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29373",
+   "label": 1,
+   "p_control": 0.25896
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29374",
+   "label": 1,
+   "p_control": 0.60818
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29378",
+   "label": 1,
+   "p_control": 0.54674
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29379",
+   "label": 1,
+   "p_control": 0.7007
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29380",
+   "label": 1,
+   "p_control": 0.85689
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29381",
+   "label": 1,
+   "p_control": 0.29652
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29383",
+   "label": 1,
+   "p_control": 0.71187
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29384",
+   "label": 1,
+   "p_control": 0.46831
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29386",
+   "label": 1,
+   "p_control": 0.4368
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29395",
+   "label": 1,
+   "p_control": 0.7184
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29396",
+   "label": 1,
+   "p_control": 0.85701
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29397",
+   "label": 1,
+   "p_control": 0.77412
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29399",
+   "label": 1,
+   "p_control": 0.62231
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29402",
+   "label": 1,
+   "p_control": 0.81448
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29405",
+   "label": 1,
+   "p_control": 0.85155
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29407",
+   "label": 1,
+   "p_control": 0.37942
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29418",
+   "label": 1,
+   "p_control": 0.53466
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29419",
+   "label": 1,
+   "p_control": 0.64352
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29420",
+   "label": 1,
+   "p_control": 0.65381
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29421",
+   "label": 1,
+   "p_control": 0.7723
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29423",
+   "label": 1,
+   "p_control": 0.74898
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29424",
+   "label": 1,
+   "p_control": 0.66015
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29427",
+   "label": 1,
+   "p_control": 0.56095
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29429",
+   "label": 1,
+   "p_control": 0.66799
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29432",
+   "label": 1,
+   "p_control": 0.67683
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29436",
+   "label": 1,
+   "p_control": 0.61447
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29437",
+   "label": 1,
+   "p_control": 0.74394
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29440",
+   "label": 1,
+   "p_control": 0.57048
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29441",
+   "label": 1,
+   "p_control": 0.53643
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29442",
+   "label": 1,
+   "p_control": 0.75104
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29443",
+   "label": 1,
+   "p_control": 0.56465
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29445",
+   "label": 1,
+   "p_control": 0.41666
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29446",
+   "label": 1,
+   "p_control": 0.51413
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29447",
+   "label": 1,
+   "p_control": 0.71226
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29451",
+   "label": 1,
+   "p_control": 0.52925
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29453",
+   "label": 1,
+   "p_control": 0.41167
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29454",
+   "label": 1,
+   "p_control": 0.53755
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29455",
+   "label": 1,
+   "p_control": 0.69992
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29459",
+   "label": 1,
+   "p_control": 0.22733
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29460",
+   "label": 1,
+   "p_control": 0.69648
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29463",
+   "label": 1,
+   "p_control": 0.50845
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29465",
+   "label": 1,
+   "p_control": 0.36662
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29466",
+   "label": 1,
+   "p_control": 0.8072
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29467",
+   "label": 1,
+   "p_control": 0.65184
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29468",
+   "label": 1,
+   "p_control": 0.39801
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29469",
+   "label": 1,
+   "p_control": 0.70516
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29470",
+   "label": 1,
+   "p_control": 0.59077
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29471",
+   "label": 1,
+   "p_control": 0.7015
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29472",
+   "label": 1,
+   "p_control": 0.78638
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29473",
+   "label": 1,
+   "p_control": 0.82386
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29474",
+   "label": 1,
+   "p_control": 0.68951
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29475",
+   "label": 1,
+   "p_control": 0.4909
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29476",
+   "label": 1,
+   "p_control": 0.51133
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29478",
+   "label": 1,
+   "p_control": 0.82476
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29483",
+   "label": 1,
+   "p_control": 0.73202
+  },
+  {
+   "fold": "ABIDEII-KKI_1",
+   "subject": "abide2_29485",
+   "label": 1,
+   "p_control": 0.83694
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29177",
+   "label": 0,
+   "p_control": 0.56713
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29179",
+   "label": 0,
+   "p_control": 0.71713
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29181",
+   "label": 0,
+   "p_control": 0.39828
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29182",
+   "label": 0,
+   "p_control": 0.31885
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29184",
+   "label": 0,
+   "p_control": 0.44767
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29185",
+   "label": 0,
+   "p_control": 0.47243
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29186",
+   "label": 0,
+   "p_control": 0.62778
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29187",
+   "label": 0,
+   "p_control": 0.65343
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29188",
+   "label": 0,
+   "p_control": 0.24523
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29189",
+   "label": 0,
+   "p_control": 0.48177
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29190",
+   "label": 0,
+   "p_control": 0.64642
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29191",
+   "label": 0,
+   "p_control": 0.72495
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29192",
+   "label": 0,
+   "p_control": 0.44213
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29194",
+   "label": 0,
+   "p_control": 0.51247
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29195",
+   "label": 0,
+   "p_control": 0.47525
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29196",
+   "label": 0,
+   "p_control": 0.40613
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29197",
+   "label": 0,
+   "p_control": 0.59765
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29198",
+   "label": 0,
+   "p_control": 0.55905
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29199",
+   "label": 0,
+   "p_control": 0.43029
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29200",
+   "label": 0,
+   "p_control": 0.88557
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29201",
+   "label": 0,
+   "p_control": 0.4223
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29202",
+   "label": 0,
+   "p_control": 0.25497
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29203",
+   "label": 0,
+   "p_control": 0.44653
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29205",
+   "label": 0,
+   "p_control": 0.62451
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29206",
+   "label": 0,
+   "p_control": 0.35531
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29208",
+   "label": 0,
+   "p_control": 0.52564
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29209",
+   "label": 0,
+   "p_control": 0.63158
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29210",
+   "label": 0,
+   "p_control": 0.49085
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29211",
+   "label": 0,
+   "p_control": 0.36813
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29212",
+   "label": 0,
+   "p_control": 0.50904
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29214",
+   "label": 0,
+   "p_control": 0.45531
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29221",
+   "label": 0,
+   "p_control": 0.5909
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29223",
+   "label": 0,
+   "p_control": 0.54231
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29224",
+   "label": 0,
+   "p_control": 0.49161
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29226",
+   "label": 1,
+   "p_control": 0.63646
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29227",
+   "label": 1,
+   "p_control": 0.58963
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29228",
+   "label": 1,
+   "p_control": 0.45008
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29230",
+   "label": 1,
+   "p_control": 0.43683
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29231",
+   "label": 1,
+   "p_control": 0.55882
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29232",
+   "label": 1,
+   "p_control": 0.40481
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29233",
+   "label": 1,
+   "p_control": 0.62258
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29235",
+   "label": 1,
+   "p_control": 0.67549
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29236",
+   "label": 1,
+   "p_control": 0.73525
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29237",
+   "label": 1,
+   "p_control": 0.64561
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29238",
+   "label": 1,
+   "p_control": 0.78142
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29239",
+   "label": 1,
+   "p_control": 0.56454
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29240",
+   "label": 1,
+   "p_control": 0.54981
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29241",
+   "label": 1,
+   "p_control": 0.73454
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29242",
+   "label": 1,
+   "p_control": 0.59569
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29243",
+   "label": 1,
+   "p_control": 0.62925
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29244",
+   "label": 1,
+   "p_control": 0.43411
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29245",
+   "label": 1,
+   "p_control": 0.48169
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29246",
+   "label": 1,
+   "p_control": 0.35276
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29247",
+   "label": 1,
+   "p_control": 0.6538
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29248",
+   "label": 1,
+   "p_control": 0.5686
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29249",
+   "label": 1,
+   "p_control": 0.46167
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29250",
+   "label": 1,
+   "p_control": 0.60827
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29251",
+   "label": 1,
+   "p_control": 0.5881
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29253",
+   "label": 1,
+   "p_control": 0.84903
+  },
+  {
+   "fold": "ABIDEII-NYU_1",
+   "subject": "abide2_29254",
+   "label": 1,
+   "p_control": 0.63063
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28920",
+   "label": 0,
+   "p_control": 0.46226
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28924",
+   "label": 0,
+   "p_control": 0.35311
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28925",
+   "label": 0,
+   "p_control": 0.24513
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28927",
+   "label": 0,
+   "p_control": 0.23919
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28930",
+   "label": 0,
+   "p_control": 0.60886
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28931",
+   "label": 0,
+   "p_control": 0.23849
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28933",
+   "label": 0,
+   "p_control": 0.39922
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28934",
+   "label": 0,
+   "p_control": 0.23982
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28935",
+   "label": 0,
+   "p_control": 0.50148
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28936",
+   "label": 0,
+   "p_control": 0.59106
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28937",
+   "label": 0,
+   "p_control": 0.30755
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28938",
+   "label": 0,
+   "p_control": 0.44059
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28939",
+   "label": 0,
+   "p_control": 0.49089
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28940",
+   "label": 0,
+   "p_control": 0.39981
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28941",
+   "label": 0,
+   "p_control": 0.54999
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28942",
+   "label": 0,
+   "p_control": 0.31866
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28949",
+   "label": 0,
+   "p_control": 0.38377
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28952",
+   "label": 0,
+   "p_control": 0.69268
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28957",
+   "label": 0,
+   "p_control": 0.41856
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28958",
+   "label": 0,
+   "p_control": 0.63266
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28962",
+   "label": 0,
+   "p_control": 0.46058
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28963",
+   "label": 0,
+   "p_control": 0.23719
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28964",
+   "label": 0,
+   "p_control": 0.5335
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28966",
+   "label": 0,
+   "p_control": 0.33838
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28967",
+   "label": 0,
+   "p_control": 0.63823
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28968",
+   "label": 0,
+   "p_control": 0.30218
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28972",
+   "label": 0,
+   "p_control": 0.65784
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28982",
+   "label": 0,
+   "p_control": 0.70339
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28986",
+   "label": 0,
+   "p_control": 0.66364
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28987",
+   "label": 0,
+   "p_control": 0.48261
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28988",
+   "label": 0,
+   "p_control": 0.44574
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28992",
+   "label": 0,
+   "p_control": 0.75686
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28995",
+   "label": 0,
+   "p_control": 0.46846
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28997",
+   "label": 0,
+   "p_control": 0.72973
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28998",
+   "label": 0,
+   "p_control": 0.56888
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30156",
+   "label": 0,
+   "p_control": 0.71672
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28943",
+   "label": 1,
+   "p_control": 0.65719
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28944",
+   "label": 1,
+   "p_control": 0.54687
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28945",
+   "label": 1,
+   "p_control": 0.28238
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28946",
+   "label": 1,
+   "p_control": 0.57479
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28947",
+   "label": 1,
+   "p_control": 0.4308
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28948",
+   "label": 1,
+   "p_control": 0.71276
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28950",
+   "label": 1,
+   "p_control": 0.56572
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28951",
+   "label": 1,
+   "p_control": 0.54671
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28953",
+   "label": 1,
+   "p_control": 0.38154
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28954",
+   "label": 1,
+   "p_control": 0.62958
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28955",
+   "label": 1,
+   "p_control": 0.38184
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28956",
+   "label": 1,
+   "p_control": 0.70397
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28960",
+   "label": 1,
+   "p_control": 0.56868
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28961",
+   "label": 1,
+   "p_control": 0.79261
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28965",
+   "label": 1,
+   "p_control": 0.46921
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28969",
+   "label": 1,
+   "p_control": 0.65615
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28970",
+   "label": 1,
+   "p_control": 0.39644
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28971",
+   "label": 1,
+   "p_control": 0.47071
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28973",
+   "label": 1,
+   "p_control": 0.58612
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28974",
+   "label": 1,
+   "p_control": 0.28267
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28975",
+   "label": 1,
+   "p_control": 0.51456
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28976",
+   "label": 1,
+   "p_control": 0.57296
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28977",
+   "label": 1,
+   "p_control": 0.42759
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28978",
+   "label": 1,
+   "p_control": 0.72899
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28979",
+   "label": 1,
+   "p_control": 0.69876
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28980",
+   "label": 1,
+   "p_control": 0.67933
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28981",
+   "label": 1,
+   "p_control": 0.7184
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28983",
+   "label": 1,
+   "p_control": 0.60909
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28984",
+   "label": 1,
+   "p_control": 0.59007
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28985",
+   "label": 1,
+   "p_control": 0.16421
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28989",
+   "label": 1,
+   "p_control": 0.65343
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28990",
+   "label": 1,
+   "p_control": 0.71094
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28991",
+   "label": 1,
+   "p_control": 0.67262
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28993",
+   "label": 1,
+   "p_control": 0.45522
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28994",
+   "label": 1,
+   "p_control": 0.61483
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28996",
+   "label": 1,
+   "p_control": 0.65578
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_28999",
+   "label": 1,
+   "p_control": 0.55736
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_29000",
+   "label": 1,
+   "p_control": 0.46805
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_29001",
+   "label": 1,
+   "p_control": 0.5957
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_29002",
+   "label": 1,
+   "p_control": 0.68298
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_29003",
+   "label": 1,
+   "p_control": 0.50432
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_29004",
+   "label": 1,
+   "p_control": 0.67269
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_29005",
+   "label": 1,
+   "p_control": 0.53079
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30154",
+   "label": 1,
+   "p_control": 0.56589
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30155",
+   "label": 1,
+   "p_control": 0.68975
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30157",
+   "label": 1,
+   "p_control": 0.48518
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30158",
+   "label": 1,
+   "p_control": 0.51642
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30159",
+   "label": 1,
+   "p_control": 0.78964
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30160",
+   "label": 1,
+   "p_control": 0.5537
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30161",
+   "label": 1,
+   "p_control": 0.49947
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30162",
+   "label": 1,
+   "p_control": 0.56172
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30163",
+   "label": 1,
+   "p_control": 0.75362
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30164",
+   "label": 1,
+   "p_control": 0.74932
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30165",
+   "label": 1,
+   "p_control": 0.7444
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30166",
+   "label": 1,
+   "p_control": 0.47672
+  },
+  {
+   "fold": "ABIDEII-OHSU_1",
+   "subject": "abide2_30167",
+   "label": 1,
+   "p_control": 0.71865
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28675",
+   "label": 0,
+   "p_control": 0.64868
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28676",
+   "label": 0,
+   "p_control": 0.60954
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28677",
+   "label": 0,
+   "p_control": 0.49344
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28679",
+   "label": 0,
+   "p_control": 0.27307
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28680",
+   "label": 0,
+   "p_control": 0.3304
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28683",
+   "label": 0,
+   "p_control": 0.53384
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28684",
+   "label": 0,
+   "p_control": 0.28325
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28685",
+   "label": 0,
+   "p_control": 0.6066
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28686",
+   "label": 0,
+   "p_control": 0.35373
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28687",
+   "label": 0,
+   "p_control": 0.4378
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28688",
+   "label": 0,
+   "p_control": 0.56768
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28689",
+   "label": 0,
+   "p_control": 0.40717
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28690",
+   "label": 0,
+   "p_control": 0.79937
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28691",
+   "label": 0,
+   "p_control": 0.69477
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28692",
+   "label": 0,
+   "p_control": 0.48087
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28694",
+   "label": 0,
+   "p_control": 0.76359
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28695",
+   "label": 0,
+   "p_control": 0.67144
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28696",
+   "label": 0,
+   "p_control": 0.26382
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28718",
+   "label": 0,
+   "p_control": 0.4628
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28698",
+   "label": 1,
+   "p_control": 0.41701
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28699",
+   "label": 1,
+   "p_control": 0.67068
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28700",
+   "label": 1,
+   "p_control": 0.49009
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28701",
+   "label": 1,
+   "p_control": 0.43449
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28702",
+   "label": 1,
+   "p_control": 0.63524
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28703",
+   "label": 1,
+   "p_control": 0.70796
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28704",
+   "label": 1,
+   "p_control": 0.43517
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28705",
+   "label": 1,
+   "p_control": 0.84673
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28706",
+   "label": 1,
+   "p_control": 0.56996
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28707",
+   "label": 1,
+   "p_control": 0.58567
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28708",
+   "label": 1,
+   "p_control": 0.28949
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28709",
+   "label": 1,
+   "p_control": 0.36403
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28710",
+   "label": 1,
+   "p_control": 0.57363
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28712",
+   "label": 1,
+   "p_control": 0.65604
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28713",
+   "label": 1,
+   "p_control": 0.81846
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28714",
+   "label": 1,
+   "p_control": 0.66037
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28715",
+   "label": 1,
+   "p_control": 0.71524
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28716",
+   "label": 1,
+   "p_control": 0.53667
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28717",
+   "label": 1,
+   "p_control": 0.28822
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28719",
+   "label": 1,
+   "p_control": 0.79047
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28720",
+   "label": 1,
+   "p_control": 0.26184
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28721",
+   "label": 1,
+   "p_control": 0.5443
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28722",
+   "label": 1,
+   "p_control": 0.55714
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28723",
+   "label": 1,
+   "p_control": 0.70879
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28725",
+   "label": 1,
+   "p_control": 0.29125
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28726",
+   "label": 1,
+   "p_control": 0.42427
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28727",
+   "label": 1,
+   "p_control": 0.65931
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28729",
+   "label": 1,
+   "p_control": 0.54865
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28730",
+   "label": 1,
+   "p_control": 0.65376
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28731",
+   "label": 1,
+   "p_control": 0.76056
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28732",
+   "label": 1,
+   "p_control": 0.29278
+  },
+  {
+   "fold": "ABIDEII-ONRC_2",
+   "subject": "abide2_28733",
+   "label": 1,
+   "p_control": 0.80791
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28855",
+   "label": 0,
+   "p_control": 0.38153
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28857",
+   "label": 0,
+   "p_control": 0.39466
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28859",
+   "label": 0,
+   "p_control": 0.4314
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28860",
+   "label": 0,
+   "p_control": 0.51086
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28861",
+   "label": 0,
+   "p_control": 0.58288
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28864",
+   "label": 0,
+   "p_control": 0.67521
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28865",
+   "label": 0,
+   "p_control": 0.55721
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28866",
+   "label": 0,
+   "p_control": 0.52615
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28869",
+   "label": 0,
+   "p_control": 0.41974
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28871",
+   "label": 0,
+   "p_control": 0.47409
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28872",
+   "label": 0,
+   "p_control": 0.66453
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28873",
+   "label": 0,
+   "p_control": 0.22778
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28874",
+   "label": 0,
+   "p_control": 0.34137
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28875",
+   "label": 0,
+   "p_control": 0.45736
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28876",
+   "label": 0,
+   "p_control": 0.344
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28879",
+   "label": 0,
+   "p_control": 0.547
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28884",
+   "label": 0,
+   "p_control": 0.5403
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28890",
+   "label": 0,
+   "p_control": 0.59344
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28896",
+   "label": 0,
+   "p_control": 0.70518
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28897",
+   "label": 0,
+   "p_control": 0.55061
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28898",
+   "label": 0,
+   "p_control": 0.59209
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28899",
+   "label": 0,
+   "p_control": 0.25544
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28901",
+   "label": 0,
+   "p_control": 0.37773
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28903",
+   "label": 0,
+   "p_control": 0.37996
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28905",
+   "label": 0,
+   "p_control": 0.45912
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28906",
+   "label": 0,
+   "p_control": 0.45411
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28908",
+   "label": 0,
+   "p_control": 0.6755
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28909",
+   "label": 0,
+   "p_control": 0.24237
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28852",
+   "label": 1,
+   "p_control": 0.49853
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28854",
+   "label": 1,
+   "p_control": 0.43268
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28863",
+   "label": 1,
+   "p_control": 0.40769
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28867",
+   "label": 1,
+   "p_control": 0.68398
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28868",
+   "label": 1,
+   "p_control": 0.52871
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28870",
+   "label": 1,
+   "p_control": 0.74136
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28877",
+   "label": 1,
+   "p_control": 0.65619
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28878",
+   "label": 1,
+   "p_control": 0.76979
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28880",
+   "label": 1,
+   "p_control": 0.79596
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28881",
+   "label": 1,
+   "p_control": 0.28798
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28882",
+   "label": 1,
+   "p_control": 0.79776
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28883",
+   "label": 1,
+   "p_control": 0.7349
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28888",
+   "label": 1,
+   "p_control": 0.64057
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28891",
+   "label": 1,
+   "p_control": 0.88279
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28893",
+   "label": 1,
+   "p_control": 0.53785
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28894",
+   "label": 1,
+   "p_control": 0.57644
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28895",
+   "label": 1,
+   "p_control": 0.55812
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28902",
+   "label": 1,
+   "p_control": 0.3323
+  },
+  {
+   "fold": "ABIDEII-SDSU_1",
+   "subject": "abide2_28904",
+   "label": 1,
+   "p_control": 0.66908
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29099",
+   "label": 0,
+   "p_control": 0.30868
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29103",
+   "label": 0,
+   "p_control": 0.6924
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29104",
+   "label": 0,
+   "p_control": 0.41583
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29105",
+   "label": 0,
+   "p_control": 0.54993
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29107",
+   "label": 0,
+   "p_control": 0.3094
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29111",
+   "label": 0,
+   "p_control": 0.46826
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29112",
+   "label": 0,
+   "p_control": 0.84312
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29114",
+   "label": 0,
+   "p_control": 0.51322
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29115",
+   "label": 0,
+   "p_control": 0.70171
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29116",
+   "label": 0,
+   "p_control": 0.2955
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29117",
+   "label": 1,
+   "p_control": 0.79505
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29118",
+   "label": 1,
+   "p_control": 0.78192
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29119",
+   "label": 1,
+   "p_control": 0.77294
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29120",
+   "label": 1,
+   "p_control": 0.63735
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29121",
+   "label": 1,
+   "p_control": 0.73579
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29122",
+   "label": 1,
+   "p_control": 0.74922
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29123",
+   "label": 1,
+   "p_control": 0.47661
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29124",
+   "label": 1,
+   "p_control": 0.67383
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29127",
+   "label": 1,
+   "p_control": 0.65387
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29128",
+   "label": 1,
+   "p_control": 0.57165
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29129",
+   "label": 1,
+   "p_control": 0.74061
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29130",
+   "label": 1,
+   "p_control": 0.57639
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29131",
+   "label": 1,
+   "p_control": 0.7481
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29132",
+   "label": 1,
+   "p_control": 0.81337
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29133",
+   "label": 1,
+   "p_control": 0.68987
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29135",
+   "label": 1,
+   "p_control": 0.71417
+  },
+  {
+   "fold": "ABIDEII-TCD_1",
+   "subject": "abide2_29137",
+   "label": 1,
+   "p_control": 0.32888
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30000",
+   "label": 0,
+   "p_control": 0.67381
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30001",
+   "label": 0,
+   "p_control": 0.59278
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30005",
+   "label": 0,
+   "p_control": 0.72946
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30010",
+   "label": 0,
+   "p_control": 0.7987
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30011",
+   "label": 0,
+   "p_control": 0.64214
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30014",
+   "label": 0,
+   "p_control": 0.79333
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30016",
+   "label": 0,
+   "p_control": 0.51254
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30017",
+   "label": 0,
+   "p_control": 0.53784
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30018",
+   "label": 0,
+   "p_control": 0.16036
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30019",
+   "label": 0,
+   "p_control": 0.34063
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30021",
+   "label": 0,
+   "p_control": 0.63159
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30026",
+   "label": 0,
+   "p_control": 0.74231
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30028",
+   "label": 0,
+   "p_control": 0.31221
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_29997",
+   "label": 1,
+   "p_control": 0.57284
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_29998",
+   "label": 1,
+   "p_control": 0.73439
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30004",
+   "label": 1,
+   "p_control": 0.72259
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30007",
+   "label": 1,
+   "p_control": 0.42596
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30008",
+   "label": 1,
+   "p_control": 0.65753
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30009",
+   "label": 1,
+   "p_control": 0.71254
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30012",
+   "label": 1,
+   "p_control": 0.39025
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30020",
+   "label": 1,
+   "p_control": 0.76327
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30024",
+   "label": 1,
+   "p_control": 0.76544
+  },
+  {
+   "fold": "ABIDEII-UCD_1",
+   "subject": "abide2_30029",
+   "label": 1,
+   "p_control": 0.90604
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29495",
+   "label": 0,
+   "p_control": 0.45627
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29497",
+   "label": 0,
+   "p_control": 0.51686
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29500",
+   "label": 0,
+   "p_control": 0.76095
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29507",
+   "label": 0,
+   "p_control": 0.21513
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29509",
+   "label": 0,
+   "p_control": 0.28198
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29510",
+   "label": 0,
+   "p_control": 0.46123
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29511",
+   "label": 0,
+   "p_control": 0.19039
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29516",
+   "label": 0,
+   "p_control": 0.64743
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29521",
+   "label": 0,
+   "p_control": 0.40492
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29522",
+   "label": 0,
+   "p_control": 0.31633
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29499",
+   "label": 1,
+   "p_control": 0.42509
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29501",
+   "label": 1,
+   "p_control": 0.50551
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29504",
+   "label": 1,
+   "p_control": 0.55703
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29505",
+   "label": 1,
+   "p_control": 0.71786
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29513",
+   "label": 1,
+   "p_control": 0.5156
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29517",
+   "label": 1,
+   "p_control": 0.65622
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29518",
+   "label": 1,
+   "p_control": 0.47743
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29519",
+   "label": 1,
+   "p_control": 0.46038
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29520",
+   "label": 1,
+   "p_control": 0.55889
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29523",
+   "label": 1,
+   "p_control": 0.77593
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29524",
+   "label": 1,
+   "p_control": 0.45328
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29525",
+   "label": 1,
+   "p_control": 0.48177
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29526",
+   "label": 1,
+   "p_control": 0.60431
+  },
+  {
+   "fold": "ABIDEII-USM_1",
+   "subject": "abide2_29527",
+   "label": 1,
+   "p_control": 0.70891
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051457",
+   "label": 0,
+   "p_control": 0.29572
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051459",
+   "label": 0,
+   "p_control": 0.26647
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051460",
+   "label": 0,
+   "p_control": 0.43935
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051463",
+   "label": 0,
+   "p_control": 0.22378
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051464",
+   "label": 0,
+   "p_control": 0.47372
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051465",
+   "label": 0,
+   "p_control": 0.35322
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051467",
+   "label": 0,
+   "p_control": 0.42929
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051468",
+   "label": 0,
+   "p_control": 0.32356
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051470",
+   "label": 0,
+   "p_control": 0.33362
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051472",
+   "label": 0,
+   "p_control": 0.39323
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051473",
+   "label": 0,
+   "p_control": 0.19629
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051476",
+   "label": 1,
+   "p_control": 0.41024
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051478",
+   "label": 1,
+   "p_control": 0.51153
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051479",
+   "label": 1,
+   "p_control": 0.48973
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051480",
+   "label": 1,
+   "p_control": 0.36905
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051482",
+   "label": 1,
+   "p_control": 0.74232
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051483",
+   "label": 1,
+   "p_control": 0.36611
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051484",
+   "label": 1,
+   "p_control": 0.49145
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051485",
+   "label": 1,
+   "p_control": 0.52976
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051486",
+   "label": 1,
+   "p_control": 0.61363
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051487",
+   "label": 1,
+   "p_control": 0.13087
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051488",
+   "label": 1,
+   "p_control": 0.4433
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051490",
+   "label": 1,
+   "p_control": 0.56781
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051491",
+   "label": 1,
+   "p_control": 0.40723
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051492",
+   "label": 1,
+   "p_control": 0.49295
+  },
+  {
+   "fold": "CALTECH",
+   "subject": "abide1_0051493",
+   "label": 1,
+   "p_control": 0.37579
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050642",
+   "label": 0,
+   "p_control": 0.64677
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050647",
+   "label": 0,
+   "p_control": 0.6825
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050649",
+   "label": 0,
+   "p_control": 0.40431
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050654",
+   "label": 0,
+   "p_control": 0.46705
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050656",
+   "label": 1,
+   "p_control": 0.64316
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050657",
+   "label": 1,
+   "p_control": 0.52998
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050660",
+   "label": 1,
+   "p_control": 0.59449
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050664",
+   "label": 1,
+   "p_control": 0.604
+  },
+  {
+   "fold": "CMU",
+   "subject": "abide1_0050666",
+   "label": 1,
+   "p_control": 0.44518
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050772",
+   "label": 1,
+   "p_control": 0.78972
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050773",
+   "label": 1,
+   "p_control": 0.67954
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050774",
+   "label": 1,
+   "p_control": 0.65581
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050777",
+   "label": 1,
+   "p_control": 0.51994
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050779",
+   "label": 1,
+   "p_control": 0.63691
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050780",
+   "label": 1,
+   "p_control": 0.65451
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050781",
+   "label": 1,
+   "p_control": 0.64106
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050782",
+   "label": 1,
+   "p_control": 0.50359
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050783",
+   "label": 1,
+   "p_control": 0.58466
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050784",
+   "label": 1,
+   "p_control": 0.35366
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050787",
+   "label": 1,
+   "p_control": 0.48019
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050788",
+   "label": 1,
+   "p_control": 0.76621
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050790",
+   "label": 1,
+   "p_control": 0.60408
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050791",
+   "label": 0,
+   "p_control": 0.37355
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050795",
+   "label": 0,
+   "p_control": 0.49121
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050798",
+   "label": 0,
+   "p_control": 0.32114
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050799",
+   "label": 0,
+   "p_control": 0.45259
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050802",
+   "label": 0,
+   "p_control": 0.65166
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050803",
+   "label": 0,
+   "p_control": 0.33446
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050804",
+   "label": 0,
+   "p_control": 0.45631
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050805",
+   "label": 0,
+   "p_control": 0.40033
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050808",
+   "label": 1,
+   "p_control": 0.33473
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050809",
+   "label": 1,
+   "p_control": 0.44225
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050810",
+   "label": 1,
+   "p_control": 0.43691
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050811",
+   "label": 1,
+   "p_control": 0.62359
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050812",
+   "label": 1,
+   "p_control": 0.60696
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050813",
+   "label": 1,
+   "p_control": 0.62178
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050814",
+   "label": 1,
+   "p_control": 0.69879
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050816",
+   "label": 1,
+   "p_control": 0.3357
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050819",
+   "label": 1,
+   "p_control": 0.53128
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050820",
+   "label": 1,
+   "p_control": 0.43422
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050822",
+   "label": 1,
+   "p_control": 0.65841
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050824",
+   "label": 0,
+   "p_control": 0.32973
+  },
+  {
+   "fold": "KKI",
+   "subject": "abide1_0050825",
+   "label": 0,
+   "p_control": 0.33662
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050683",
+   "label": 1,
+   "p_control": 0.75893
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050686",
+   "label": 0,
+   "p_control": 0.45929
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050687",
+   "label": 1,
+   "p_control": 0.56475
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050688",
+   "label": 1,
+   "p_control": 0.68817
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050689",
+   "label": 0,
+   "p_control": 0.38147
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050690",
+   "label": 0,
+   "p_control": 0.6348
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050691",
+   "label": 1,
+   "p_control": 0.38036
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050692",
+   "label": 1,
+   "p_control": 0.68875
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050693",
+   "label": 0,
+   "p_control": 0.7616
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050694",
+   "label": 0,
+   "p_control": 0.60944
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050696",
+   "label": 0,
+   "p_control": 0.61883
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050697",
+   "label": 0,
+   "p_control": 0.48181
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050698",
+   "label": 1,
+   "p_control": 0.59798
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050699",
+   "label": 1,
+   "p_control": 0.37921
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050700",
+   "label": 0,
+   "p_control": 0.53133
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050702",
+   "label": 0,
+   "p_control": 0.5645
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050704",
+   "label": 0,
+   "p_control": 0.75202
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050705",
+   "label": 0,
+   "p_control": 0.38801
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050706",
+   "label": 1,
+   "p_control": 0.79971
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050707",
+   "label": 1,
+   "p_control": 0.80673
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050708",
+   "label": 0,
+   "p_control": 0.58159
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050709",
+   "label": 1,
+   "p_control": 0.60901
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050710",
+   "label": 1,
+   "p_control": 0.58009
+  },
+  {
+   "fold": "LEUVEN_1",
+   "subject": "abide1_0050711",
+   "label": 0,
+   "p_control": 0.40549
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050722",
+   "label": 1,
+   "p_control": 0.58052
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050723",
+   "label": 1,
+   "p_control": 0.4608
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050724",
+   "label": 1,
+   "p_control": 0.59932
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050726",
+   "label": 1,
+   "p_control": 0.74019
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050728",
+   "label": 1,
+   "p_control": 0.65445
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050730",
+   "label": 1,
+   "p_control": 0.86217
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050731",
+   "label": 1,
+   "p_control": 0.70884
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050733",
+   "label": 1,
+   "p_control": 0.36693
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050734",
+   "label": 1,
+   "p_control": 0.66843
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050735",
+   "label": 1,
+   "p_control": 0.71775
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050738",
+   "label": 1,
+   "p_control": 0.61017
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050739",
+   "label": 1,
+   "p_control": 0.48494
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050741",
+   "label": 1,
+   "p_control": 0.47677
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050743",
+   "label": 0,
+   "p_control": 0.41219
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050745",
+   "label": 0,
+   "p_control": 0.55539
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050746",
+   "label": 0,
+   "p_control": 0.32305
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050747",
+   "label": 0,
+   "p_control": 0.21384
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050748",
+   "label": 0,
+   "p_control": 0.55734
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050749",
+   "label": 0,
+   "p_control": 0.29623
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050752",
+   "label": 0,
+   "p_control": 0.62867
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050753",
+   "label": 0,
+   "p_control": 0.33944
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050754",
+   "label": 0,
+   "p_control": 0.35526
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050755",
+   "label": 0,
+   "p_control": 0.67356
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050756",
+   "label": 0,
+   "p_control": 0.65259
+  },
+  {
+   "fold": "LEUVEN_2",
+   "subject": "abide1_0050757",
+   "label": 0,
+   "p_control": 0.48818
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051318",
+   "label": 0,
+   "p_control": 0.69612
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051319",
+   "label": 0,
+   "p_control": 0.61894
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051321",
+   "label": 0,
+   "p_control": 0.72377
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051322",
+   "label": 0,
+   "p_control": 0.32835
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051323",
+   "label": 0,
+   "p_control": 0.52778
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051324",
+   "label": 0,
+   "p_control": 0.42642
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051325",
+   "label": 0,
+   "p_control": 0.71087
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051326",
+   "label": 0,
+   "p_control": 0.72669
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051327",
+   "label": 0,
+   "p_control": 0.5751
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051328",
+   "label": 0,
+   "p_control": 0.58479
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051329",
+   "label": 0,
+   "p_control": 0.57113
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051330",
+   "label": 0,
+   "p_control": 0.29057
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051331",
+   "label": 0,
+   "p_control": 0.64185
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051332",
+   "label": 1,
+   "p_control": 0.65859
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051333",
+   "label": 1,
+   "p_control": 0.42717
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051334",
+   "label": 1,
+   "p_control": 0.65877
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051335",
+   "label": 1,
+   "p_control": 0.49805
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051338",
+   "label": 1,
+   "p_control": 0.77276
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051339",
+   "label": 1,
+   "p_control": 0.61167
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051340",
+   "label": 1,
+   "p_control": 0.55774
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051341",
+   "label": 1,
+   "p_control": 0.60149
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051342",
+   "label": 1,
+   "p_control": 0.4723
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051343",
+   "label": 1,
+   "p_control": 0.58064
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051344",
+   "label": 1,
+   "p_control": 0.57074
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051345",
+   "label": 1,
+   "p_control": 0.9043
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051346",
+   "label": 1,
+   "p_control": 0.30374
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051347",
+   "label": 1,
+   "p_control": 0.50929
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051348",
+   "label": 0,
+   "p_control": 0.57991
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051349",
+   "label": 0,
+   "p_control": 0.54908
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051351",
+   "label": 0,
+   "p_control": 0.58936
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051354",
+   "label": 0,
+   "p_control": 0.64785
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051355",
+   "label": 0,
+   "p_control": 0.41135
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051356",
+   "label": 1,
+   "p_control": 0.6895
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051357",
+   "label": 1,
+   "p_control": 0.87974
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051360",
+   "label": 1,
+   "p_control": 0.62707
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051361",
+   "label": 1,
+   "p_control": 0.62721
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051362",
+   "label": 1,
+   "p_control": 0.64031
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051363",
+   "label": 1,
+   "p_control": 0.70658
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051364",
+   "label": 1,
+   "p_control": 0.6585
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051367",
+   "label": 1,
+   "p_control": 0.56753
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051368",
+   "label": 1,
+   "p_control": 0.54928
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051370",
+   "label": 1,
+   "p_control": 0.7651
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051371",
+   "label": 1,
+   "p_control": 0.63862
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051372",
+   "label": 1,
+   "p_control": 0.52571
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051373",
+   "label": 1,
+   "p_control": 0.50669
+  },
+  {
+   "fold": "MAX_MUN",
+   "subject": "abide1_0051606",
+   "label": 0,
+   "p_control": 0.56203
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050953",
+   "label": 0,
+   "p_control": 0.48472
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050954",
+   "label": 0,
+   "p_control": 0.31814
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050955",
+   "label": 0,
+   "p_control": 0.76228
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050956",
+   "label": 0,
+   "p_control": 0.26318
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050957",
+   "label": 0,
+   "p_control": 0.32096
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050959",
+   "label": 0,
+   "p_control": 0.22048
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050960",
+   "label": 0,
+   "p_control": 0.5342
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050961",
+   "label": 0,
+   "p_control": 0.39431
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050962",
+   "label": 0,
+   "p_control": 0.32857
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050964",
+   "label": 0,
+   "p_control": 0.56097
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050965",
+   "label": 0,
+   "p_control": 0.50152
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050966",
+   "label": 0,
+   "p_control": 0.39055
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050967",
+   "label": 0,
+   "p_control": 0.5248
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050968",
+   "label": 0,
+   "p_control": 0.3534
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050970",
+   "label": 0,
+   "p_control": 0.61371
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050971",
+   "label": 0,
+   "p_control": 0.5989
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050972",
+   "label": 0,
+   "p_control": 0.38116
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050973",
+   "label": 0,
+   "p_control": 0.27001
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050974",
+   "label": 0,
+   "p_control": 0.52979
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050975",
+   "label": 0,
+   "p_control": 0.63654
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050976",
+   "label": 0,
+   "p_control": 0.41739
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050977",
+   "label": 0,
+   "p_control": 0.61871
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050978",
+   "label": 0,
+   "p_control": 0.54677
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050979",
+   "label": 0,
+   "p_control": 0.4302
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050981",
+   "label": 0,
+   "p_control": 0.51389
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050982",
+   "label": 0,
+   "p_control": 0.87873
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050984",
+   "label": 0,
+   "p_control": 0.40315
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050985",
+   "label": 0,
+   "p_control": 0.24997
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050986",
+   "label": 0,
+   "p_control": 0.45933
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050987",
+   "label": 0,
+   "p_control": 0.60184
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050988",
+   "label": 0,
+   "p_control": 0.41607
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050989",
+   "label": 0,
+   "p_control": 0.35208
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050991",
+   "label": 0,
+   "p_control": 0.56096
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050992",
+   "label": 0,
+   "p_control": 0.36004
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050993",
+   "label": 0,
+   "p_control": 0.40407
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050994",
+   "label": 0,
+   "p_control": 0.2143
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050996",
+   "label": 0,
+   "p_control": 0.44374
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050998",
+   "label": 0,
+   "p_control": 0.41536
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0050999",
+   "label": 0,
+   "p_control": 0.46942
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051000",
+   "label": 0,
+   "p_control": 0.44082
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051001",
+   "label": 0,
+   "p_control": 0.34105
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051002",
+   "label": 0,
+   "p_control": 0.54012
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051003",
+   "label": 0,
+   "p_control": 0.41202
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051006",
+   "label": 0,
+   "p_control": 0.60512
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051007",
+   "label": 0,
+   "p_control": 0.53683
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051009",
+   "label": 0,
+   "p_control": 0.21955
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051010",
+   "label": 0,
+   "p_control": 0.49192
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051011",
+   "label": 0,
+   "p_control": 0.4141
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051014",
+   "label": 0,
+   "p_control": 0.32574
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051015",
+   "label": 0,
+   "p_control": 0.48464
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051016",
+   "label": 0,
+   "p_control": 0.40414
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051017",
+   "label": 0,
+   "p_control": 0.35936
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051018",
+   "label": 0,
+   "p_control": 0.54014
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051019",
+   "label": 0,
+   "p_control": 0.64079
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051020",
+   "label": 0,
+   "p_control": 0.43214
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051021",
+   "label": 0,
+   "p_control": 0.52017
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051023",
+   "label": 0,
+   "p_control": 0.28045
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051024",
+   "label": 0,
+   "p_control": 0.34483
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051025",
+   "label": 0,
+   "p_control": 0.55372
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051026",
+   "label": 0,
+   "p_control": 0.46185
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051027",
+   "label": 0,
+   "p_control": 0.46475
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051028",
+   "label": 0,
+   "p_control": 0.79617
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051029",
+   "label": 0,
+   "p_control": 0.5473
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051032",
+   "label": 0,
+   "p_control": 0.50566
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051035",
+   "label": 0,
+   "p_control": 0.42589
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051036",
+   "label": 1,
+   "p_control": 0.31256
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051038",
+   "label": 1,
+   "p_control": 0.49323
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051039",
+   "label": 1,
+   "p_control": 0.41419
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051040",
+   "label": 1,
+   "p_control": 0.54623
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051041",
+   "label": 1,
+   "p_control": 0.74182
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051042",
+   "label": 1,
+   "p_control": 0.67587
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051044",
+   "label": 1,
+   "p_control": 0.59594
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051046",
+   "label": 1,
+   "p_control": 0.49963
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051047",
+   "label": 1,
+   "p_control": 0.4436
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051048",
+   "label": 1,
+   "p_control": 0.55689
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051049",
+   "label": 1,
+   "p_control": 0.87238
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051050",
+   "label": 1,
+   "p_control": 0.79445
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051051",
+   "label": 1,
+   "p_control": 0.48902
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051052",
+   "label": 1,
+   "p_control": 0.3175
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051053",
+   "label": 1,
+   "p_control": 0.34173
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051054",
+   "label": 1,
+   "p_control": 0.41408
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051055",
+   "label": 1,
+   "p_control": 0.62626
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051056",
+   "label": 1,
+   "p_control": 0.50487
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051057",
+   "label": 1,
+   "p_control": 0.61587
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051058",
+   "label": 1,
+   "p_control": 0.6191
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051059",
+   "label": 1,
+   "p_control": 0.6436
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051060",
+   "label": 1,
+   "p_control": 0.67729
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051061",
+   "label": 1,
+   "p_control": 0.54086
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051062",
+   "label": 1,
+   "p_control": 0.61286
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051063",
+   "label": 1,
+   "p_control": 0.68002
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051064",
+   "label": 1,
+   "p_control": 0.68485
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051065",
+   "label": 1,
+   "p_control": 0.45564
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051066",
+   "label": 1,
+   "p_control": 0.723
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051067",
+   "label": 1,
+   "p_control": 0.70332
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051068",
+   "label": 1,
+   "p_control": 0.52692
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051069",
+   "label": 1,
+   "p_control": 0.79564
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051070",
+   "label": 1,
+   "p_control": 0.49242
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051071",
+   "label": 1,
+   "p_control": 0.63487
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051072",
+   "label": 1,
+   "p_control": 0.71095
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051073",
+   "label": 1,
+   "p_control": 0.4249
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051074",
+   "label": 1,
+   "p_control": 0.57808
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051075",
+   "label": 1,
+   "p_control": 0.71935
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051076",
+   "label": 1,
+   "p_control": 0.53411
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051078",
+   "label": 1,
+   "p_control": 0.5595
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051079",
+   "label": 1,
+   "p_control": 0.47349
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051080",
+   "label": 1,
+   "p_control": 0.54034
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051081",
+   "label": 1,
+   "p_control": 0.57006
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051082",
+   "label": 1,
+   "p_control": 0.40746
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051083",
+   "label": 1,
+   "p_control": 0.29943
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051084",
+   "label": 1,
+   "p_control": 0.41716
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051085",
+   "label": 1,
+   "p_control": 0.30652
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051086",
+   "label": 1,
+   "p_control": 0.63516
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051087",
+   "label": 1,
+   "p_control": 0.5453
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051088",
+   "label": 1,
+   "p_control": 0.57234
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051089",
+   "label": 1,
+   "p_control": 0.73171
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051090",
+   "label": 1,
+   "p_control": 0.61014
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051091",
+   "label": 1,
+   "p_control": 0.58566
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051093",
+   "label": 1,
+   "p_control": 0.6686
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051094",
+   "label": 1,
+   "p_control": 0.59858
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051095",
+   "label": 1,
+   "p_control": 0.48255
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051096",
+   "label": 1,
+   "p_control": 0.68041
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051097",
+   "label": 1,
+   "p_control": 0.49409
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051098",
+   "label": 1,
+   "p_control": 0.86503
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051099",
+   "label": 1,
+   "p_control": 0.54998
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051100",
+   "label": 1,
+   "p_control": 0.52236
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051101",
+   "label": 1,
+   "p_control": 0.62462
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051103",
+   "label": 1,
+   "p_control": 0.36036
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051104",
+   "label": 1,
+   "p_control": 0.4309
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051105",
+   "label": 1,
+   "p_control": 0.7358
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051106",
+   "label": 1,
+   "p_control": 0.61751
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051107",
+   "label": 1,
+   "p_control": 0.55947
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051108",
+   "label": 1,
+   "p_control": 0.42437
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051109",
+   "label": 1,
+   "p_control": 0.69919
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051110",
+   "label": 1,
+   "p_control": 0.65521
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051111",
+   "label": 1,
+   "p_control": 0.43175
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051112",
+   "label": 1,
+   "p_control": 0.78994
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051113",
+   "label": 1,
+   "p_control": 0.44388
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051114",
+   "label": 1,
+   "p_control": 0.59309
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051115",
+   "label": 1,
+   "p_control": 0.76356
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051116",
+   "label": 1,
+   "p_control": 0.63244
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051117",
+   "label": 1,
+   "p_control": 0.72878
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051119",
+   "label": 1,
+   "p_control": 0.38674
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051120",
+   "label": 1,
+   "p_control": 0.53671
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051121",
+   "label": 1,
+   "p_control": 0.76447
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051122",
+   "label": 1,
+   "p_control": 0.64966
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051124",
+   "label": 1,
+   "p_control": 0.28107
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051125",
+   "label": 1,
+   "p_control": 0.45603
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051126",
+   "label": 1,
+   "p_control": 0.58782
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051128",
+   "label": 1,
+   "p_control": 0.55334
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051129",
+   "label": 1,
+   "p_control": 0.78697
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051130",
+   "label": 1,
+   "p_control": 0.37666
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051131",
+   "label": 1,
+   "p_control": 0.61533
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051146",
+   "label": 1,
+   "p_control": 0.49349
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051147",
+   "label": 1,
+   "p_control": 0.47696
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051148",
+   "label": 1,
+   "p_control": 0.74863
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051151",
+   "label": 1,
+   "p_control": 0.61451
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051152",
+   "label": 1,
+   "p_control": 0.49072
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051153",
+   "label": 1,
+   "p_control": 0.6778
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051154",
+   "label": 1,
+   "p_control": 0.73436
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051155",
+   "label": 1,
+   "p_control": 0.52706
+  },
+  {
+   "fold": "NYU",
+   "subject": "abide1_0051156",
+   "label": 1,
+   "p_control": 0.47748
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050142",
+   "label": 0,
+   "p_control": 0.5572
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050143",
+   "label": 0,
+   "p_control": 0.30907
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050144",
+   "label": 0,
+   "p_control": 0.39071
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050145",
+   "label": 0,
+   "p_control": 0.40181
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050146",
+   "label": 0,
+   "p_control": 0.52662
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050147",
+   "label": 0,
+   "p_control": 0.34029
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050148",
+   "label": 0,
+   "p_control": 0.54062
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050149",
+   "label": 0,
+   "p_control": 0.55071
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050150",
+   "label": 0,
+   "p_control": 0.62915
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050152",
+   "label": 0,
+   "p_control": 0.45809
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050153",
+   "label": 0,
+   "p_control": 0.71676
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050155",
+   "label": 0,
+   "p_control": 0.27456
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050156",
+   "label": 0,
+   "p_control": 0.36029
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050157",
+   "label": 1,
+   "p_control": 0.44812
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050158",
+   "label": 1,
+   "p_control": 0.71567
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050159",
+   "label": 1,
+   "p_control": 0.53367
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050160",
+   "label": 1,
+   "p_control": 0.72243
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050161",
+   "label": 1,
+   "p_control": 0.48423
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050162",
+   "label": 1,
+   "p_control": 0.45261
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050163",
+   "label": 1,
+   "p_control": 0.1719
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050164",
+   "label": 1,
+   "p_control": 0.39625
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050165",
+   "label": 1,
+   "p_control": 0.47372
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050166",
+   "label": 1,
+   "p_control": 0.40279
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050167",
+   "label": 1,
+   "p_control": 0.698
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050168",
+   "label": 1,
+   "p_control": 0.54942
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050169",
+   "label": 1,
+   "p_control": 0.66693
+  },
+  {
+   "fold": "OHSU",
+   "subject": "abide1_0050171",
+   "label": 1,
+   "p_control": 0.57667
+  },
+  {
+   "fold": "OLIN",
+   "subject": "abide1_0050104",
+   "label": 1,
+   "p_control": 0.4736
+  },
+  {
+   "fold": "OLIN",
+   "subject": "abide1_0050107",
+   "label": 1,
+   "p_control": 0.73914
+  },
+  {
+   "fold": "OLIN",
+   "subject": "abide1_0050116",
+   "label": 1,
+   "p_control": 0.71388
+  },
+  {
+   "fold": "OLIN",
+   "subject": "abide1_0050118",
+   "label": 0,
+   "p_control": 0.66798
+  },
+  {
+   "fold": "OLIN",
+   "subject": "abide1_0050130",
+   "label": 0,
+   "p_control": 0.54933
+  },
+  {
+   "fold": "OLIN",
+   "subject": "abide1_0050131",
+   "label": 0,
+   "p_control": 0.44188
+  },
+  {
+   "fold": "OLIN",
+   "subject": "abide1_0050133",
+   "label": 0,
+   "p_control": 0.74513
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050004",
+   "label": 0,
+   "p_control": 0.62096
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050006",
+   "label": 0,
+   "p_control": 0.16445
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050011",
+   "label": 0,
+   "p_control": 0.47568
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050014",
+   "label": 0,
+   "p_control": 0.36435
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050016",
+   "label": 0,
+   "p_control": 0.59775
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050022",
+   "label": 0,
+   "p_control": 0.81432
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050024",
+   "label": 0,
+   "p_control": 0.40725
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050029",
+   "label": 0,
+   "p_control": 0.41913
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050030",
+   "label": 1,
+   "p_control": 0.83981
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050031",
+   "label": 1,
+   "p_control": 0.45982
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050032",
+   "label": 1,
+   "p_control": 0.76427
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050033",
+   "label": 1,
+   "p_control": 0.72654
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050036",
+   "label": 1,
+   "p_control": 0.82398
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050037",
+   "label": 1,
+   "p_control": 0.52741
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050040",
+   "label": 1,
+   "p_control": 0.828
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050041",
+   "label": 1,
+   "p_control": 0.75652
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050044",
+   "label": 1,
+   "p_control": 0.59193
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050047",
+   "label": 1,
+   "p_control": 0.55542
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050050",
+   "label": 1,
+   "p_control": 0.43974
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050052",
+   "label": 1,
+   "p_control": 0.71223
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050057",
+   "label": 0,
+   "p_control": 0.83424
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050058",
+   "label": 1,
+   "p_control": 0.36654
+  },
+  {
+   "fold": "PITT",
+   "subject": "abide1_0050060",
+   "label": 1,
+   "p_control": 0.6985
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051557",
+   "label": 1,
+   "p_control": 0.62712
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051559",
+   "label": 1,
+   "p_control": 0.6565
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051561",
+   "label": 1,
+   "p_control": 0.4122
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051565",
+   "label": 1,
+   "p_control": 0.53676
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051566",
+   "label": 1,
+   "p_control": 0.76215
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051574",
+   "label": 0,
+   "p_control": 0.35298
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051577",
+   "label": 0,
+   "p_control": 0.25628
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051579",
+   "label": 0,
+   "p_control": 0.71853
+  },
+  {
+   "fold": "SBL",
+   "subject": "abide1_0051583",
+   "label": 0,
+   "p_control": 0.67369
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050182",
+   "label": 0,
+   "p_control": 0.41579
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050183",
+   "label": 0,
+   "p_control": 0.54929
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050184",
+   "label": 0,
+   "p_control": 0.36115
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050186",
+   "label": 0,
+   "p_control": 0.31495
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050187",
+   "label": 0,
+   "p_control": 0.60829
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050188",
+   "label": 0,
+   "p_control": 0.53683
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050189",
+   "label": 0,
+   "p_control": 0.42509
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050190",
+   "label": 0,
+   "p_control": 0.3905
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050191",
+   "label": 0,
+   "p_control": 0.42043
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050193",
+   "label": 1,
+   "p_control": 0.59546
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050194",
+   "label": 1,
+   "p_control": 0.76221
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050195",
+   "label": 1,
+   "p_control": 0.79997
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050196",
+   "label": 1,
+   "p_control": 0.25358
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050197",
+   "label": 1,
+   "p_control": 0.42897
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050199",
+   "label": 1,
+   "p_control": 0.55458
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050200",
+   "label": 1,
+   "p_control": 0.63082
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050201",
+   "label": 1,
+   "p_control": 0.76339
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050203",
+   "label": 1,
+   "p_control": 0.62443
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050204",
+   "label": 1,
+   "p_control": 0.65892
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050205",
+   "label": 1,
+   "p_control": 0.71121
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050207",
+   "label": 0,
+   "p_control": 0.74684
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050209",
+   "label": 1,
+   "p_control": 0.57607
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050210",
+   "label": 1,
+   "p_control": 0.50257
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050211",
+   "label": 1,
+   "p_control": 0.57951
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050212",
+   "label": 0,
+   "p_control": 0.57183
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050213",
+   "label": 1,
+   "p_control": 0.46332
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050214",
+   "label": 1,
+   "p_control": 0.60956
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050215",
+   "label": 1,
+   "p_control": 0.73283
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050216",
+   "label": 0,
+   "p_control": 0.36588
+  },
+  {
+   "fold": "SDSU",
+   "subject": "abide1_0050217",
+   "label": 1,
+   "p_control": 0.32038
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051160",
+   "label": 0,
+   "p_control": 0.30105
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051162",
+   "label": 0,
+   "p_control": 0.51658
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051163",
+   "label": 0,
+   "p_control": 0.43058
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051164",
+   "label": 0,
+   "p_control": 0.48981
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051165",
+   "label": 0,
+   "p_control": 0.12046
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051168",
+   "label": 0,
+   "p_control": 0.35856
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051169",
+   "label": 0,
+   "p_control": 0.35481
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051170",
+   "label": 0,
+   "p_control": 0.5979
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051171",
+   "label": 0,
+   "p_control": 0.40922
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051172",
+   "label": 0,
+   "p_control": 0.44327
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051173",
+   "label": 0,
+   "p_control": 0.40988
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051174",
+   "label": 0,
+   "p_control": 0.70414
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051177",
+   "label": 0,
+   "p_control": 0.46584
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051178",
+   "label": 0,
+   "p_control": 0.3121
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051180",
+   "label": 1,
+   "p_control": 0.59823
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051181",
+   "label": 1,
+   "p_control": 0.56502
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051182",
+   "label": 1,
+   "p_control": 0.71594
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051183",
+   "label": 1,
+   "p_control": 0.50079
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051184",
+   "label": 1,
+   "p_control": 0.52084
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051187",
+   "label": 1,
+   "p_control": 0.61834
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051188",
+   "label": 1,
+   "p_control": 0.5307
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051189",
+   "label": 1,
+   "p_control": 0.60363
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051190",
+   "label": 1,
+   "p_control": 0.37444
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051191",
+   "label": 1,
+   "p_control": 0.60182
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051192",
+   "label": 1,
+   "p_control": 0.64261
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051193",
+   "label": 1,
+   "p_control": 0.49984
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051194",
+   "label": 1,
+   "p_control": 0.47705
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051195",
+   "label": 1,
+   "p_control": 0.42196
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051196",
+   "label": 1,
+   "p_control": 0.26825
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051197",
+   "label": 1,
+   "p_control": 0.22333
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051198",
+   "label": 1,
+   "p_control": 0.4008
+  },
+  {
+   "fold": "STANFORD",
+   "subject": "abide1_0051199",
+   "label": 1,
+   "p_control": 0.59078
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050233",
+   "label": 0,
+   "p_control": 0.46957
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050234",
+   "label": 0,
+   "p_control": 0.43909
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050235",
+   "label": 0,
+   "p_control": 0.40321
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050236",
+   "label": 0,
+   "p_control": 0.263
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050237",
+   "label": 0,
+   "p_control": 0.28733
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050238",
+   "label": 0,
+   "p_control": 0.47311
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050240",
+   "label": 0,
+   "p_control": 0.2182
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050241",
+   "label": 0,
+   "p_control": 0.1697
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050246",
+   "label": 0,
+   "p_control": 0.58167
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050248",
+   "label": 0,
+   "p_control": 0.42212
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050249",
+   "label": 0,
+   "p_control": 0.24451
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050253",
+   "label": 0,
+   "p_control": 0.66492
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050254",
+   "label": 0,
+   "p_control": 0.36764
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050255",
+   "label": 0,
+   "p_control": 0.39508
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050257",
+   "label": 1,
+   "p_control": 0.31391
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050259",
+   "label": 1,
+   "p_control": 0.43292
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050260",
+   "label": 1,
+   "p_control": 0.59332
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050261",
+   "label": 1,
+   "p_control": 0.50937
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050263",
+   "label": 1,
+   "p_control": 0.4805
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050264",
+   "label": 1,
+   "p_control": 0.46465
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050267",
+   "label": 1,
+   "p_control": 0.55797
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050268",
+   "label": 1,
+   "p_control": 0.46323
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050269",
+   "label": 1,
+   "p_control": 0.46799
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050270",
+   "label": 1,
+   "p_control": 0.48764
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0050271",
+   "label": 1,
+   "p_control": 0.51299
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051132",
+   "label": 1,
+   "p_control": 0.56774
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051133",
+   "label": 1,
+   "p_control": 0.45865
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051134",
+   "label": 1,
+   "p_control": 0.46932
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051135",
+   "label": 1,
+   "p_control": 0.54447
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051138",
+   "label": 1,
+   "p_control": 0.6864
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051139",
+   "label": 1,
+   "p_control": 0.50928
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051140",
+   "label": 1,
+   "p_control": 0.28905
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051141",
+   "label": 1,
+   "p_control": 0.77377
+  },
+  {
+   "fold": "TRINITY",
+   "subject": "abide1_0051142",
+   "label": 1,
+   "p_control": 0.35827
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051202",
+   "label": 0,
+   "p_control": 0.45129
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051205",
+   "label": 0,
+   "p_control": 0.51669
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051206",
+   "label": 0,
+   "p_control": 0.54552
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051208",
+   "label": 0,
+   "p_control": 0.78811
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051210",
+   "label": 0,
+   "p_control": 0.55435
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051211",
+   "label": 0,
+   "p_control": 0.66416
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051212",
+   "label": 0,
+   "p_control": 0.51507
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051217",
+   "label": 0,
+   "p_control": 0.64477
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051218",
+   "label": 0,
+   "p_control": 0.15235
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051219",
+   "label": 0,
+   "p_control": 0.66785
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051220",
+   "label": 0,
+   "p_control": 0.41683
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051221",
+   "label": 0,
+   "p_control": 0.57652
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051222",
+   "label": 0,
+   "p_control": 0.67074
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051223",
+   "label": 0,
+   "p_control": 0.45439
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051224",
+   "label": 0,
+   "p_control": 0.55717
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051225",
+   "label": 0,
+   "p_control": 0.32698
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051226",
+   "label": 0,
+   "p_control": 0.80212
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051229",
+   "label": 0,
+   "p_control": 0.28273
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051230",
+   "label": 0,
+   "p_control": 0.54872
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051234",
+   "label": 0,
+   "p_control": 0.50596
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051235",
+   "label": 0,
+   "p_control": 0.39095
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051237",
+   "label": 0,
+   "p_control": 0.84597
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051240",
+   "label": 0,
+   "p_control": 0.30357
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051241",
+   "label": 0,
+   "p_control": 0.72057
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051248",
+   "label": 0,
+   "p_control": 0.53711
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051249",
+   "label": 0,
+   "p_control": 0.5859
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051250",
+   "label": 1,
+   "p_control": 0.45896
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051252",
+   "label": 1,
+   "p_control": 0.73715
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051253",
+   "label": 1,
+   "p_control": 0.59315
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051254",
+   "label": 1,
+   "p_control": 0.74805
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051255",
+   "label": 1,
+   "p_control": 0.86589
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051256",
+   "label": 1,
+   "p_control": 0.55597
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051257",
+   "label": 1,
+   "p_control": 0.63603
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051260",
+   "label": 1,
+   "p_control": 0.78477
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051261",
+   "label": 1,
+   "p_control": 0.49989
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051262",
+   "label": 1,
+   "p_control": 0.69771
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051263",
+   "label": 1,
+   "p_control": 0.75912
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051264",
+   "label": 1,
+   "p_control": 0.8591
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051265",
+   "label": 1,
+   "p_control": 0.75386
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051267",
+   "label": 1,
+   "p_control": 0.84864
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051268",
+   "label": 1,
+   "p_control": 0.54272
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051269",
+   "label": 1,
+   "p_control": 0.91073
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051271",
+   "label": 1,
+   "p_control": 0.63146
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051272",
+   "label": 1,
+   "p_control": 0.61417
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051273",
+   "label": 1,
+   "p_control": 0.83024
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051275",
+   "label": 1,
+   "p_control": 0.83249
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051276",
+   "label": 1,
+   "p_control": 0.54613
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051277",
+   "label": 1,
+   "p_control": 0.66255
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051279",
+   "label": 1,
+   "p_control": 0.70059
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051280",
+   "label": 1,
+   "p_control": 0.83268
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051281",
+   "label": 1,
+   "p_control": 0.57773
+  },
+  {
+   "fold": "UCLA_1",
+   "subject": "abide1_0051282",
+   "label": 1,
+   "p_control": 0.28226
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051291",
+   "label": 0,
+   "p_control": 0.45088
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051293",
+   "label": 0,
+   "p_control": 0.29772
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051294",
+   "label": 0,
+   "p_control": 0.28776
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051295",
+   "label": 0,
+   "p_control": 0.32834
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051301",
+   "label": 0,
+   "p_control": 0.52747
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051303",
+   "label": 1,
+   "p_control": 0.75276
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051305",
+   "label": 1,
+   "p_control": 0.49149
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051307",
+   "label": 1,
+   "p_control": 0.60113
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051308",
+   "label": 1,
+   "p_control": 0.46493
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051309",
+   "label": 1,
+   "p_control": 0.23553
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051311",
+   "label": 1,
+   "p_control": 0.29538
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051312",
+   "label": 1,
+   "p_control": 0.76592
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051313",
+   "label": 1,
+   "p_control": 0.5387
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051314",
+   "label": 1,
+   "p_control": 0.60413
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051315",
+   "label": 1,
+   "p_control": 0.83421
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051316",
+   "label": 1,
+   "p_control": 0.67742
+  },
+  {
+   "fold": "UCLA_2",
+   "subject": "abide1_0051317",
+   "label": 0,
+   "p_control": 0.50081
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050272",
+   "label": 0,
+   "p_control": 0.48073
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050273",
+   "label": 0,
+   "p_control": 0.55289
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050274",
+   "label": 0,
+   "p_control": 0.57332
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050276",
+   "label": 0,
+   "p_control": 0.44224
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050277",
+   "label": 0,
+   "p_control": 0.49328
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050278",
+   "label": 0,
+   "p_control": 0.09829
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050280",
+   "label": 0,
+   "p_control": 0.3762
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050281",
+   "label": 0,
+   "p_control": 0.48792
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050282",
+   "label": 0,
+   "p_control": 0.27694
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050283",
+   "label": 0,
+   "p_control": 0.37892
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050284",
+   "label": 0,
+   "p_control": 0.48459
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050285",
+   "label": 0,
+   "p_control": 0.68357
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050287",
+   "label": 0,
+   "p_control": 0.47014
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050289",
+   "label": 0,
+   "p_control": 0.54002
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050290",
+   "label": 0,
+   "p_control": 0.32174
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050291",
+   "label": 0,
+   "p_control": 0.43639
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050292",
+   "label": 0,
+   "p_control": 0.70129
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050293",
+   "label": 0,
+   "p_control": 0.47161
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050294",
+   "label": 0,
+   "p_control": 0.29409
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050295",
+   "label": 0,
+   "p_control": 0.51294
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050298",
+   "label": 0,
+   "p_control": 0.34928
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050300",
+   "label": 0,
+   "p_control": 0.61331
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050301",
+   "label": 0,
+   "p_control": 0.45712
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050307",
+   "label": 0,
+   "p_control": 0.35542
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050310",
+   "label": 0,
+   "p_control": 0.50273
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050314",
+   "label": 0,
+   "p_control": 0.51589
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050315",
+   "label": 0,
+   "p_control": 0.43814
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050318",
+   "label": 0,
+   "p_control": 0.46628
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050319",
+   "label": 0,
+   "p_control": 0.63324
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050320",
+   "label": 0,
+   "p_control": 0.15235
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050321",
+   "label": 0,
+   "p_control": 0.43886
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050324",
+   "label": 0,
+   "p_control": 0.26171
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050325",
+   "label": 0,
+   "p_control": 0.52565
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050327",
+   "label": 1,
+   "p_control": 0.46887
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050328",
+   "label": 1,
+   "p_control": 0.55076
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050330",
+   "label": 1,
+   "p_control": 0.48863
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050331",
+   "label": 1,
+   "p_control": 0.65989
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050332",
+   "label": 1,
+   "p_control": 0.3033
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050333",
+   "label": 1,
+   "p_control": 0.36844
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050334",
+   "label": 1,
+   "p_control": 0.51065
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050335",
+   "label": 1,
+   "p_control": 0.60274
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050336",
+   "label": 1,
+   "p_control": 0.45661
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050337",
+   "label": 1,
+   "p_control": 0.46948
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050338",
+   "label": 1,
+   "p_control": 0.70055
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050339",
+   "label": 1,
+   "p_control": 0.62159
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050340",
+   "label": 1,
+   "p_control": 0.78097
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050341",
+   "label": 1,
+   "p_control": 0.65793
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050342",
+   "label": 1,
+   "p_control": 0.26195
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050343",
+   "label": 1,
+   "p_control": 0.51783
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050344",
+   "label": 1,
+   "p_control": 0.79512
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050346",
+   "label": 1,
+   "p_control": 0.65781
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050347",
+   "label": 1,
+   "p_control": 0.39807
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050348",
+   "label": 1,
+   "p_control": 0.4154
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050349",
+   "label": 1,
+   "p_control": 0.74448
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050350",
+   "label": 1,
+   "p_control": 0.56018
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050351",
+   "label": 1,
+   "p_control": 0.52818
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050352",
+   "label": 1,
+   "p_control": 0.31501
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050353",
+   "label": 1,
+   "p_control": 0.72864
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050355",
+   "label": 1,
+   "p_control": 0.38026
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050356",
+   "label": 1,
+   "p_control": 0.55629
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050357",
+   "label": 1,
+   "p_control": 0.59682
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050358",
+   "label": 1,
+   "p_control": 0.5099
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050360",
+   "label": 1,
+   "p_control": 0.52911
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050361",
+   "label": 1,
+   "p_control": 0.33871
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050362",
+   "label": 1,
+   "p_control": 0.46555
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050363",
+   "label": 1,
+   "p_control": 0.55702
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050365",
+   "label": 1,
+   "p_control": 0.61265
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050366",
+   "label": 1,
+   "p_control": 0.69204
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050367",
+   "label": 1,
+   "p_control": 0.46211
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050368",
+   "label": 1,
+   "p_control": 0.41757
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050369",
+   "label": 1,
+   "p_control": 0.55473
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050370",
+   "label": 1,
+   "p_control": 0.48277
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050372",
+   "label": 1,
+   "p_control": 0.67706
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050373",
+   "label": 1,
+   "p_control": 0.36953
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050374",
+   "label": 1,
+   "p_control": 0.5386
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050375",
+   "label": 1,
+   "p_control": 0.64466
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050376",
+   "label": 1,
+   "p_control": 0.62484
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050377",
+   "label": 1,
+   "p_control": 0.66223
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050378",
+   "label": 1,
+   "p_control": 0.48056
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050379",
+   "label": 1,
+   "p_control": 0.45961
+  },
+  {
+   "fold": "UM_1",
+   "subject": "abide1_0050380",
+   "label": 1,
+   "p_control": 0.47125
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050382",
+   "label": 1,
+   "p_control": 0.72025
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050385",
+   "label": 1,
+   "p_control": 0.61293
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050386",
+   "label": 1,
+   "p_control": 0.4797
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050387",
+   "label": 1,
+   "p_control": 0.61527
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050388",
+   "label": 1,
+   "p_control": 0.83967
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050390",
+   "label": 1,
+   "p_control": 0.44296
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050391",
+   "label": 1,
+   "p_control": 0.79694
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050397",
+   "label": 0,
+   "p_control": 0.4531
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050399",
+   "label": 0,
+   "p_control": 0.66471
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050402",
+   "label": 0,
+   "p_control": 0.52799
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050404",
+   "label": 0,
+   "p_control": 0.69962
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050405",
+   "label": 0,
+   "p_control": 0.44118
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050407",
+   "label": 0,
+   "p_control": 0.38076
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050408",
+   "label": 0,
+   "p_control": 0.45762
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050410",
+   "label": 0,
+   "p_control": 0.42583
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050412",
+   "label": 0,
+   "p_control": 0.41708
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050413",
+   "label": 0,
+   "p_control": 0.35815
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050414",
+   "label": 1,
+   "p_control": 0.76061
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050415",
+   "label": 1,
+   "p_control": 0.61312
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050416",
+   "label": 1,
+   "p_control": 0.49603
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050417",
+   "label": 1,
+   "p_control": 0.76495
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050418",
+   "label": 1,
+   "p_control": 0.606
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050419",
+   "label": 1,
+   "p_control": 0.79562
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050421",
+   "label": 1,
+   "p_control": 0.57624
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050424",
+   "label": 1,
+   "p_control": 0.45565
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050425",
+   "label": 1,
+   "p_control": 0.58565
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050426",
+   "label": 1,
+   "p_control": 0.5899
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050427",
+   "label": 1,
+   "p_control": 0.66291
+  },
+  {
+   "fold": "UM_2",
+   "subject": "abide1_0050428",
+   "label": 1,
+   "p_control": 0.67934
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050432",
+   "label": 1,
+   "p_control": 0.65344
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050433",
+   "label": 1,
+   "p_control": 0.52387
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050434",
+   "label": 1,
+   "p_control": 0.54604
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050435",
+   "label": 1,
+   "p_control": 0.67711
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050436",
+   "label": 1,
+   "p_control": 0.57056
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050437",
+   "label": 1,
+   "p_control": 0.41975
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050438",
+   "label": 1,
+   "p_control": 0.74586
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050439",
+   "label": 1,
+   "p_control": 0.73117
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050440",
+   "label": 1,
+   "p_control": 0.53272
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050441",
+   "label": 1,
+   "p_control": 0.82057
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050442",
+   "label": 1,
+   "p_control": 0.76036
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050443",
+   "label": 1,
+   "p_control": 0.44657
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050445",
+   "label": 1,
+   "p_control": 0.82438
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050446",
+   "label": 1,
+   "p_control": 0.80013
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050447",
+   "label": 1,
+   "p_control": 0.46248
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050448",
+   "label": 1,
+   "p_control": 0.43075
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050449",
+   "label": 1,
+   "p_control": 0.70958
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050450",
+   "label": 1,
+   "p_control": 0.64643
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050452",
+   "label": 1,
+   "p_control": 0.67533
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050454",
+   "label": 1,
+   "p_control": 0.40862
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050455",
+   "label": 1,
+   "p_control": 0.77242
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050456",
+   "label": 1,
+   "p_control": 0.70607
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050457",
+   "label": 1,
+   "p_control": 0.78474
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050459",
+   "label": 1,
+   "p_control": 0.77986
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050460",
+   "label": 1,
+   "p_control": 0.66783
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050461",
+   "label": 1,
+   "p_control": 0.56738
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050462",
+   "label": 1,
+   "p_control": 0.70862
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050464",
+   "label": 1,
+   "p_control": 0.75793
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050465",
+   "label": 1,
+   "p_control": 0.68923
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050466",
+   "label": 1,
+   "p_control": 0.54114
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050467",
+   "label": 1,
+   "p_control": 0.58085
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050468",
+   "label": 1,
+   "p_control": 0.62278
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050469",
+   "label": 1,
+   "p_control": 0.74882
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050471",
+   "label": 1,
+   "p_control": 0.4894
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050472",
+   "label": 1,
+   "p_control": 0.70684
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050473",
+   "label": 1,
+   "p_control": 0.46704
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050474",
+   "label": 1,
+   "p_control": 0.42916
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050475",
+   "label": 0,
+   "p_control": 0.62454
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050476",
+   "label": 0,
+   "p_control": 0.43055
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050477",
+   "label": 0,
+   "p_control": 0.49681
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050480",
+   "label": 0,
+   "p_control": 0.37964
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050482",
+   "label": 0,
+   "p_control": 0.48322
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050483",
+   "label": 0,
+   "p_control": 0.31767
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050484",
+   "label": 0,
+   "p_control": 0.27694
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050485",
+   "label": 0,
+   "p_control": 0.7332
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050486",
+   "label": 0,
+   "p_control": 0.27193
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050488",
+   "label": 0,
+   "p_control": 0.48595
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050491",
+   "label": 0,
+   "p_control": 0.4537
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050493",
+   "label": 0,
+   "p_control": 0.45537
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050494",
+   "label": 0,
+   "p_control": 0.52071
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050495",
+   "label": 0,
+   "p_control": 0.30883
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050497",
+   "label": 0,
+   "p_control": 0.32251
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050498",
+   "label": 0,
+   "p_control": 0.32065
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050499",
+   "label": 0,
+   "p_control": 0.40861
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050500",
+   "label": 0,
+   "p_control": 0.48807
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050501",
+   "label": 0,
+   "p_control": 0.31158
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050502",
+   "label": 0,
+   "p_control": 0.56871
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050503",
+   "label": 0,
+   "p_control": 0.51613
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050504",
+   "label": 0,
+   "p_control": 0.21168
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050505",
+   "label": 0,
+   "p_control": 0.46669
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050506",
+   "label": 0,
+   "p_control": 0.37112
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050507",
+   "label": 0,
+   "p_control": 0.47529
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050509",
+   "label": 0,
+   "p_control": 0.79299
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050512",
+   "label": 0,
+   "p_control": 0.67226
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050513",
+   "label": 0,
+   "p_control": 0.50049
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050514",
+   "label": 0,
+   "p_control": 0.5678
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050515",
+   "label": 0,
+   "p_control": 0.34566
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050516",
+   "label": 0,
+   "p_control": 0.42057
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050517",
+   "label": 0,
+   "p_control": 0.36359
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050518",
+   "label": 0,
+   "p_control": 0.77302
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050519",
+   "label": 0,
+   "p_control": 0.40558
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050520",
+   "label": 0,
+   "p_control": 0.51718
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050521",
+   "label": 0,
+   "p_control": 0.47977
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050523",
+   "label": 0,
+   "p_control": 0.30055
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050524",
+   "label": 0,
+   "p_control": 0.36361
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050525",
+   "label": 0,
+   "p_control": 0.27356
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050526",
+   "label": 0,
+   "p_control": 0.51321
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050527",
+   "label": 0,
+   "p_control": 0.46993
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050528",
+   "label": 0,
+   "p_control": 0.52886
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050530",
+   "label": 0,
+   "p_control": 0.37042
+  },
+  {
+   "fold": "USM",
+   "subject": "abide1_0050532",
+   "label": 0,
+   "p_control": 0.44996
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050551",
+   "label": 1,
+   "p_control": 0.46252
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050552",
+   "label": 1,
+   "p_control": 0.95275
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050553",
+   "label": 1,
+   "p_control": 0.65583
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050554",
+   "label": 1,
+   "p_control": 0.72186
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050555",
+   "label": 1,
+   "p_control": 0.69261
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050556",
+   "label": 1,
+   "p_control": 0.67766
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050557",
+   "label": 1,
+   "p_control": 0.63686
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050558",
+   "label": 1,
+   "p_control": 0.63013
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050560",
+   "label": 1,
+   "p_control": 0.56656
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050561",
+   "label": 1,
+   "p_control": 0.65941
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050562",
+   "label": 1,
+   "p_control": 0.37904
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050564",
+   "label": 1,
+   "p_control": 0.50961
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050566",
+   "label": 1,
+   "p_control": 0.54135
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050567",
+   "label": 1,
+   "p_control": 0.54015
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050568",
+   "label": 1,
+   "p_control": 0.62012
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050569",
+   "label": 1,
+   "p_control": 0.94187
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050570",
+   "label": 1,
+   "p_control": 0.82834
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050572",
+   "label": 1,
+   "p_control": 0.86684
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050573",
+   "label": 1,
+   "p_control": 0.76121
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050574",
+   "label": 1,
+   "p_control": 0.91211
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050575",
+   "label": 1,
+   "p_control": 0.81005
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050576",
+   "label": 1,
+   "p_control": 0.80586
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050601",
+   "label": 0,
+   "p_control": 0.61329
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050603",
+   "label": 0,
+   "p_control": 0.47548
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050604",
+   "label": 0,
+   "p_control": 0.52308
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050605",
+   "label": 0,
+   "p_control": 0.61587
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050606",
+   "label": 0,
+   "p_control": 0.52142
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050607",
+   "label": 0,
+   "p_control": 0.67064
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050611",
+   "label": 0,
+   "p_control": 0.50134
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050612",
+   "label": 0,
+   "p_control": 0.7918
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050613",
+   "label": 0,
+   "p_control": 0.43197
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050614",
+   "label": 0,
+   "p_control": 0.38783
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050616",
+   "label": 0,
+   "p_control": 0.47907
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050617",
+   "label": 0,
+   "p_control": 0.48781
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050619",
+   "label": 0,
+   "p_control": 0.28533
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050620",
+   "label": 0,
+   "p_control": 0.43099
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050621",
+   "label": 0,
+   "p_control": 0.66751
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050623",
+   "label": 0,
+   "p_control": 0.74236
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050625",
+   "label": 0,
+   "p_control": 0.67023
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050626",
+   "label": 0,
+   "p_control": 0.44625
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050627",
+   "label": 0,
+   "p_control": 0.54769
+  },
+  {
+   "fold": "YALE",
+   "subject": "abide1_0050628",
+   "label": 0,
+   "p_control": 0.26475
+  }
+ ]
+}
