@@ -138,6 +138,31 @@ Any model family is allowed (linear, kernel, trees, MLP, GNN through
 `neuroasd.ensemble`), as long as the folds finish inside the stage time limits
 (screen 40 min, loso-site and loso-institution 120 min each).
 
+### Strategy (read this first)
+
+The bar is ASD recall > 74.3% with control recall ≥ 73% on both LOSO splits.
+At the base AUC (~0.78–0.80) that operating point is out of reach: moving the
+cut alone likely tops out near 65% ASD recall at 73% control recall. Two things
+must improve, in this order of expected payoff:
+
+1. **Site shift in the raw score.** Per-site score offsets are the largest
+   loss: iter10's (now forbidden) per-site z-scoring of the scores was worth
+   ~+20 pp ASD recall. Recover what you can **per subject**: normalize each
+   subject's own FC or features with that subject's own statistics (e.g.
+   z-score a subject's edges across its own edges, remove its mean FC / global
+   connectivity, rank-transform within the subject), site-invariant training
+   (site-balanced weights, removing training-site directions from the feature
+   space, leave-site-out-robust objectives), or covariates that carry site
+   differences. These are allowed: they use one subject at a time.
+2. **Ranking (AUC).** More information per subject: add Power / Markov atlas
+   members (stacking on training-fold OOF scores), partial correlation,
+   better FC shrinkage, nonlinear classifiers, ensembles of differently
+   regularized models.
+
+Then re-tune the training-fold cut on top of every accepted step (the cut
+mechanism should stay in the base once accepted). After two FAILs in the same
+direction, switch direction.
+
 Untested directions (all use only FC + age/sex, fit inside the training fold):
 
 0. **A cut chosen on the training fold**: out-of-fold training scores (grouped
