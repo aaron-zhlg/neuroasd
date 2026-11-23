@@ -75,6 +75,9 @@ neuroasd.ensemble) if one fold fits within the stage time limits \
 choice of C, training-only PCA / feature selection, FC shrinkage or a different \
 tangent reference, partial-correlation features, site-balanced sample weights, \
 a nonlinear classifier on a reduced tangent space.
+- HARD RULE: every trial must change the model's predictions. No \
+instrumentation-, logging- or diagnostics-only edits, no refactors, no \
+"plumbing" rounds: they cannot raise ASD recall and waste a full LOSO run.
 - HARD RULE: do NOT change how the decision cut is chosen, rescaled, shifted \
 or calibrated. Six trials this session showed the cut is exhausted at the \
 current AUC (it already sits at the 73% OOF floor). Every trial must aim to \
