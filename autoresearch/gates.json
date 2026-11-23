@@ -48,7 +48,8 @@
     "accept_margin": 0.003,
     "improve_margin": 0.003,
     "regress_tolerance": 0.005,
-    "note": "ASD recall, either split (one split gains the margin, the other drops at most regress_tolerance), control recall >= floor on both. Every accepted step (+0.3pp vs the current base) becomes the new base AND opens a review PR, so every new best score can be reproduced from its own branch."
+    "note": "ASD recall, either split (one split gains the margin, the other drops at most regress_tolerance), control recall >= floor on both. Every accepted step (+0.3pp vs the current base) becomes the new base AND opens a review PR, so every new best score can be reproduced from its own branch.",
+    "screen_tolerance": 0.02
   },
   "gates": {
     "screen": {

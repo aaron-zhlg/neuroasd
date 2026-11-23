@@ -310,6 +310,17 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
     if stage != FINAL_STAGE:
         threshold = float(gate["threshold"])
         rationale = gate["rationale"]
+        if stage == "screen":
+            # Track the current base: a screen far below the base's own screen
+            # cannot win later, so stop it here instead of paying for LOSO.
+            base_screen = trials_dir() / f"screen__{gates['reference']['name']}" / "result.json"
+            if base_screen.is_file():
+                base_value = json.loads(base_screen.read_text(encoding="utf-8"))["summary"][PRIMARY_METRIC]
+                floor = round(base_value - float(gates["rule"].get("screen_tolerance", 0.02)), 4)
+                if floor > threshold:
+                    threshold = floor
+                    rationale += (f" Raised to {threshold} = the base's own screen ASD recall "
+                                  f"({base_value:.4f}) minus screen_tolerance.")
         if stage == "loso-site":
             # Below this the either-split rule cannot pass, so skip the institution sweep.
             floor = gates["reference"]["loso-site"][PRIMARY_METRIC] - float(gates["rule"]["regress_tolerance"])
