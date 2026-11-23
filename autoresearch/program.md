@@ -200,6 +200,10 @@ per subject (Power / Markov members stacked on training-fold OOF scores,
 partial correlation, better FC shrinkage), a stronger classifier, or features
 that are stable across sites.
 
+**Ruled out twice (2026-11-23):** z-scoring each subject's own tangent / edge
+vector (once on the single model, once inside each stacked member). Site ASD
+recall fell both times (−1.6 and −1.7 pp), AUC flat. Do not retry.
+
 Then re-tune the training-fold cut on top of every accepted step (the cut
 mechanism should stay in the base once accepted). After two FAILs in the same
 direction, switch direction.
