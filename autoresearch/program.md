@@ -159,6 +159,17 @@ must improve, in this order of expected payoff:
    better FC shrinkage, nonlinear classifiers, ensembles of differently
    regularized models.
 
+**Lesson from this session (iter3):** stacking a Power-tangent member onto
+Gordon+HCP raised AUC on both splits (site 0.797 → 0.803, institution 0.779 →
+0.783) yet FAILED, because the training-fold cut left held-out control recall
+at ~77.5%, well above the 73% floor, so ASD recall did not rise. The cut, not
+the ranking, is now the bottleneck: OOF scores from smaller inner fits sit on
+a different scale than the final model's scores. Fixing that (e.g. derive the
+cut from inner fits that mirror the final fit, calibrate OOF scores to the
+final model, or pick the cut on a calibrated probability) is a valid
+mechanism, and retrying the Power stacking together with a better cut later is
+allowed.
+
 Then re-tune the training-fold cut on top of every accepted step (the cut
 mechanism should stay in the base once accepted). After two FAILs in the same
 direction, switch direction.
