@@ -200,6 +200,11 @@ per subject (Power / Markov members stacked on training-fold OOF scores,
 partial correlation, better FC shrinkage), a stronger classifier, or features
 that are stable across sites.
 
+**Not ruled out, only too slow (2026-11-23):** a partial-correlation member on
+the Gordon+HCP pair (731 regions) timed out at screen (40 min), partly because
+another job shared the CPU. Retry it on a smaller atlas (Power 94 or Markov 205)
+or with a cheap precision estimate so screen finishes in ~10 min.
+
 **Ruled out twice (2026-11-23):** z-scoring each subject's own tangent / edge
 vector (once on the single model, once inside each stacked member). Site ASD
 recall fell both times (−1.6 and −1.7 pp), AUC flat. Do not retry.
