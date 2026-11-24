@@ -326,7 +326,18 @@ def apply_gate(stage: str, name: str, summary: dict[str, float]) -> dict:
             # cannot win later, so stop it here instead of paying for LOSO.
             base_screen = trials_dir() / f"screen__{gates['reference']['name']}" / "result.json"
             if base_screen.is_file():
-                base_value = json.loads(base_screen.read_text(encoding="utf-8"))["summary"][PRIMARY_METRIC]
+                base_summary = json.loads(base_screen.read_text(encoding="utf-8"))["summary"]
+                base_value = base_summary[PRIMARY_METRIC]
+                keys = ("sensitivity_mean", "specificity_mean", "auc_mean")
+                if name != gates["reference"]["name"] and all(
+                    abs(float(summary.get(k, -1)) - float(base_summary.get(k, -2))) < 5e-5 for k in keys
+                ):
+                    # Same numbers as the base: the change never fired. Do not pay for LOSO.
+                    return {"stage": stage, "metric": PRIMARY_METRIC, "threshold": threshold,
+                            "observed": round(observed, 4), "margin": None, "passed": False,
+                            "inert": True, "floor_passed": True, "floor": float(gates["floor"]["min"]),
+                            "floor_observed": {stage: round(summary[FLOOR_METRIC], 4)}, "floor_failed_on": [],
+                            "rationale": "screen identical to the base's screen: the change is inert"}
                 floor = round(base_value - float(gates["rule"].get("screen_tolerance", 0.02)), 4)
                 if floor > threshold:
                     threshold = floor
