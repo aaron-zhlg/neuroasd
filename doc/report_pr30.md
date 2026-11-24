@@ -67,21 +67,6 @@
 | 70/10/20，5 次 | BrainNetTF（69.3） | 72.5 | **74.3** |
 | 70/15/15，10 次 | BrainMass（71.9） | 74.3 | 74.2（持平） |
 
-### 1c. 只用 ABIDE I（附录）
-
-如果只用 ABIDE I 的 789 人（论文大多只用 ABIDE I），训练的人少了一半左右，分界线偏向判"对照"：
-- 自闭症检出率：随机 10 折 67.6，70/10/20 是 64.9，70/15/15 是 58.5。
-- 对照检出率：分别是 74.4、84.5、83.1。
-- AUC：0.789、0.837、0.819。
-
-把对照检出率调到和论文一样后，自闭症检出率分别是：
-- 69.1（对 ASD-DiagNet 的 67.8）
-- 79.0（对 Heinsfeld 的 69.3）
-- 80.3（对 BrainNetTF 的 72.5）
-- 73.7（对 BrainMass 的 74.3）
-
-完整表格见 `experiments/pr30_release/paper_compare_abide1.md`。
-
 ## 2. 严格测试：测试站点训练时没见过
 
 论文的随机划分，测试的人和训练的人来自同一批扫描站点，模型可以"认站点"，分数偏高。
@@ -131,7 +116,6 @@
 - 1,120 人上的分数偏乐观：自动实验在这些人上试了几十轮，只保留最好的。最可信的是锁定 323 人的分数。
 - 预处理不同：我们用 DCAN，论文大多用 CPAC。
 - 论文数字来自 arXiv 版本（BrainMass、BrainNetTF、ASD-DiagNet、Abraham），期刊版可能略有不同；Heinsfeld 原文没能打开。
-- 模型自己的分界线在训练数据少时不准，会偏向判"对照"（只用 ABIDE I 时最明显），这是下一步要改的地方。
 
 ## 复现
 
@@ -139,9 +123,6 @@
 # 论文的随机划分方法（两期数据 1,120 人）
 uv run python -m autoresearch.loop.paper_protocols --data dev --protocols random-10fold brainnettf brainmass \
     --out-dir experiments/pr30_release/paper_protocols_dev
-# 只用 ABIDE I
-uv run python -m autoresearch.loop.paper_protocols --data abide1 --protocols random-10fold brainnettf brainmass \
-    --out-dir experiments/pr30_release/paper_protocols
 # 对比表
 uv run python -m scripts.paper_compare experiments/pr30_release/paper_protocols_dev/paper_protocols.json
 # 锁定 323 人
@@ -154,7 +135,7 @@ uv run python -m scripts.plot_chord_pr30 --out-dir experiments/pr30_release/chor
 
 | 文件 | 内容 |
 |---|---|
-| `paper_protocols_dev/`、`paper_protocols/` | 每次测试每个人的分数 |
+| `paper_protocols_dev/` | 每次测试每个人的分数 |
 | `all_splits_1120.json` | 随机 10 折、按站点分层 10 折 |
 | `loso_result.json` | 留一站点、留一机构 |
 | `holdout_log.jsonl` | 锁定集 7 次测试记录 |
