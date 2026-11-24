@@ -1070,6 +1070,15 @@ def _member_oof(
             continue
         x_train = feats[np.ix_(inner_train, mask)]
         x_val = feats[np.ix_(inner_val, mask)]
+        # CUT FIX (a): re-standardize with THIS inner split's training rows
+        # only. `feats` was scaled with all training rows of the fold, which
+        # includes this split's validation rows; the final refit is scaled with
+        # exactly its own training rows, so the OOF path now mirrors it.
+        mu = x_train.mean(axis=0, dtype=np.float64).astype(x_train.dtype)
+        sd = x_train.std(axis=0, dtype=np.float64).astype(x_train.dtype)
+        sd[~np.isfinite(sd) | (sd <= 0)] = 1.0
+        x_train = (x_train - mu) / sd
+        x_val = (x_val - mu) / sd
         for j, c in enumerate(c_scales):
             clf = _make_estimator(asd_weight, c=float(c), penalty=penalties[j]).fit(
                 x_train, y[inner_train], None
@@ -1135,7 +1144,7 @@ def _member_test_scores(
     return out
 
 
-def _meta_oof(member_oof: np.ndarray, y) -> np.ndarray:
+def _meta_oof(member_oof: np.ndarray, y, inner_folds=None) -> np.ndarray:
     """The stack's training-fold OOF scores, one scalar per training row.
 
     The meta-learner is fitted by `stack_scores` on the OOF score columns of the
@@ -1151,13 +1160,28 @@ def _meta_oof(member_oof: np.ndarray, y) -> np.ndarray:
         return np.full(len(y), np.nan, dtype=float)
     if not np.isfinite(member_oof).any():
         return np.full(len(y), np.nan, dtype=float)
-    stacked, _ = stack_scores(member_oof, y, member_oof, c=META_C)
+    if not inner_folds:
+        stacked, _ = stack_scores(member_oof, y, member_oof, c=META_C)
+        return np.asarray(stacked, dtype=float)
+    # CUT FIX (b): cross-fit the meta-learner on the SAME grouped inner folds,
+    # so each training row's stacked score comes from a meta fit that did not
+    # see that row. Fitting and scoring the same rows made the stacked OOF
+    # scores, and hence the cut and the ASD-weight choice, optimistic.
+    stacked = np.full(len(y), np.nan, dtype=float)
+    for inner_train, inner_val in inner_folds:
+        if len(np.unique(y[inner_train])) < 2:
+            continue
+        _, val_scores = stack_scores(member_oof[inner_train], y[inner_train], member_oof[inner_val], c=META_C)
+        stacked[inner_val] = val_scores
+    if not np.isfinite(stacked).any():
+        stacked, _ = stack_scores(member_oof, y, member_oof, c=META_C)
     return np.asarray(stacked, dtype=float)
 
 
 def select_stacked_weight(
     oof_by_weight: dict[float, np.ndarray],
     y,
+    inner_folds=None,
 ) -> tuple[float, float]:
     """Pick the ASD class weight and the cut on the STACKED training-fold OOF scores.
 
@@ -1177,7 +1201,7 @@ def select_stacked_weight(
         member_oof = oof_by_weight.get(weight)
         if member_oof is None:
             continue
-        stacked = _meta_oof(member_oof, y)
+        stacked = _meta_oof(member_oof, y, inner_folds)
         cut = threshold_from_oof(y, stacked)
         asd_recall, control_recall = _recalls(y, stacked, cut)
         if baseline is None:
@@ -1545,7 +1569,7 @@ def fit_predict(train, test) -> tuple[np.ndarray, np.ndarray]:
     # weight and the single scalar cut come from the meta-learner's OOF scores of
     # the TRAINING rows (test rows are never passed in). Weight 1.0 / cut 0.0
     # remains the fallback, i.e. the incumbent operating point.
-    asd_weight, threshold = select_stacked_weight(oof_matrix, y)
+    asd_weight, threshold = select_stacked_weight(oof_matrix, y, inner_folds)
 
     # Held-out scores: each member refit on ALL training rows at the selected
     # weight (with its own training-row selection mask), then the one

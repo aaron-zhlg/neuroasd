@@ -1,0 +1,147 @@
+{
+  "name": "fixcut-pr30",
+  "stage": "screen",
+  "note": "PR #30 + cut fixes: inner-split standardization, cross-fitted meta OOF",
+  "ran_at": "2026-11-24T19:15:36.165719+00:00",
+  "runtime_seconds": 246.2,
+  "git": {
+    "branch": "autoresearch/recall-objective",
+    "commit": "72a4525"
+  },
+  "data": {
+    "subjects": 1120,
+    "atlases": [
+      "gordon",
+      "hcp",
+      "markov",
+      "power"
+    ],
+    "locked_test_set": "323 subjects excluded (autoresearch.loop.holdout)"
+  },
+  "model_selection": "final fit (no selection on the evaluation set)",
+  "summary": {
+    "balanced_accuracy_mean": 0.7737,
+    "balanced_accuracy_std": 0.0679,
+    "accuracy_mean": 0.7796,
+    "accuracy_std": 0.0708,
+    "auc_mean": 0.8618,
+    "auc_std": 0.0656,
+    "sensitivity_mean": 0.7481,
+    "sensitivity_std": 0.1376,
+    "specificity_mean": 0.7994,
+    "specificity_std": 0.1211,
+    "f1_mean": 0.7864,
+    "f1_std": 0.0738,
+    "accuracy_pooled": 0.7605,
+    "folds": 6
+  },
+  "folds": [
+    {
+      "test_group": "NYU",
+      "test_sites": [
+        "NYU"
+      ],
+      "train_size": 959,
+      "test_size": 161,
+      "seconds": 79.9,
+      "accuracy": 0.6956521739130435,
+      "balanced_accuracy": 0.7224358974358975,
+      "auc": 0.8139423076923077,
+      "sensitivity": 0.8615384615384616,
+      "specificity": 0.5833333333333334,
+      "f1": 0.6956521739130436
+    },
+    {
+      "test_group": "UM_1",
+      "test_sites": [
+        "UM_1"
+      ],
+      "train_size": 1039,
+      "test_size": 81,
+      "seconds": 83.2,
+      "accuracy": 0.7654320987654321,
+      "balanced_accuracy": 0.7547348484848485,
+      "auc": 0.831439393939394,
+      "sensitivity": 0.696969696969697,
+      "specificity": 0.8125,
+      "f1": 0.8041237113402061
+    },
+    {
+      "test_group": "USM",
+      "test_sites": [
+        "USM"
+      ],
+      "train_size": 1039,
+      "test_size": 81,
+      "seconds": 77.7,
+      "accuracy": 0.8024691358024691,
+      "balanced_accuracy": 0.8031326781326782,
+      "auc": 0.9250614250614251,
+      "sensitivity": 0.7954545454545454,
+      "specificity": 0.8108108108108109,
+      "f1": 0.7894736842105263
+    },
+    {
+      "test_group": "ABIDEII-OHSU_1",
+      "test_sites": [
+        "ABIDEII-OHSU_1"
+      ],
+      "train_size": 1028,
+      "test_size": 92,
+      "seconds": 86.3,
+      "accuracy": 0.782608695652174,
+      "balanced_accuracy": 0.7321428571428572,
+      "auc": 0.8209325396825397,
+      "sensitivity": 0.5,
+      "specificity": 0.9642857142857143,
+      "f1": 0.8437499999999999
+    },
+    {
+      "test_group": "ABIDEII-NYU_1",
+      "test_sites": [
+        "ABIDEII-NYU_1"
+      ],
+      "train_size": 1060,
+      "test_size": 60,
+      "seconds": 76.1,
+      "accuracy": 0.7166666666666667,
+      "balanced_accuracy": 0.7183257918552036,
+      "auc": 0.8020361990950226,
+      "sensitivity": 0.7058823529411765,
+      "specificity": 0.7307692307692307,
+      "f1": 0.6909090909090909
+    },
+    {
+      "test_group": "ABIDEII-SDSU_1",
+      "test_sites": [
+        "ABIDEII-SDSU_1"
+      ],
+      "train_size": 1073,
+      "test_size": 47,
+      "seconds": 76.5,
+      "accuracy": 0.9148936170212766,
+      "balanced_accuracy": 0.9116541353383458,
+      "auc": 0.9774436090225564,
+      "sensitivity": 0.9285714285714286,
+      "specificity": 0.8947368421052632,
+      "f1": 0.8947368421052632
+    }
+  ],
+  "verdict": {
+    "stage": "screen",
+    "metric": "sensitivity_mean",
+    "threshold": 0.7477,
+    "observed": 0.7481,
+    "margin": 0.0004,
+    "floor_metric": "specificity_mean",
+    "floor": 0.73,
+    "floor_observed": {
+      "screen": 0.7994
+    },
+    "floor_passed": true,
+    "floor_failed_on": [],
+    "auc_passed": true,
+    "passed": true,
+    "rationale": "Cheap filter on 6 mixed ABIDE I / II sites. The development base scores ASD recall 0.619 / control recall 0.803 here. 0.59 kills large regressions; control recall must also stay >= the floor. Raised to 0.7477 = the base's own screen ASD recall (0.7677) minus screen_tolerance."
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "name": "fixcut-pr30",
+  "stage": "loso-institution",
+  "note": "PR #30 + cut fixes: inner-split standardization, cross-fitted meta OOF",
+  "ran_at": "2026-11-24T19:42:36.287455+00:00",
+  "runtime_seconds": 654.6,
+  "git": {
+    "branch": "autoresearch/recall-objective",
+    "commit": "72a4525"
+  },
+  "data": {
+    "subjects": 1120,
+    "atlases": [
+      "gordon",
+      "hcp",
+      "markov",
+      "power"
+    ],
+    "locked_test_set": "323 subjects excluded (autoresearch.loop.holdout)"
+  },
+  "model_selection": "final fit (no selection on the evaluation set)",
+  "summary": {
+    "balanced_accuracy_mean": 0.6955,
+    "balanced_accuracy_std": 0.0826,
+    "accuracy_mean": 0.6951,
+    "accuracy_std": 0.0847,
+    "auc_mean": 0.791,
+    "auc_std": 0.0951,
+    "sensitivity_mean": 0.6207,
+    "sensitivity_std": 0.1715,
+    "specificity_mean": 0.7704,
+    "specificity_std": 0.1476,
+    "f1_mean": 0.7335,
+    "f1_std": 0.0726,
+    "accuracy_pooled": 0.7054,
+    "folds": 16,
+    "site_balanced_accuracy_mean": 0.731,
+    "site_balanced_accuracy_std": 0.0877,
+    "site_accuracy_mean": 0.7379,
+    "site_accuracy_std": 0.0834,
+    "site_auc_mean": 0.8119,
+    "site_auc_std": 0.1044,
+    "site_sensitivity_mean": 0.6848,
+    "site_sensitivity_std": 0.1698,
+    "site_specificity_mean": 0.7772,
+    "site_specificity_std": 0.1346,
+    "site_f1_mean": 0.7637,
+    "site_f1_std": 0.0813,
+    "site_accuracy_pooled": 0.7359
+  },
+  "folds": [
+    {
+      "test_group": "ABIDEII-BNI_1",
+      "test_sites": [
+        "ABIDEII-BNI_1"
+      ],
+      "train_size": 1097,
+      "test_size": 23,
+      "seconds": 90.0,
+      "accuracy": 0.6521739130434783,
+      "balanced_accuracy": 0.6666666666666666,
+      "auc": 0.75,
+      "sensitivity": 0.3333333333333333,
+      "specificity": 1.0,
+      "f1": 0.7333333333333334
+    },
+    {
+      "test_group": "ABIDEII-GU_1",
+      "test_sites": [
+        "ABIDEII-GU_1"
+      ],
+      "train_size": 1081,
+      "test_size": 39,
+      "seconds": 90.3,
+      "accuracy": 0.717948717948718,
+      "balanced_accuracy": 0.7328571428571429,
+      "auc": 0.7685714285714286,
+      "sensitivity": 0.7857142857142857,
+      "specificity": 0.68,
+      "f1": 0.7555555555555556
+    },
+    {
+      "test_group": "ABIDEII-IU_1",
+      "test_sites": [
+        "ABIDEII-IU_1"
+      ],
+      "train_size": 1089,
+      "test_size": 31,
+      "seconds": 81.7,
+      "accuracy": 0.7096774193548387,
+      "balanced_accuracy": 0.7041666666666666,
+      "auc": 0.675,
+      "sensitivity": 0.5333333333333333,
+      "specificity": 0.875,
+      "f1": 0.7567567567567567
+    },
+    {
+      "test_group": "ABIDEII-UCD_1",
+      "test_sites": [
+        "ABIDEII-UCD_1"
+      ],
+      "train_size": 1097,
+      "test_size": 23,
+      "seconds": 85.7,
+      "accuracy": 0.6956521739130435,
+      "balanced_accuracy": 0.7192307692307692,
+      "auc": 0.8384615384615385,
+      "sensitivity": 0.5384615384615384,
+      "specificity": 0.9,
+      "f1": 0.7200000000000001
+    },
+    {
+      "test_group": "CMU",
+      "test_sites": [
+        "CMU"
+      ],
+      "train_size": 1111,
+      "test_size": 9,
+      "seconds": 80.7,
+      "accuracy": 0.5555555555555556,
+      "balanced_accuracy": 0.525,
+      "auc": 0.6000000000000001,
+      "sensitivity": 0.25,
+      "specificity": 0.8,
+      "f1": 0.6666666666666666
+    },
+    {
+      "test_group": "KKI",
+      "test_sites": [
+        "ABIDEII-KKI_1",
+        "KKI"
+      ],
+      "train_size": 962,
+      "test_size": 158,
+      "seconds": 80.3,
+      "accuracy": 0.569620253164557,
+      "balanced_accuracy": 0.6297438330170778,
+      "auc": 0.7352941176470588,
+      "sensitivity": 0.7352941176470589,
+      "specificity": 0.5241935483870968,
+      "f1": 0.6565656565656566
+    },
+    {
+      "test_group": "MAX_MUN",
+      "test_sites": [
+        "MAX_MUN"
+      ],
+      "train_size": 1074,
+      "test_size": 46,
+      "seconds": 80.7,
+      "accuracy": 0.5434782608695652,
+      "balanced_accuracy": 0.5331384015594541,
+      "auc": 0.6354775828460039,
+      "sensitivity": 0.47368421052631576,
+      "specificity": 0.5925925925925926,
+      "f1": 0.6037735849056604
+    },
+    {
+      "test_group": "NYU",
+      "test_sites": [
+        "ABIDEII-NYU_1",
+        "ABIDEII-NYU_2",
+        "NYU"
+      ],
+      "train_size": 881,
+      "test_size": 239,
+      "seconds": 78.0,
+      "accuracy": 0.7071129707112971,
+      "balanced_accuracy": 0.7068095838587642,
+      "auc": 0.7951520246602213,
+      "sensitivity": 0.6923076923076923,
+      "specificity": 0.7213114754098361,
+      "f1": 0.7154471544715446
+    },
+    {
+      "test_group": "OHSU",
+      "test_sites": [
+        "ABIDEII-OHSU_1",
+        "OHSU"
+      ],
+      "train_size": 1001,
+      "test_size": 119,
+      "seconds": 84.0,
+      "accuracy": 0.7647058823529411,
+      "balanced_accuracy": 0.726530612244898,
+      "auc": 0.8180758017492712,
+      "sensitivity": 0.5102040816326531,
+      "specificity": 0.9428571428571428,
+      "f1": 0.8250000000000001
+    },
+    {
+      "test_group": "OLIN",
+      "test_sites": [
+        "ABIDEII-ONRC_2",
+        "OLIN"
+      ],
+      "train_size": 1062,
+      "test_size": 58,
+      "seconds": 78.0,
+      "accuracy": 0.7068965517241379,
+      "balanced_accuracy": 0.6751552795031056,
+      "auc": 0.7403726708074534,
+      "sensitivity": 0.5217391304347826,
+      "specificity": 0.8285714285714286,
+      "f1": 0.7733333333333333
+    },
+    {
+      "test_group": "SBL",
+      "test_sites": [
+        "SBL"
+      ],
+      "train_size": 1111,
+      "test_size": 9,
+      "seconds": 74.4,
+      "accuracy": 0.6666666666666666,
+      "balanced_accuracy": 0.675,
+      "auc": 0.9,
+      "sensitivity": 0.75,
+      "specificity": 0.6,
+      "f1": 0.6666666666666665
+    },
+    {
+      "test_group": "SDSU",
+      "test_sites": [
+        "ABIDEII-SDSU_1",
+        "SDSU"
+      ],
+      "train_size": 1043,
+      "test_size": 77,
+      "seconds": 83.5,
+      "accuracy": 0.7922077922077922,
+      "balanced_accuracy": 0.7918918918918919,
+      "auc": 0.9141891891891892,
+      "sensitivity": 0.8,
+      "specificity": 0.7837837837837838,
+      "f1": 0.7837837837837838
+    },
+    {
+      "test_group": "STANFORD",
+      "test_sites": [
+        "STANFORD"
+      ],
+      "train_size": 1088,
+      "test_size": 32,
+      "seconds": 80.2,
+      "accuracy": 0.65625,
+      "balanced_accuracy": 0.6785714285714286,
+      "auc": 0.8174603174603174,
+      "sensitivity": 0.8571428571428571,
+      "specificity": 0.5,
+      "f1": 0.6206896551724137
+    },
+    {
+      "test_group": "UM",
+      "test_sites": [
+        "UM_1",
+        "UM_2"
+      ],
+      "train_size": 1010,
+      "test_size": 110,
+      "seconds": 75.2,
+      "accuracy": 0.7363636363636363,
+      "balanced_accuracy": 0.7169385629989586,
+      "auc": 0.8469281499479347,
+      "sensitivity": 0.627906976744186,
+      "specificity": 0.8059701492537313,
+      "f1": 0.7883211678832117
+    },
+    {
+      "test_group": "USM",
+      "test_sites": [
+        "ABIDEII-USM_1",
+        "USM"
+      ],
+      "train_size": 1015,
+      "test_size": 105,
+      "seconds": 74.5,
+      "accuracy": 0.7904761904761904,
+      "balanced_accuracy": 0.792483660130719,
+      "auc": 0.8979665940450254,
+      "sensitivity": 0.7222222222222222,
+      "specificity": 0.8627450980392157,
+      "f1": 0.8
+    },
+    {
+      "test_group": "YALE",
+      "test_sites": [
+        "YALE"
+      ],
+      "train_size": 1078,
+      "test_size": 42,
+      "seconds": 78.6,
+      "accuracy": 0.8571428571428571,
+      "balanced_accuracy": 0.8545454545454545,
+      "auc": 0.9227272727272727,
+      "sensitivity": 0.8,
+      "specificity": 0.9090909090909091,
+      "f1": 0.8695652173913043
+    }
+  ],
+  "verdict": {
+    "stage": "loso-institution",
+    "metric": "sensitivity_mean",
+    "rule": "either split improves; the other does not regress; control recall above the floor on both",
+    "reference": "iter39_appending-a-fixed-nonlinear-demo",
+    "reference_site": 0.7426,
+    "reference_institution": 0.7465,
+    "observed": 0.6207,
+    "observed_site": 0.6848,
+    "passed": false,
+    "delta_site": -0.0578,
+    "delta_institution": -0.1258,
+    "improved_on": [],
+    "margin": -0.1208,
+    "floor_metric": "specificity_mean",
+    "floor": 0.73,
+    "floor_observed": {
+      "loso-site": 0.7772,
+      "loso-institution": 0.7704
+    },
+    "floor_passed": true,
+    "floor_failed_on": [],
+    "auc_tolerance": 0.005,
+    "auc_drop": {},
+    "auc_passed": true,
+    "open_pr": false,
+    "pr_reference": "iter39_appending-a-fixed-nonlinear-demo",
+    "pr_delta_site": -0.0578,
+    "pr_delta_institution": -0.1258,
+    "pr_margin": -0.1208,
+    "rationale": "Accept as the new base, and open a review PR, if site or institution ASD recall gains >= 0.003 vs the current base, the other split drops by at most 0.005, and control recall is >= the floor on both splits. Always report balanced accuracy, accuracy, AUC and both recalls."
+  }
+}
