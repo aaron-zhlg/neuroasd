@@ -67,6 +67,22 @@ GROUPINGS = {
 }
 
 SHRINKAGE = 0.1
+# Ledoit-Wolf per-subject shrinkage of the FC estimate (see
+# `ledoit_wolf_correlation`). The intensity is estimated per subject and clipped
+# into a numerically and statistically safe band. Lower clip: the sample
+# correlation is a Gram matrix, so a positive intensity keeps every eigenvalue
+# above it and the matrix SPD for the log map. Upper clip: a subject's noise
+# level is only identifiable up to the share of dense true connectivity, so
+# larger estimates are not believable as a shrinkage intensity and would flatten
+# every subject toward the identity.
+LW_LAMBDA_MIN = 0.05
+LW_LAMBDA_MAX = 0.3
+# Aspect ratio gamma = p / T of a subject's correlation matrix, from the median
+# of its squared off-diagonal correlations (noise ~ 1 / T). Clipped only so the
+# implied sample size stays finite.
+LW_GAMMA_MIN = 0.05
+LW_GAMMA_MAX = 20.0
+LW_BLOCK = 32
 ALPHAS = np.logspace(-1, 5, 13)
 INNER_FOLDS = 5
 SUBSAMPLE_FRACTION = 0.9
@@ -123,12 +139,104 @@ def shrink(fcs: np.ndarray, shrinkage: float = SHRINKAGE) -> np.ndarray:
     return (out + np.swapaxes(out, -1, -2)) / 2.0
 
 
-def tangent_features(fcs: np.ndarray, train_idx: np.ndarray, block: int = 64) -> np.ndarray:
-    """Tangent-space embedding at the log-Euclidean mean of the training subjects."""
+def ledoit_wolf_correlation(
+    fcs: np.ndarray,
+    block: int = LW_BLOCK,
+    inplace: bool = False,
+    return_lambda: bool = False,
+):
+    """Per-subject Ledoit-Wolf shrinkage of the FC covariance, kept as a correlation.
+
+    Each subject's matrix is treated as its own covariance estimate (unit
+    variances) and shrunk toward the scaled identity, the Ledoit-Wolf target:
+
+        R_lw = (1 - lambda) R + lambda I,      lambda in [LW_LAMBDA_MIN, LW_LAMBDA_MAX]
+
+    The intensity is the closed-form Ledoit-Wolf / Schaefer-Strimmer optimum for
+    that target,
+
+        lambda = sum_{i != j} Var(r_ij) / sum_{i != j} r_ij^2,
+        Var(r_ij) ~ (1 - r_ij^2)^2 / T,
+
+    i.e. the variance of the sample correlations over their squared magnitude.
+    Only the number of samples T behind the matrix is not exposed by the
+    harness, so it is estimated per subject from that subject's own matrix: for
+    a pure-noise correlation matrix with T samples, r_ij ~ N(0, 1 / T), so the
+    MEDIAN of the squared off-diagonal correlations is a robust noise-variance
+    estimate, noise = median(r_ij^2) ~ 1 / T, and gamma = p / T = p * noise. The
+    median is used instead of a moment because the (dense) true connectivity
+    signal inflates any sum of squares and would drive gamma far too large; with
+    the median, lambda is approximately the noise share of the squared
+    correlation mass, which is exactly what the shrinkage is meant to remove.
+
+    Everything is computed inside one subject's own matrix (row-wise over the
+    leading axis): no cross-subject statistic, no label, no fold information, so
+    a subject's transformed matrix is identical whether it is scored alone or as
+    part of a batch. Results are renormalized to unit diagonal, so the returned
+    matrix is a correlation matrix and can be fed to the tangent map without the
+    fixed 0.1 shrinkage (`tangent_features(..., shrinkage=None)`).
+
+    ``inplace=True`` overwrites the array passed in (used where the caller owns
+    it) so that transforming a whole atlas does not double peak memory.
+
+    ``return_lambda=True`` additionally returns the per-subject UNCLIPPED
+    intensities as a length-n vector, for read-only diagnostics only: the
+    matrices returned are bit-identical to the default call.
+    """
+    fcs = np.asarray(fcs)
+    if not inplace:
+        fcs = fcs.copy()
     n, p = fcs.shape[0], fcs.shape[1]
+    eye = np.eye(p)
+    lams = np.empty(n, dtype=np.float64) if return_lambda else None
+    iu, ju = np.triu_indices(p, k=1)
+    for start in range(0, n, block):
+        chunk = np.asarray(fcs[start : start + block], dtype=np.float64)
+        chunk = (chunk + np.swapaxes(chunk, -1, -2)) / 2.0
+        upper = chunk[:, iu, ju]  # strictly upper triangle of this block of subjects
+        sq = upper * upper
+        den = np.maximum(sq.sum(axis=1), 1e-6)  # sum_{i != j} r_ij^2
+        num = np.square(1.0 - sq).sum(axis=1)  # sum_{i != j} (1 - r_ij^2)^2
+        noise = np.maximum(np.median(sq, axis=1), 1e-8)  # ~ 1 / T of this subject
+        gamma = np.clip(p * noise, LW_GAMMA_MIN, LW_GAMMA_MAX)
+        t_hat = p / gamma
+        lam_raw = num / (t_hat * den)
+        lam = np.clip(lam_raw, LW_LAMBDA_MIN, LW_LAMBDA_MAX)[:, None, None]
+        if lams is not None:
+            lams[start : start + len(chunk)] = lam_raw
+        chunk = (1.0 - lam) * chunk + lam * eye
+        d = np.sqrt(np.diagonal(chunk, axis1=-2, axis2=-1))
+        chunk /= d[:, :, None] * d[:, None, :]
+        fcs[start : start + block] = chunk.astype(np.float32)
+    if lams is not None:
+        return fcs, lams
+    return fcs
+
+
+def tangent_features(
+    fcs: np.ndarray,
+    train_idx: np.ndarray,
+    block: int = 64,
+    shrinkage: float | None = SHRINKAGE,
+) -> np.ndarray:
+    """Tangent-space embedding at the log-Euclidean mean of the training subjects.
+
+    ``shrinkage`` is the convex weight of the identity in the fixed shrink that
+    makes each matrix SPD. ``shrinkage=None`` means the matrices were already
+    regularized per subject (e.g. by `ledoit_wolf_correlation`), so only a
+    symmetrization is applied.
+    """
+    n, p = fcs.shape[0], fcs.shape[1]
+
+    def prepare(mats: np.ndarray) -> np.ndarray:
+        mats = np.asarray(mats, dtype=np.float64)
+        if shrinkage is None:
+            return (mats + np.swapaxes(mats, -1, -2)) / 2.0
+        return shrink(mats, shrinkage)
+
     log_sum = np.zeros((p, p))
     for start in range(0, len(train_idx), block):
-        log_sum += _apply_eig(shrink(fcs[train_idx[start : start + block]]), np.log).sum(axis=0)
+        log_sum += _apply_eig(prepare(fcs[train_idx[start : start + block]]), np.log).sum(axis=0)
     reference = _apply_eig((log_sum / len(train_idx))[None], np.exp)[0]
     whiten = _apply_eig(reference[None], lambda v: 1.0 / np.sqrt(v))[0]
 
@@ -136,7 +244,7 @@ def tangent_features(fcs: np.ndarray, train_idx: np.ndarray, block: int = 64) ->
     weight = np.where(iu[0] == iu[1], 1.0, np.sqrt(2.0))
     feats = np.empty((n, len(iu[0])), dtype=np.float32)
     for start in range(0, n, block):
-        whitened = whiten @ shrink(fcs[start : start + block]) @ whiten
+        whitened = whiten @ prepare(fcs[start : start + block]) @ whiten
         feats[start : start + block] = _apply_eig(whitened, np.log)[:, iu[0], iu[1]] * weight
     return feats
 
